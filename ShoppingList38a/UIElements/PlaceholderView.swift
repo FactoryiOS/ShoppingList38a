@@ -13,13 +13,13 @@ struct PlaceholderView: View {
     let subtitle: String
     
     var body: some View {
-        VStack(spacing: AppSpacing.space28) {
+        VStack(spacing: 28) {
             Image(image)
                 .resizable()
                 .scaledToFit()
                 .frame(maxWidth: .infinity)
             
-            VStack(spacing: AppSpacing.space4) {
+            VStack(spacing: 4) {
                 Text(title)
                     .font(AppFont.medium20)
                     .foregroundStyle(.primaryText)
