@@ -31,13 +31,19 @@ struct PlaceholderView: View {
                     .multilineTextAlignment(.center)
             }
         }
-        .padding(.horizontal, AppSpacing.space16)
     }
 }
 
 #Preview {
     PlaceholderView(
+        image: AppImage.emptyShoppingLists,
+        title: "Давайте спланируем покупки!",
+        subtitle: "Создайте свой первый список"
+    )
+    
+    PlaceholderView(
         image: AppImage.emptyShoppingList,
         title: "Давайте спланируем покупки!",
-        subtitle: "Создайте свой первый список")
+        subtitle: "Начните добавлять товары"
+    )
 }
