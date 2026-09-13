@@ -11,6 +11,7 @@ enum AppFont {
     static let regular13 = Font.system(size: 13, weight: .regular)
     static let regular16 = Font.system(size: 16, weight: .regular)
     static let regular17 = Font.system(size: 17, weight: .regular)
+    static let regular24 = Font.system(size: 24, weight: .regular)
     static let regular34 = Font.system(size: 34, weight: .regular)
     
     static let medium17 = Font.system(size: 17, weight: .medium)
