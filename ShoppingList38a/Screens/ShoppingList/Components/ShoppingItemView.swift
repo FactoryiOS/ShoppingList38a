@@ -49,14 +49,13 @@ struct ShoppingItemView: View {
             
             Spacer()
             
-            Text("\(shoppingItem.count) \(shoppingItem.unit.rawValue)")
+            Text("\(shoppingItem.count) \(shoppingItem.unit.displayName)")
                 .font(AppFont.regular17)
                 .foregroundStyle(textColor)
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 4)
-        .frame(minHeight: 52)
-        .frame(maxWidth: .infinity)
+        .frame(maxWidth: .infinity, minHeight: 52)
     }
 }
 
