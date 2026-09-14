@@ -17,20 +17,20 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Список покупок" textAlignment="center" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" minimumFontSize="18" translatesAutoresizingMaskIntoConstraints="NO" id="GJd-Yh-RWb">
-                                <rect key="frame" x="54.666666666666657" y="672.66666666666663" width="283.66666666666674" height="44.333333333333371"/>
+                                <rect key="frame" x="54.666666666666657" y="647.66666666666663" width="283.66666666666674" height="44.333333333333371"/>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="37"/>
                                 <color key="textColor" name="turquoise"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="EmptyShoppingList" translatesAutoresizingMaskIntoConstraints="NO" id="5SE-wm-vt7">
-                                <rect key="frame" x="0.0" y="279.66666666666669" width="393" height="343.00000000000006"/>
+                                <rect key="frame" x="0.0" y="254.66666666666663" width="393" height="343"/>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Bcu-3y-fUS"/>
                         <color key="backgroundColor" name="primaryBackground"/>
                         <constraints>
                             <constraint firstItem="5SE-wm-vt7" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="L0d-qP-oHB"/>
-                            <constraint firstItem="5SE-wm-vt7" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" constant="25.166666666666742" id="VKV-aa-zeg"/>
+                            <constraint firstItem="5SE-wm-vt7" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="VKV-aa-zeg"/>
                             <constraint firstItem="5SE-wm-vt7" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="VVh-ni-xxZ"/>
                             <constraint firstAttribute="trailing" secondItem="5SE-wm-vt7" secondAttribute="trailing" id="kbK-8G-PeL"/>
                             <constraint firstItem="GJd-Yh-RWb" firstAttribute="top" secondItem="5SE-wm-vt7" secondAttribute="bottom" constant="50" id="nJX-ty-fC1"/>
