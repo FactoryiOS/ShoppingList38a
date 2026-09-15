@@ -33,7 +33,6 @@ struct ColorSelectorView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .frame(height: 105)
         .background(.baseElementsBackground, in: RoundedRectangle(cornerRadius: 12))
-        .padding(.horizontal, 16)
     }
     
     private func colorButton(for purchaseColor: PurchaseColor) -> some View {
@@ -63,5 +62,6 @@ struct ColorSelectorView: View {
     ColorSelectorView(selectedColor: $selectedColor)
         .padding(.vertical)
         .frame(maxHeight: .infinity, alignment: .center)
+        .padding(.horizontal, 16)
         .background(.primaryBackground)
 }
