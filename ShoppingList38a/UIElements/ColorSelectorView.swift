@@ -11,14 +11,12 @@ struct ColorSelectorView: View {
     @Binding var selectedColor: PurchaseColor?
     
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 12) {
             Text("Выберите цвет")
                 .font(AppFont.regular16)
                 .foregroundStyle(.primaryText)
                 .padding(.horizontal, 12)
-            
-            Spacer(minLength: 0)
-            
+
             HStack {
                 ForEach(PurchaseColor.allCases, id: \.self) { purchaseColor in
                     if purchaseColor != PurchaseColor.allCases.first {
@@ -28,7 +26,7 @@ struct ColorSelectorView: View {
                     colorButton(for: purchaseColor)
                 }
             }
-            .padding(.horizontal, 31.5)
+            .padding(.horizontal, 27.5)
         }
         .padding(.top, 12)
         .padding(.bottom, 12)
@@ -53,7 +51,7 @@ struct ColorSelectorView: View {
                     .fill(purchaseColor.color)
                     .frame(width: 40, height: 40)
             }
-            .frame(width: 40, height: 52)
+            .frame(width: 48, height: 48)
         }
         .buttonStyle(.plain)
     }
