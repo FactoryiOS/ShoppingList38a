@@ -11,7 +11,7 @@ struct ListItemView: View {
     let listItem: ListItem
     
     var body: some View {
-        HStack(spacing: 16) {
+        HStack(spacing: 12) {
             Image(listItem.icon.rawValue)
                 .frame(width: 48, height: 48)
                 .foregroundStyle(.black)
@@ -36,13 +36,13 @@ struct ListItemView: View {
         .padding(.horizontal, 16)
         .frame(maxWidth: .infinity)
         .frame(height: 84)
+        .background(.baseElementsBackground)
+        .clipShape(
+            RoundedRectangle(cornerRadius: 16)
+        )
     }
 }
 
 #Preview {
     ListItemView(listItem: .mock)
-        .background(.primaryBackground)
-        .clipShape(
-            RoundedRectangle(cornerRadius: 16)
-        )
 }
