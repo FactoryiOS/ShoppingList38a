@@ -7,8 +7,7 @@
 
 import SwiftUI
 
-struct BaseButtonModel: Identifiable {
-    let id = UUID()
+struct BaseButtonModel {
     let title: String
     let isActive: Bool
     let action: () -> Void

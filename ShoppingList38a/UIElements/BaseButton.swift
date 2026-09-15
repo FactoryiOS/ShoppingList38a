@@ -26,9 +26,8 @@ struct BaseButton: View {
 
 #Preview {
     VStack(spacing: 16) {
-        ForEach(BaseButtonModel.mocks) { buttonModel in
-            BaseButton(baseButtonModel: buttonModel)
-        }
+        BaseButton(baseButtonModel: BaseButtonModel.mocks[0])
+        BaseButton(baseButtonModel: BaseButtonModel.mocks[1])
     }
     .padding()
     .background(Color(.primaryBackground))
