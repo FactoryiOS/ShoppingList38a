@@ -8,22 +8,22 @@
 import Foundation
 
 enum PurchaseIcon: String, CaseIterable, Hashable {
+    case snow
     case airplane
     case alert
     case balloon
     case bandage
     case barbell
-    case snow
-    case gift
-    case calendarNumber
-    case business
-    case build
-    case briefcase
     case bed
-    case gameController
-    case paw
-    case fastFood
-    case car
-    case cart
+    case briefcase
+    case build
+    case business
+    case calendarNumber
+    case gift
     case colorPalette
+    case cart
+    case car
+    case fastFood
+    case paw
+    case gameController
 }
