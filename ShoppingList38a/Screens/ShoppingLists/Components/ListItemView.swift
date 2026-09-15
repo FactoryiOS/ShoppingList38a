@@ -12,7 +12,7 @@ struct ListItemView: View {
     
     var body: some View {
         HStack(spacing: 12) {
-            Image(listItem.icon.rawValue)
+            Image(listItem.icon.resource)
                 .frame(width: 48, height: 48)
                 .foregroundStyle(.black)
                 .background(listItem.color.color, in: Circle())
