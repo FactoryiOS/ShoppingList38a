@@ -8,14 +8,17 @@
 import SwiftUI
 
 struct BaseTextField: View {
-    let placeholder: String
+    let baseTextFieldModel: BaseTextFieldModel
     @Binding var text: String
-    let errorMessage: String?
+    
+    private var currentErrorMessage: String? {
+        baseTextFieldModel.errorMessage(for: text)
+    }
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 4) {
             HStack {
-                TextField(placeholder, text: $text)
+                TextField(baseTextFieldModel.placeholder, text: $text)
                     .font(AppFont.regular17)
                 
                 if !text.isEmpty {
@@ -28,38 +31,34 @@ struct BaseTextField: View {
                     )
                 }
             }
-            .padding()
-            .background(Color(.baseTextFieldBackground))
+            .padding(.vertical, 8)
+            .padding(.horizontal, 16)
+            .background(Color(.baseElementsBackground))
             .cornerRadius(12)
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
                     .stroke(
-                        errorMessage != nil ? Color(.systemsRed) : Color.clear,
+                        currentErrorMessage != nil ? Color(.systemsRed) : Color.clear,
                         lineWidth: 0.5
                     )
             )
             
-            if let errorMessage {
-                Text(errorMessage)
-                    .font(.system(size: 12))
+            if let currentErrorMessage {
+                Text(currentErrorMessage)
+                    .font(AppFont.regular13)
                     .foregroundColor(Color(.systemsRed))
-                    .padding(.horizontal, 4)
+                    .padding(.horizontal, 8)
             }
         }
     }
 }
 
-#Preview { // дефолтное состояние с ошибкой дубля
-    @Previewable @State var text = "Новый год"
-    
-    let currentError = text == "Новый год"
-    ? "Это название уже используется, пожалуйста, измените его."
-    : nil
+#Preview {
+    @Previewable @State var text = BaseTextFieldModel.duplicateError.defaultText
     
     BaseTextField(
-        placeholder: "Введите название",
-        text: $text,
-        errorMessage: currentError
+        baseTextFieldModel: .duplicateError,
+        text: $text
     )
     .padding()
     .background(Color(.primaryBackground))
