@@ -33,6 +33,8 @@ struct BaseTextField: View {
             }
             .padding(.vertical, 8)
             .padding(.horizontal, 16)
+            .frame(maxWidth: .infinity)
+            .frame(height: 54)
             .background(Color(.baseElementsBackground))
             .cornerRadius(12)
             .overlay(

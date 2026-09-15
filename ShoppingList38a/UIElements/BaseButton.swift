@@ -16,7 +16,7 @@ struct BaseButton: View {
                 .font(AppFont.medium17)
                 .foregroundColor(baseButtonModel.isActive ? Color(.white) : Color(.hintGrey))
                 .frame(maxWidth: .infinity)
-                .padding()
+                .frame(height: 44)
                 .background(baseButtonModel.isActive ? Color(.turquoise) : Color(.buttonGrey))
                 .cornerRadius(100)
         }
