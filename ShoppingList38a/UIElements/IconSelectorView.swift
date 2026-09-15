@@ -20,6 +20,7 @@ struct IconSelectorView: View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Выберите дизайн")
                 .font(AppFont.regular16)
+                .foregroundStyle(.primaryText)
             
             VStack(alignment: .leading, spacing: 12) {
                 ForEach(0..<iconRowCount, id: \.self) { row in
