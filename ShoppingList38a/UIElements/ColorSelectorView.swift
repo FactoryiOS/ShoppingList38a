@@ -8,10 +8,10 @@
 import SwiftUI
 
 struct ColorSelectorView: View {
-    @Binding var selectedColor: PurchaseColor
+    @Binding var selectedColor: PurchaseColor?
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
+        VStack(alignment: .leading) {
             Text("Выберите цвет")
                 .font(AppFont.regular16)
                 .foregroundStyle(.primaryText)
@@ -34,7 +34,7 @@ struct ColorSelectorView: View {
         .padding(.bottom, 12)
         .frame(maxWidth: .infinity, alignment: .leading)
         .frame(height: 105)
-        .background(.selectorBackground, in: RoundedRectangle(cornerRadius: 16))
+        .background(.baseElementsBackground, in: RoundedRectangle(cornerRadius: 12))
         .padding(.horizontal, 16)
     }
     
@@ -60,7 +60,7 @@ struct ColorSelectorView: View {
 }
 
 #Preview {
-    @Previewable @State var selectedColor = PurchaseColor.mock
+    @Previewable @State var selectedColor: PurchaseColor?
     
     ColorSelectorView(selectedColor: $selectedColor)
         .padding(.vertical)

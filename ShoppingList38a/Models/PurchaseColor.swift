@@ -11,6 +11,4 @@ enum PurchaseColor: String, CaseIterable, Hashable {
     case red
     case blue
     case yellow
-    
-    static let mock = PurchaseColor.green
 }
