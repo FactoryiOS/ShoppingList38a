@@ -8,17 +8,14 @@
 import SwiftUI
 
 struct BaseTextField: View {
-    let baseTextFieldModel: BaseTextFieldModel
+    let placeholder: String
     @Binding var text: String
-    
-    private var currentErrorMessage: String? {
-        baseTextFieldModel.errorMessage(for: text)
-    }
+    let errorMessage: String?
     
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             HStack {
-                TextField(baseTextFieldModel.placeholder, text: $text)
+                TextField(placeholder, text: $text)
                     .font(AppFont.regular17)
                 
                 if !text.isEmpty {
@@ -40,13 +37,13 @@ struct BaseTextField: View {
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
                     .stroke(
-                        currentErrorMessage != nil ? Color(.systemsRed) : Color.clear,
+                        errorMessage != nil ? Color(.systemsRed) : Color.clear,
                         lineWidth: 0.5
                     )
             )
             
-            if let currentErrorMessage {
-                Text(currentErrorMessage)
+            if let errorMessage {
+                Text(errorMessage)
                     .font(AppFont.regular13)
                     .foregroundColor(Color(.systemsRed))
                     .padding(.horizontal, 8)
@@ -56,11 +53,16 @@ struct BaseTextField: View {
 }
 
 #Preview {
-    @Previewable @State var text = BaseTextFieldModel.duplicateError.defaultText
+    @Previewable @State var text = "Новый год"
+    
+    let currentError = text == "Новый год"
+    ? "Это название уже используется, пожалуйста, измените его."
+    : nil
     
     BaseTextField(
-        baseTextFieldModel: .duplicateError,
-        text: $text
+        placeholder: "Введите название",
+        text: $text,
+        errorMessage: currentError
     )
     .padding()
     .background(Color(.primaryBackground))

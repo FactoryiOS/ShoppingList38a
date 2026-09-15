@@ -8,26 +8,37 @@
 import SwiftUI
 
 struct BaseButton: View {
-    let baseButtonModel: BaseButtonModel
+    let title: String
+    let isActive: Bool
+    let action: () -> Void
     
     var body: some View {
-        Button(action: baseButtonModel.action) {
-            Text(baseButtonModel.title)
+        Button(action: action) {
+            Text(title)
                 .font(AppFont.medium17)
-                .foregroundColor(baseButtonModel.isActive ? Color(.white) : Color(.hintGrey))
+                .foregroundColor(isActive ? Color(.white) : Color(.hintGrey))
                 .frame(maxWidth: .infinity)
                 .frame(height: 44)
-                .background(baseButtonModel.isActive ? Color(.turquoise) : Color(.buttonGrey))
+                .background(isActive ? Color(.turquoise) : Color(.buttonGrey))
                 .cornerRadius(100)
         }
-        .disabled(!baseButtonModel.isActive)
+        .disabled(!isActive)
     }
 }
 
 #Preview {
     VStack(spacing: 16) {
-        BaseButton(baseButtonModel: BaseButtonModel.mocks[0])
-        BaseButton(baseButtonModel: BaseButtonModel.mocks[1])
+        BaseButton(
+            title: "Создать",
+            isActive: false, // неактивная кнопка
+            action: {}
+        )
+        
+        BaseButton(
+            title: "Создать",
+            isActive: true, // активная кнопка
+            action: {}
+        )
     }
     .padding()
     .background(Color(.primaryBackground))
