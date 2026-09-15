@@ -6,9 +6,9 @@
 //
 
 enum PurchaseColor: String, CaseIterable, Hashable {
-    case blue
     case green
     case purple
     case red
+    case blue
     case yellow
 }
