@@ -12,6 +12,8 @@ struct IconSelectorView: View {
     
     @Binding var selectedIcon: PurchaseIcon?
     
+    var selectedColor: PurchaseColor?
+    
     private var iconRowCount: Int {
         Int(ceil(Double(PurchaseIcon.allCases.count) / Double(Constants.iconsPerRow)))
     }
@@ -53,9 +55,11 @@ struct IconSelectorView: View {
     }
     
     private func getBackgroundColor(for icon: PurchaseIcon) -> Color {
-        icon == selectedIcon ? .additionalBlue : .iconBackground
+        icon == selectedIcon
+        ? (selectedColor?.color ?? .additionalBlue)
+        : .iconBackground
     }
-
+    
     private func getIconIndexRange(for row: Int) -> Range<Int> {
         let startIndex = row * Constants.iconsPerRow
         
@@ -71,9 +75,12 @@ private extension IconSelectorView {
 
 #Preview {
     @Previewable @State var selectedIcon: PurchaseIcon? = .car
+    @Previewable @State var selectedColor: PurchaseColor? = .red
     
     VStack {
-        IconSelectorView(selectedIcon: $selectedIcon)
+        ColorSelectorView(selectedColor: $selectedColor)
+        
+        IconSelectorView(selectedIcon: $selectedIcon, selectedColor: selectedColor)
     }
     .padding(.horizontal, 16)
 }
