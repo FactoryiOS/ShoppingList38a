@@ -37,21 +37,8 @@ struct ShoppingListsView: View {
             .padding(.bottom, 20)
         }
         .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                Text("Мои списки")
-                    .font(AppFont.semiBold28)
-                    .foregroundStyle(.titleText)
-            }
-            
-            ToolbarItem(placement: .topBarTrailing) {
-                Menu {
-                    
-                } label: {
-                    Image(systemName: AppSystemIcon.ellipsisCircle)
-                        .foregroundStyle(.titleText)
-                        .frame(width: 44, height: 44)
-                }
-            }
+            titleToolbarItem
+            contextMenuToolbarItem
         }
         .navigationDestination(item: $selectedListID) { id in
             if let list = lists.first(where: { $0.id == id }) {
@@ -135,6 +122,37 @@ struct ShoppingListsView: View {
         .contentMargins(.top, 8, for: .scrollContent)
         // Запас для overscroll, чтобы последняя ячейка прокручивалась выше кнопки
         .contentMargins(.bottom, 86, for: .scrollContent)
+    }
+    
+    @ToolbarContentBuilder
+    private var titleToolbarItem: some ToolbarContent {
+        if #available(iOS 26.0, *) {
+            ToolbarItem(placement: .topBarLeading) {
+                Text("Мои списки")
+                    .font(AppFont.semiBold28)
+                    .foregroundStyle(.titleText)
+                    .fixedSize(horizontal: true, vertical: false)
+            }
+            .sharedBackgroundVisibility(.hidden)
+        } else {
+            ToolbarItem(placement: .topBarLeading) {
+                Text("Мои списки")
+                    .font(AppFont.semiBold28)
+                    .foregroundStyle(.titleText)
+            }
+        }
+    }
+    
+    @ToolbarContentBuilder
+    private var contextMenuToolbarItem: some ToolbarContent {
+        ToolbarItem(placement: .topBarTrailing) {
+            Menu {
+            } label: {
+                Image(systemName: AppSystemIcon.ellipsisCircle)
+                    .foregroundStyle(.titleText)
+                    .frame(width: 44, height: 44)
+            }
+        }
     }
 }
 
