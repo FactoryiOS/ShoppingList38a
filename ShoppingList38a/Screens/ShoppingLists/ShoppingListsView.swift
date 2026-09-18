@@ -15,69 +15,9 @@ struct ShoppingListsView: View {
     var body: some View {
         Group {
             if lists.isEmpty {
-                // Центрируем плейсхолдер между заголовком и кнопкой.
-                // В Figma он привязан к фиксированным отступам,
-                // но такая верстка плохо адаптируется к маленьким экранам
-                // (например, некорректно выглядит на iPhone SE)
-                VStack(spacing: 0) {
-                    Spacer()
-                    
-                    PlaceholderView(
-                        image: AppImage.emptyShoppingLists,
-                        title: "Давайте спланируем покупки!",
-                        subtitle: "Создайте свой первый список"
-                    )
-                    
-                    Spacer()
-                }
-                // Исключаем из центрирования высоту кнопки 44 pt + нижний отступ 20 pt
-                .padding(.bottom, 64)
+                emptyState
             } else {
-                List(lists) { list in
-                    Button {
-                        selectedListID = list.id
-                    } label: {
-                        ListItemView(listItem: list)
-                    }
-                    .buttonStyle(.plain)
-                    .listRowBackground(Color.clear)
-                    .listRowSeparator(.hidden)
-                    .listRowInsets(EdgeInsets(.zero))
-                    .swipeActions(allowsFullSwipe: false) {
-                        Button(role: .destructive) {
-                            print("Delete")
-                        } label: {
-                            Image(systemName: AppSystemIcon.trash)
-                                .environment(\.symbolVariants, .none)
-                        }
-                        .tint(.systemsRed)
-                        
-                        Button {
-                            print("Duplicate")
-                        } label: {
-                            Image(systemName: AppSystemIcon.plusSquareOnSquare)
-                                .environment(\.symbolVariants, .none)
-                        }
-                        .tint(.systemsOrange)
-                        
-                        Button {
-                            print("Edit")
-                        } label: {
-                            Image(systemName: AppSystemIcon.squareAndPencil)
-                                .environment(\.symbolVariants, .none)
-                        }
-                        .tint(.systemsGrey)
-                    }
-                }
-                .listStyle(.plain)
-                .scrollContentBackground(.hidden)
-                .scrollIndicators(.hidden)
-                .listRowSpacing(12)
-                .padding(.top, 12)
-                // Компенсируем 8 pt из-за некорректной высоты NavigationBar в Figma
-                .contentMargins(.top, 8, for: .scrollContent)
-                // Запас для overscroll, чтобы последняя ячейка прокручивалась выше кнопки
-                .contentMargins(.bottom, 86, for: .scrollContent)
+                shoppingList
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -119,6 +59,74 @@ struct ShoppingListsView: View {
                 Text(list.title)
             }
         }
+    }
+    
+    private var emptyState: some View {
+        // Центрируем плейсхолдер между заголовком и кнопкой.
+        // В Figma он привязан к фиксированным отступам,
+        // но такая верстка плохо адаптируется к маленьким экранам
+        // (например, некорректно выглядит на iPhone SE)
+        VStack(spacing: 0) {
+            Spacer()
+            
+            PlaceholderView(
+                image: AppImage.emptyShoppingLists,
+                title: "Давайте спланируем покупки!",
+                subtitle: "Создайте свой первый список"
+            )
+            
+            Spacer()
+        }
+        // Исключаем из центрирования высоту кнопки 44 pt + нижний отступ 20 pt
+        .padding(.bottom, 64)
+    }
+    
+    private var shoppingList: some View {
+        List(lists) { list in
+            Button {
+                selectedListID = list.id
+            } label: {
+                ListItemView(listItem: list)
+            }
+            .buttonStyle(.plain)
+            .listRowBackground(Color.clear)
+            .listRowSeparator(.hidden)
+            .listRowInsets(EdgeInsets(.zero))
+            .swipeActions(allowsFullSwipe: false) {
+                Button(role: .destructive) {
+                    print("Delete")
+                } label: {
+                    Image(systemName: AppSystemIcon.trash)
+                        .environment(\.symbolVariants, .none)
+                }
+                .tint(.systemsRed)
+                
+                Button {
+                    print("Duplicate")
+                } label: {
+                    Image(systemName: AppSystemIcon.plusSquareOnSquare)
+                        .environment(\.symbolVariants, .none)
+                }
+                .tint(.systemsOrange)
+                
+                Button {
+                    print("Edit")
+                } label: {
+                    Image(systemName: AppSystemIcon.squareAndPencil)
+                        .environment(\.symbolVariants, .none)
+                }
+                .tint(.systemsGrey)
+            }
+        }
+        .listStyle(.plain)
+        .scrollContentBackground(.hidden)
+        .scrollIndicators(.hidden)
+        .listRowSpacing(12)
+        .padding(.top, 12)
+        // Компенсируем 8 pt из-за некорректной высоты NavigationBar в Figma
+        .contentMargins(.top, 8, for: .scrollContent)
+        // Запас для overscroll, чтобы последняя ячейка прокручивалась выше кнопки
+        .contentMargins(.bottom, 86, for: .scrollContent)
     }
 }
 
