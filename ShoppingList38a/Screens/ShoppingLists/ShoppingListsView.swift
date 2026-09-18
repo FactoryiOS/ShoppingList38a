@@ -21,7 +21,6 @@ struct ShoppingListsView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .padding(.horizontal, 16)
         .background {
             Color.primaryBackground
                 .ignoresSafeArea()
@@ -79,6 +78,7 @@ struct ShoppingListsView: View {
         }
         // Исключаем из центрирования высоту кнопки 44 pt + нижний отступ 20 pt
         .padding(.bottom, 64)
+        .padding(.horizontal, 16)
     }
     
     private var shoppingList: some View {
@@ -91,7 +91,14 @@ struct ShoppingListsView: View {
             .buttonStyle(.plain)
             .listRowBackground(Color.clear)
             .listRowSeparator(.hidden)
-            .listRowInsets(EdgeInsets(.zero))
+            .listRowInsets(
+                EdgeInsets(
+                    top: 0,
+                    leading: 16,
+                    bottom: 0,
+                    trailing: 0
+                )
+            )
             .swipeActions(allowsFullSwipe: false) {
                 Button(role: .destructive) {
                     print("Delete")
@@ -122,6 +129,7 @@ struct ShoppingListsView: View {
         .scrollContentBackground(.hidden)
         .scrollIndicators(.hidden)
         .listRowSpacing(12)
+        .padding(.trailing, 16)
         .padding(.top, 12)
         // Компенсируем 8 pt из-за некорректной высоты NavigationBar в Figma
         .contentMargins(.top, 8, for: .scrollContent)
