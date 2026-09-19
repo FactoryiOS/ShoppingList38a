@@ -15,9 +15,6 @@ struct PlaceholderView: View {
     var body: some View {
         VStack(spacing: 28) {
             Image(image)
-                .resizable()
-                .scaledToFit()
-                .frame(maxWidth: .infinity)
             
             VStack(spacing: 4) {
                 Text(title)
