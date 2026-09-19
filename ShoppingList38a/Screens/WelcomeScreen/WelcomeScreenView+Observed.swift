@@ -11,11 +11,14 @@ extension WelcomeScreenView {
     @Observable
     @MainActor
     final class Observed {
-        
-        init() {}
-        
+        private let onStartButtonTap: () -> Void
+
+        init(onStartButtonTap: @escaping () -> Void = {}) {
+            self.onStartButtonTap = onStartButtonTap
+        }
+
         func handleStartButtonTap() {
-            // В будущем здесь будет переход на следующий экран
+            onStartButtonTap()
         }
     }
 }
