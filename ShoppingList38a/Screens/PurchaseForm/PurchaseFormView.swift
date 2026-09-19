@@ -99,5 +99,7 @@ struct PurchaseFormView: View {
 }
 
 #Preview {
-    PurchaseFormView(purchaseId: ListItem.mocks.first?.id ?? UUID(), onComplete: { })
+    NavigationStack {
+        PurchaseFormView(purchaseId: ListItem.mocks.first?.id ?? UUID(), onComplete: { })
+    }
 }
