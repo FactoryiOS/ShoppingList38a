@@ -9,7 +9,7 @@ import Foundation
 
 struct ListItem: Identifiable {
     let id: UUID
-    var title: String
+    var name: String
     var icon: PurchaseIcon
     var color: PurchaseColor
     var purchasedCount: Int
@@ -17,14 +17,14 @@ struct ListItem: Identifiable {
     
     init(
         id: UUID = UUID(),
-        title: String,
+        name: String,
         icon: PurchaseIcon,
         color: PurchaseColor,
         purchasedCount: Int,
         totalCount: Int
     ) {
         self.id = id
-        self.title = title
+        self.name = name
         self.icon = icon
         self.color = color
         self.purchasedCount = purchasedCount
@@ -32,7 +32,7 @@ struct ListItem: Identifiable {
     }
     
     static let mock = ListItem(
-        title: "Новый год",
+        name: "Новый год",
         icon: .calendarNumber,
         color: .blue,
         purchasedCount: 10,
@@ -41,70 +41,70 @@ struct ListItem: Identifiable {
     
     static let mocks: [ListItem] = [
         ListItem(
-            title: "Новый год",
+            name: "Новый год",
             icon: .calendarNumber,
             color: .blue,
             purchasedCount: 10,
             totalCount: 20
         ),
         ListItem(
-            title: "Кошке",
+            name: "Кошке",
             icon: .paw,
             color: .green,
             purchasedCount: 1,
             totalCount: 4
         ),
         ListItem(
-            title: "Вечеринка",
+            name: "Вечеринка",
             icon: .balloon,
             color: .yellow,
             purchasedCount: 4,
             totalCount: 20
         ),
         ListItem(
-            title: "Поездка",
+            name: "Поездка",
             icon: .airplane,
             color: .purple,
             purchasedCount: 3,
             totalCount: 12
         ),
         ListItem(
-            title: "Продукты",
+            name: "Продукты",
             icon: .cart,
             color: .red,
             purchasedCount: 8,
             totalCount: 15
         ),
         ListItem(
-            title: "Спорт",
+            name: "Спорт",
             icon: .barbell,
             color: .blue,
             purchasedCount: 2,
             totalCount: 7
         ),
         ListItem(
-            title: "Подарки",
+            name: "Подарки",
             icon: .gift,
             color: .green,
             purchasedCount: 5,
             totalCount: 9
         ),
         ListItem(
-            title: "Работа",
+            name: "Работа",
             icon: .briefcase,
             color: .yellow,
             purchasedCount: 1,
             totalCount: 6
         ),
         ListItem(
-            title: "Для машины",
+            name: "Для машины",
             icon: .car,
             color: .purple,
             purchasedCount: 0,
             totalCount: 5
         ),
         ListItem(
-            title: "Очень длинное название списка покупок",
+            name: "Очень длинное название списка покупок",
             icon: .fastFood,
             color: .red,
             purchasedCount: 7,

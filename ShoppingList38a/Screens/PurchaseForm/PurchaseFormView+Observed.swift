@@ -15,7 +15,7 @@ extension PurchaseFormView {
         var selectedIcon: PurchaseIcon?
         var selectedColor: PurchaseColor?
         
-        private var currentPurchase: Purchase?
+        private var currentPurchase: ListItem?
         
         private var trimmedName: String {
             name.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -41,7 +41,7 @@ extension PurchaseFormView {
                 return nil
             }
             
-            guard Purchase.mockPurchases.first(where: { $0.name == name }) != nil else {
+            guard ListItem.mocks.first(where: { $0.name.lowercased() == name.lowercased() }) != nil else {
                 return nil
             }
             
@@ -49,7 +49,7 @@ extension PurchaseFormView {
         }
         
         func fetchPurchase(by id: UUID?) {
-            guard let id, let purchase = Purchase.mockPurchases.first(where: { $0.id == id }) else {
+            guard let id, let purchase = ListItem.mocks.first(where: { $0.id == id }) else {
                 return
             }
             
@@ -61,7 +61,7 @@ extension PurchaseFormView {
         }
         
         func savePurchase(with id: UUID?, completion: Completion) {
-            // TODO добавляем сохранение модели (добавляем или обновляем)
+            // TODO: добавляем сохранение модели (добавляем или обновляем)
             completion()
         }
     }
