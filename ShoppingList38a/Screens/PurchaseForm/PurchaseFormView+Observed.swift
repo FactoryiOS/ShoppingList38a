@@ -32,6 +32,10 @@ extension PurchaseFormView {
             currentPurchase != nil ? "Сохранить" : "Создать"
         }
         
+        var titleToolbar: String {
+            currentPurchase != nil ? "Редактировать список" : "Создать список"
+        }
+        
         var nameErrorMessage: String? {
             if name.isEmpty || name == currentPurchase?.name {
                 return nil
