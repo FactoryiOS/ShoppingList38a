@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct PurchaseFormView: View {
+    @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.dismiss) private var dismiss
+    
     @FocusState private var isNameFieldFocused: Bool
     @State private var observed = Observed()
     
@@ -36,13 +39,18 @@ struct PurchaseFormView: View {
                     selectedColor: observed.selectedColor
                 )
             }
+            .padding(.top, 12)
         }
         .padding(.horizontal, 16)
         .background(.primaryBackground)
         .scrollIndicators(.hidden)
-        
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(true)
         .overlay(alignment: .bottom) {
             submitButton
+        }
+        .toolbar {
+            titleToolbar
         }
         .onTapGesture {
             isNameFieldFocused = false
@@ -50,6 +58,7 @@ struct PurchaseFormView: View {
         .onAppear {
             observed.fetchPurchase(by: purchaseId)
         }
+        .ignoresSafeArea(.keyboard, edges: .bottom)
     }
     
     private var submitButton: some View {
@@ -62,6 +71,26 @@ struct PurchaseFormView: View {
         )
         .padding(.horizontal, 16)
         .padding(.bottom, 20)
+    }
+    
+    @ToolbarContentBuilder
+    private var titleToolbar: some ToolbarContent {
+        ToolbarItem(placement: .topBarLeading) {
+            Button {
+                dismiss()
+            } label: {
+                Image(systemName: AppSystemIcon.chevronLeft)
+                    .foregroundStyle(colorScheme == .dark ? .white : .blackPrimary )
+                    .frame(width: 28, height: 28)
+                    .contentShape(Rectangle())
+            }
+        }
+        
+        ToolbarItem(placement: .topBarLeading) {
+            Text(observed.titleToolbar)
+                .font(AppFont.medium17)
+                .foregroundStyle(.titleText)
+        }
     }
 }
 
