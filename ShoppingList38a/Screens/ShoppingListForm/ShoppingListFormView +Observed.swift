@@ -1,5 +1,5 @@
 //
-//  PurchaseFormView+Observed.swift
+//  ShoppingListFormView+Observed.swift
 //  ShoppingList38a
 //
 //  Created by Kislov Vadim on 19.09.2026.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension PurchaseFormView {
+extension ShoppingListFormView {
     @MainActor
     @Observable
     final class Observed {
@@ -15,7 +15,7 @@ extension PurchaseFormView {
         var selectedIcon: PurchaseIcon?
         var selectedColor: PurchaseColor?
         
-        private var currentPurchase: ListItem?
+        private var currentShoppingList: ListItem?
         
         private var trimmedName: String {
             name.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -29,15 +29,15 @@ extension PurchaseFormView {
         }
         
         var submitButtonTitle: String {
-            currentPurchase != nil ? "Сохранить" : "Создать"
+            currentShoppingList != nil ? "Сохранить" : "Создать"
         }
         
         var titleToolbar: String {
-            currentPurchase != nil ? "Редактировать список" : "Создать список"
+            currentShoppingList != nil ? "Редактировать список" : "Создать список"
         }
         
         var nameErrorMessage: String? {
-            if name.isEmpty || name == currentPurchase?.name {
+            if name.isEmpty || name == currentShoppingList?.name {
                 return nil
             }
             
@@ -48,19 +48,19 @@ extension PurchaseFormView {
             return "Это название уже используется, пожалуйста, измените его."
         }
         
-        func fetchPurchase(by id: UUID?) {
-            guard let id, let purchase = ListItem.mocks.first(where: { $0.id == id }) else {
+        func fetchShoppingList(by id: UUID?) {
+            guard let id, let shoppingList = ListItem.mocks.first(where: { $0.id == id }) else {
                 return
             }
             
-            name = purchase.name
-            selectedIcon = purchase.icon
-            selectedColor = purchase.color
+            name = shoppingList.name
+            selectedIcon = shoppingList.icon
+            selectedColor = shoppingList.color
             
-            currentPurchase = purchase
+            currentShoppingList = shoppingList
         }
         
-        func savePurchase(with id: UUID?, completion: Completion) {
+        func saveShoppingList(with id: UUID?, completion: Completion) {
             // TODO: добавляем сохранение модели (добавляем или обновляем)
             completion()
         }

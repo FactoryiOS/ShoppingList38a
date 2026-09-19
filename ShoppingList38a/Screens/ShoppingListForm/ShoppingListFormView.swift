@@ -1,5 +1,5 @@
 //
-//  PurchaseFormView.swift
+//  ShoppingListFormView.swift
 //  ShoppingList38a
 //
 //  Created by Kislov Vadim on 19.09.2026.
@@ -7,18 +7,18 @@
 
 import SwiftUI
 
-struct PurchaseFormView: View {
+struct ShoppingListFormView: View {
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.dismiss) private var dismiss
     
     @FocusState private var isNameFieldFocused: Bool
     @State private var observed = Observed()
     
-    private let purchaseId: UUID?
+    private let shoppingListId: UUID?
     private let onComplete: Completion
     
-    init(purchaseId: UUID? = nil, onComplete: @escaping Completion) {
-        self.purchaseId = purchaseId
+    init(shoppingListId: UUID? = nil, onComplete: @escaping Completion) {
+        self.shoppingListId = shoppingListId
         self.onComplete = onComplete
     }
     
@@ -56,7 +56,7 @@ struct PurchaseFormView: View {
             isNameFieldFocused = false
         }
         .onAppear {
-            observed.fetchPurchase(by: purchaseId)
+            observed.fetchShoppingList(by: shoppingListId)
         }
         .ignoresSafeArea(.keyboard, edges: .bottom)
     }
@@ -66,7 +66,7 @@ struct PurchaseFormView: View {
             title: observed.submitButtonTitle,
             isActive: observed.isValid,
             action: {
-                observed.savePurchase(with: purchaseId, completion: onComplete)
+                observed.saveShoppingList(with: shoppingListId, completion: onComplete)
             }
         )
         .padding(.horizontal, 16)
@@ -95,11 +95,11 @@ struct PurchaseFormView: View {
 }
 
 #Preview {
-    PurchaseFormView(onComplete: { })
+    ShoppingListFormView(onComplete: { })
 }
 
 #Preview {
     NavigationStack {
-        PurchaseFormView(purchaseId: ListItem.mocks.first?.id ?? UUID(), onComplete: { })
+        ShoppingListFormView(shoppingListId: ListItem.mocks.first?.id ?? UUID(), onComplete: { })
     }
 }
