@@ -10,4 +10,5 @@ import SwiftUI
 enum AppImage {
     static let emptyShoppingList: ImageResource = .emptyShoppingList
     static let emptyShoppingLists: ImageResource = .emptyShoppingLists
+    static let welcomeScreenImage: ImageResource = .onboardingWelcome
 }
