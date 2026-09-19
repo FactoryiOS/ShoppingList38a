@@ -11,15 +11,37 @@ struct ShoppingListsView: View {
     @Environment(AppState.self) private var appState
     
     @State private var selectedListID: ListItem.ID?
+    @State private var navigationPath = NavigationPath()
     
     let lists: [ListItem]
     
     var body: some View {
-        Group {
-            if lists.isEmpty {
-                emptyState
-            } else {
-                shoppingList
+        NavigationStack(path: $navigationPath) {
+            Group {
+                if lists.isEmpty {
+                    emptyState
+                } else {
+                    shoppingList
+                }
+            }
+            .navigationDestination(for: RoutePath.self) { path in
+                switch path {
+                case .createPurchase:
+                    PurchaseFormView(onComplete: {})
+                case .editPurchase(let id):
+                    PurchaseFormView(purchaseId: id, onComplete: {})
+                }
+            }
+            .overlay(alignment: .bottom) {
+                BaseButton(
+                    title: "Создать список",
+                    isActive: true,
+                    action: {
+                        navigationPath.append(RoutePath.createPurchase)
+                    }
+                )
+                .padding(.horizontal, 16)
+                .padding(.bottom, 20)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -27,25 +49,9 @@ struct ShoppingListsView: View {
             Color.primaryBackground
                 .ignoresSafeArea()
         }
-        .overlay(alignment: .bottom) {
-            BaseButton(
-                title: "Создать список",
-                isActive: true,
-                action: {
-                    print("Create List")
-                }
-            )
-            .padding(.horizontal, 16)
-            .padding(.bottom, 20)
-        }
         .toolbar {
             titleToolbarItem
             contextMenuToolbarItem
-        }
-        .navigationDestination(item: $selectedListID) { id in
-            if let list = lists.first(where: { $0.id == id }) {
-                Text(list.title)
-            }
         }
     }
     
@@ -73,7 +79,7 @@ struct ShoppingListsView: View {
     private var shoppingList: some View {
         List(lists) { list in
             Button {
-                selectedListID = list.id
+                navigationPath.append(RoutePath.editPurchase(list.id))
             } label: {
                 ListItemView(listItem: list)
             }
