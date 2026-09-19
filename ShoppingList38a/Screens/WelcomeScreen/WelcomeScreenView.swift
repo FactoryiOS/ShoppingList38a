@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct WelcomeScreenView: View {
-    enum WelcomeTexts {
+    private enum WelcomeTexts {
         static let largeTitle = "Добро пожаловать!"
         static let headLineTitle = "Никогда не забывайте,\nчто нужно купить"
         static let supportingTextTitle = "Создавайте списки\nи не переживайте о покупках"
@@ -37,6 +37,7 @@ struct WelcomeScreenView: View {
     private var titleView: some View {
         Text(WelcomeTexts.largeTitle)
             .font(AppFont.regular34)
+            .foregroundStyle(.titleText)
             .multilineTextAlignment(.center)
     }
     
