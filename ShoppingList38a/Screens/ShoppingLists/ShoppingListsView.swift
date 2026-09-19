@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct ShoppingListsView: View {
+    @Environment(AppState.self) private var appState
+    
     @State private var selectedListID: ListItem.ID?
     
     let lists: [ListItem]
@@ -145,8 +147,32 @@ struct ShoppingListsView: View {
     
     @ToolbarContentBuilder
     private var contextMenuToolbarItem: some ToolbarContent {
+        @Bindable var appState = appState
+        
         ToolbarItem(placement: .topBarTrailing) {
             Menu {
+                Picker(
+                    "Установить тему",
+                    systemImage: AppSystemIcon.circleLefthalfFilledInverse,
+                    selection: $appState.appColorScheme
+                ) {
+                    ForEach(AppColorScheme.allCases) { scheme in
+                        Text(scheme.displayName)
+                            .tag(scheme as AppColorScheme?)
+                    }
+                }
+                .pickerStyle(.menu)
+                
+                Divider()
+                
+                Button {
+                    
+                } label: {
+                    Label(
+                        "Сортировать по алфавиту",
+                        systemImage: AppSystemIcon.arrowUpArrowDown
+                    )
+                }
             } label: {
                 Image(systemName: AppSystemIcon.ellipsisCircle)
                     .foregroundStyle(.titleText)
@@ -157,13 +183,25 @@ struct ShoppingListsView: View {
 }
 
 #Preview("Empty") {
+    @Previewable @State var appState = AppState()
+    
     NavigationStack {
         ShoppingListsView(lists: [])
     }
+    .environment(appState)
+    .preferredColorScheme(
+        appState.appColorScheme?.preferredColorScheme
+    )
 }
 
 #Preview("Data") {
+    @Previewable @State var appState = AppState()
+    
     NavigationStack {
         ShoppingListsView(lists: ListItem.mocks)
     }
+    .environment(appState)
+    .preferredColorScheme(
+        appState.appColorScheme?.preferredColorScheme
+    )
 }
