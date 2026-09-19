@@ -9,9 +9,21 @@ import SwiftUI
 
 @main
 struct ShoppingList38aApp: App {
+    @State private var appState = AppState()
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            if appState.isFirstLaunch {
+                WelcomeScreenView(
+                    observed: WelcomeScreenView.Observed(
+                        onStartButtonTap: appState.completeWelcome
+                    )
+                )
+            } else {
+                NavigationStack {
+                    ShoppingListsView(lists: [])
+                }
+            }
         }
     }
 }
