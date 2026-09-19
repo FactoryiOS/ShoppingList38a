@@ -24,13 +24,13 @@ struct WelcomeScreenView: View {
                 imageView
                 descriptionView
             }
-            .padding(.horizontal, 16)
             .padding(.top, 40)
             
             Spacer()
             
             actionButton
         }
+        .padding(.horizontal, 16)
         .background(.primaryBackground)
     }
     
@@ -52,15 +52,12 @@ struct WelcomeScreenView: View {
         VStack(spacing: 12) {
             Text(WelcomeTexts.headLineTitle)
                 .font(AppFont.semiBold22)
-                .foregroundStyle(.primaryText)
-                .multilineTextAlignment(.center)
             
             Text(WelcomeTexts.supportingTextTitle)
                 .font(AppFont.regular17)
-                .foregroundStyle(.primaryText)
-                .multilineTextAlignment(.center)
         }
-        
+        .foregroundStyle(.primaryText)
+        .multilineTextAlignment(.center)
     }
     
     private var actionButton: some View {
@@ -72,7 +69,6 @@ struct WelcomeScreenView: View {
             }
         )
         .padding(.bottom, 20)
-        .padding(.horizontal, 16)
     }
 }
 
