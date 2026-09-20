@@ -11,7 +11,6 @@ struct ShoppingListsView: View {
     @Environment(AppState.self) private var appState
     
     @State private var selectedListID: ListItem.ID?
-    @State private var navigationPath = NavigationPath()
     
     let lists: [ListItem]
     

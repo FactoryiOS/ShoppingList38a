@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct ShoppingListFormView: View {
-    @Environment(\.colorScheme) private var colorScheme
     @Environment(\.dismiss) private var dismiss
     
     @FocusState private var isNameFieldFocused: Bool
@@ -75,18 +74,17 @@ struct ShoppingListFormView: View {
     
     @ToolbarContentBuilder
     private var titleToolbar: some ToolbarContent {
-        ToolbarItem(placement: .topBarLeading) {
+        ToolbarItemGroup(placement: .topBarLeading) {
             Button {
                 dismiss()
             } label: {
                 Image(systemName: AppSystemIcon.chevronLeft)
-                    .foregroundStyle(colorScheme == .dark ? .white : .blackPrimary )
-                    .frame(width: 28, height: 28)
+                    .foregroundStyle(.titleText)
+                    .frame(width: 28, height: 44)
                     .contentShape(Rectangle())
             }
-        }
-        
-        ToolbarItem(placement: .topBarLeading) {
+            .buttonStyle(.plain)
+            
             Text(observed.titleToolbar)
                 .font(AppFont.medium17)
                 .foregroundStyle(.titleText)
