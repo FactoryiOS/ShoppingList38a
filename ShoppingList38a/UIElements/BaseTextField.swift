@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct BaseTextField: View {
+    @FocusState.Binding var isFocused: Bool
+    
     let placeholder: String
     @Binding var text: String
     let errorMessage: String?
@@ -17,6 +19,7 @@ struct BaseTextField: View {
             HStack {
                 TextField(placeholder, text: $text)
                     .font(AppFont.regular17)
+                    .focused($isFocused)
                 
                 if !text.isEmpty {
                     Button(
@@ -54,12 +57,14 @@ struct BaseTextField: View {
 
 #Preview {
     @Previewable @State var text = "Новый год"
+    @FocusState var isFocused: Bool
     
     let currentError = text == "Новый год"
     ? "Это название уже используется, пожалуйста, измените его."
     : nil
     
     BaseTextField(
+        isFocused: $isFocused,
         placeholder: "Введите название",
         text: $text,
         errorMessage: currentError

@@ -2,7 +2,7 @@
 //  AppState.swift
 //  ShoppingList38a
 //
-//  Created by Anastasia Belyakova on 19.09.2026.
+//  Created by Андрей Макалкин on 19.09.2026.
 //
 
 import Foundation
@@ -10,20 +10,28 @@ import Foundation
 @Observable
 @MainActor
 final class AppState {
-    private enum Keys {
-        static let hasCompletedWelcome = "hasCompletedWelcome"
-    }
 
-    private let userDefaults: UserDefaults
+    private let userDefaultsService: UserDefaultsService
+
     private(set) var isFirstLaunch: Bool
 
-    init(userDefaults: UserDefaults = .standard) {
-        self.userDefaults = userDefaults
-        isFirstLaunch = !userDefaults.bool(forKey: Keys.hasCompletedWelcome)
+    var appColorScheme: AppColorScheme? {
+        didSet {
+            userDefaultsService.saveAppColorScheme(appColorScheme)
+        }
+    }
+
+    init(
+        userDefaultsService: UserDefaultsService = UserDefaultsService()
+    ) {
+        self.userDefaultsService = userDefaultsService
+
+        isFirstLaunch = !userDefaultsService.fetchHasCompletedWelcome()
+        appColorScheme = userDefaultsService.fetchAppColorScheme()
     }
 
     func completeWelcome() {
         isFirstLaunch = false
-        userDefaults.set(true, forKey: Keys.hasCompletedWelcome)
+        userDefaultsService.saveHasCompletedWelcome()
     }
 }

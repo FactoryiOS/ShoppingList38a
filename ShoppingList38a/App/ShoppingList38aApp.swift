@@ -13,13 +13,17 @@ struct ShoppingList38aApp: App {
 
     var body: some Scene {
         WindowGroup {
-            if appState.isFirstLaunch {
-                WelcomeScreenView(onComplete: appState.completeWelcome)
-            } else {
-                NavigationStack {
-                    ShoppingListsView(lists: [])
+            Group {
+                if appState.isFirstLaunch {
+                    WelcomeScreenView(onComplete: appState.completeWelcome)
+                } else {
+                    NavigationStack {
+                        ShoppingListsView(lists: [])
+                    }
                 }
             }
+            .environment(appState)
+            .preferredColorScheme(appState.appColorScheme?.preferredColorScheme)
         }
     }
 }
