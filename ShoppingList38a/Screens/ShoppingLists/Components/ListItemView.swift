@@ -17,7 +17,7 @@ struct ListItemView: View {
                 .foregroundStyle(.black)
                 .background(listItem.color.color, in: Circle())
             
-            Text(listItem.title)
+            Text(listItem.name)
                 .font(AppFont.medium20)
                 .foregroundStyle(.primaryText)
             

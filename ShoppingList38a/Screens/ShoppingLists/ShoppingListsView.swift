@@ -44,7 +44,7 @@ struct ShoppingListsView: View {
         }
         .navigationDestination(item: $selectedListID) { id in
             if let list = lists.first(where: { $0.id == id }) {
-                Text(list.title)
+                Text(list.name)
             }
         }
     }
