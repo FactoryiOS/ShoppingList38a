@@ -14,11 +14,7 @@ struct ShoppingList38aApp: App {
     var body: some Scene {
         WindowGroup {
             if appState.isFirstLaunch {
-                WelcomeScreenView(
-                    observed: WelcomeScreenView.Observed(
-                        onStartButtonTap: appState.completeWelcome
-                    )
-                )
+                WelcomeScreenView(onComplete: appState.completeWelcome)
             } else {
                 NavigationStack {
                     ShoppingListsView(lists: [])
