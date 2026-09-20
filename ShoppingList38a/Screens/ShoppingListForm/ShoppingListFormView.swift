@@ -95,7 +95,9 @@ struct ShoppingListFormView: View {
 }
 
 #Preview {
-    ShoppingListFormView(onComplete: { })
+    NavigationStack {
+        ShoppingListFormView(onComplete: { })
+    }
 }
 
 #Preview {
