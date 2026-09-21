@@ -10,12 +10,20 @@ import SwiftUI
 @main
 struct ShoppingList38aApp: App {
     @State private var appState = AppState()
-    
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environment(appState)
-                .preferredColorScheme(appState.appColorScheme?.preferredColorScheme)
+            Group {
+                if appState.isFirstLaunch {
+                    WelcomeScreenView(onComplete: appState.completeWelcome)
+                } else {
+                    NavigationStack {
+                        ShoppingListsView(lists: [])
+                    }
+                }
+            }
+            .environment(appState)
+            .preferredColorScheme(appState.appColorScheme?.preferredColorScheme)
         }
     }
 }
