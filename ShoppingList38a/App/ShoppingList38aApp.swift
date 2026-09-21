@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct ShoppingList38aApp: App {
@@ -18,5 +19,6 @@ struct ShoppingList38aApp: App {
                 .environment(appState)
                 .environment(appRouter)
         }
+        .modelContainer(appState.swiftDataService.modelContainer)
     }
 }
