@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ShoppingListFormView: View {
     @Environment(\.dismiss) private var dismiss
@@ -13,10 +14,10 @@ struct ShoppingListFormView: View {
     @FocusState private var isNameFieldFocused: Bool
     @State private var observed = Observed()
     
-    private let shoppingListId: UUID?
+    private let shoppingListId: ShoppingList.ID?
     private let onComplete: Completion
     
-    init(shoppingListId: UUID? = nil, onComplete: @escaping Completion) {
+    init(shoppingListId: ShoppingList.ID? = nil, onComplete: @escaping Completion) {
         self.shoppingListId = shoppingListId
         self.onComplete = onComplete
     }
@@ -100,6 +101,9 @@ struct ShoppingListFormView: View {
 
 #Preview {
     NavigationStack {
-        ShoppingListFormView(shoppingListId: ListItem.mocks.first?.id ?? UUID(), onComplete: { })
+        ShoppingListFormView(
+            shoppingListId: ShoppingList.mocks.first?.id,
+            onComplete: { }
+        )
     }
 }

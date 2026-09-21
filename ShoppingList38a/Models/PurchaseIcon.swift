@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum PurchaseIcon: String, CaseIterable, Hashable {
+enum PurchaseIcon: String, CaseIterable, Hashable, Codable {
     case snow
     case airplane
     case alert

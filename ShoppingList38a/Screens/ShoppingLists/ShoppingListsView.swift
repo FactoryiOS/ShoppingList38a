@@ -6,12 +6,13 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ShoppingListsView: View {
     @Environment(AppState.self) private var appState
     @Environment(AppRouter.self) private var router
     
-    let lists: [ListItem]
+    let lists: [ShoppingList]
     
     var body: some View {
         Group {
@@ -195,7 +196,7 @@ struct ShoppingListsView: View {
     @Previewable @State var appRouter = AppRouter()
     
     NavigationStack {
-        ShoppingListsView(lists: ListItem.mocks)
+        ShoppingListsView(lists: ShoppingList.mocks)
     }
     .environment(appState)
     .environment(appRouter)

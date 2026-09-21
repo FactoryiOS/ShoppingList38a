@@ -5,40 +5,26 @@
 //  Created by Андрей Макалкин on 13.09.2026.
 //
 
-import Foundation
+import SwiftData
 
-struct ShoppingItem: Identifiable {
-    let id: UUID
+@Model
+final class ShoppingItem {
     var title: String
     var count: Int
     var unit: ShoppingItemUnit
     var isPurchased: Bool
     
+    var list: ShoppingList?
+    
     init(
-        id: UUID = UUID(),
         title: String,
         count: Int,
         unit: ShoppingItemUnit,
         isPurchased: Bool
     ) {
-        self.id = id
         self.title = title
         self.count = count
         self.unit = unit
         self.isPurchased = isPurchased
     }
-    
-    static let mockUnpurchased = ShoppingItem(
-        title: "текст",
-        count: 2,
-        unit: .piece,
-        isPurchased: false
-    )
-    
-    static let mockPurchased = ShoppingItem(
-        title: "Чайник",
-        count: 2,
-        unit: .piece,
-        isPurchased: true
-    )
 }

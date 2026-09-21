@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ListItemView: View {
-    let listItem: ListItem
+    let listItem: ShoppingList
     
     var body: some View {
         HStack(spacing: 12) {
