@@ -9,8 +9,7 @@ import SwiftUI
 
 struct ShoppingListsView: View {
     @Environment(AppState.self) private var appState
-    
-    @State private var selectedListID: ListItem.ID?
+    @Environment(AppRouter.self) private var router
     
     let lists: [ListItem]
     
@@ -32,7 +31,7 @@ struct ShoppingListsView: View {
                 title: "Создать список",
                 isActive: true,
                 action: {
-                    print("Create List")
+                    router.showModal(.createShoppingList)
                 }
             )
             .padding(.horizontal, 16)
@@ -41,11 +40,6 @@ struct ShoppingListsView: View {
         .toolbar {
             titleToolbarItem
             contextMenuToolbarItem
-        }
-        .navigationDestination(item: $selectedListID) { id in
-            if let list = lists.first(where: { $0.id == id }) {
-                Text(list.name)
-            }
         }
     }
     
@@ -73,7 +67,7 @@ struct ShoppingListsView: View {
     private var shoppingList: some View {
         List(lists) { list in
             Button {
-                selectedListID = list.id
+                router.push(.shoppingList(list))
             } label: {
                 ListItemView(listItem: list)
             }
@@ -106,7 +100,7 @@ struct ShoppingListsView: View {
                 .tint(.systemsOrange)
                 
                 Button {
-                    print("Edit")
+                    router.showModal(.editShoppingList(list.id))
                 } label: {
                     Image(systemName: AppSystemIcon.squareAndPencil)
                         .environment(\.symbolVariants, .none)
@@ -184,11 +178,13 @@ struct ShoppingListsView: View {
 
 #Preview("Empty") {
     @Previewable @State var appState = AppState()
+    @Previewable @State var appRouter = AppRouter()
     
     NavigationStack {
         ShoppingListsView(lists: [])
     }
     .environment(appState)
+    .environment(appRouter)
     .preferredColorScheme(
         appState.appColorScheme?.preferredColorScheme
     )
@@ -196,11 +192,13 @@ struct ShoppingListsView: View {
 
 #Preview("Data") {
     @Previewable @State var appState = AppState()
+    @Previewable @State var appRouter = AppRouter()
     
     NavigationStack {
         ShoppingListsView(lists: ListItem.mocks)
     }
     .environment(appState)
+    .environment(appRouter)
     .preferredColorScheme(
         appState.appColorScheme?.preferredColorScheme
     )
