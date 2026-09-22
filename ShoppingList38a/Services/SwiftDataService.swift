@@ -6,6 +6,7 @@
 //
 
 import SwiftData
+import Foundation
 
 @MainActor
 final class SwiftDataService {
@@ -37,7 +38,7 @@ final class SwiftDataService {
         color: PurchaseColor
     ) throws {
         let model = ShoppingList(
-            name: name,
+            name: trimmed(name),
             icon: icon,
             color: color
         )
@@ -53,7 +54,7 @@ final class SwiftDataService {
         icon: PurchaseIcon,
         color: PurchaseColor
     ) throws {
-        shoppingList.name = name
+        shoppingList.name = trimmed(name)
         shoppingList.icon = icon
         shoppingList.color = color
         
@@ -93,6 +94,48 @@ final class SwiftDataService {
         try modelContext.save()
     }
     
+    /// Проверяет, доступно ли название для списка покупок.
+    ///
+    /// Сравнение выполняется с учётом регистра.
+    /// Пробелы и переносы строк в начале и конце названия игнорируются.
+    ///
+    /// Например:
+    /// `Продукты` и `Продукты` — дубликат.
+    /// ` Продукты ` и `Продукты` — дубликат.
+    /// `Продукты` и `продукты` — разные названия.
+    /// `Продукты` и `ПРОДУКТЫ` — разные названия.
+    ///
+    /// При редактировании текущий список исключается из проверки,
+    /// поэтому его собственное название не считается дубликатом.
+    ///
+    /// - Parameters:
+    ///   - name: Название, которое нужно проверить.
+    ///   - shoppingList: Текущий редактируемый список, который нужно исключить из проверки.
+    /// - Returns: `true`, если список с таким названием отсутствует, иначе `false`.
+    /// - Throws: Ошибка получения списков из SwiftData.
+    func isShoppingListNameAvailable(
+        _ name: String,
+        excluding shoppingList: ShoppingList? = nil
+    ) throws -> Bool {
+        let descriptor = FetchDescriptor<ShoppingList>()
+        let lists = try modelContext.fetch(descriptor)
+        
+        let normalizedName = name
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        return !lists.contains { list in
+            if let shoppingList,
+               list.id == shoppingList.id {
+                return false
+            }
+            
+            let existingName = list.name
+                .trimmingCharacters(in: .whitespacesAndNewlines)
+            
+            return existingName == normalizedName
+        }
+    }
+    
     // MARK: - Работа с ShoppingItem
     
     func addShoppingItem(
@@ -102,7 +145,7 @@ final class SwiftDataService {
         unit: ShoppingItemUnit
     ) throws {
         let model = ShoppingItem(
-            title: title,
+            title: trimmed(title),
             count: count,
             unit: unit
         )
@@ -119,7 +162,7 @@ final class SwiftDataService {
         count: Int,
         unit: ShoppingItemUnit
     ) throws {
-        shoppingItem.title = title
+        shoppingItem.title = trimmed(title)
         shoppingItem.count = count
         shoppingItem.unit = unit
         
@@ -182,5 +225,9 @@ final class SwiftDataService {
             .max() ?? 0
         
         return "\(prefix)\(lastCopyNumber + 1)"
+    }
+    
+    private func trimmed(_ value: String) -> String {
+        value.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 }

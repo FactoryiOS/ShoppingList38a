@@ -12,8 +12,18 @@ struct ShoppingListsView: View {
     @Environment(AppState.self) private var appState
     @Environment(AppRouter.self) private var router
     
+    @State private var observed: Observed
+    
     @Query private var lists: [ShoppingList]
     
+    init(service: SwiftDataService) {
+        _observed = State(
+            initialValue: Observed(
+                service: service
+            )
+        )
+    }
+
     var body: some View {
         Group {
             if lists.isEmpty {
@@ -85,7 +95,7 @@ struct ShoppingListsView: View {
             )
             .swipeActions(allowsFullSwipe: false) {
                 Button(role: .destructive) {
-                    print("Delete")
+                    observed.handleDeleteShoppingList(list)
                 } label: {
                     Image(systemName: AppSystemIcon.trash)
                         .environment(\.symbolVariants, .none)
@@ -93,7 +103,7 @@ struct ShoppingListsView: View {
                 .tint(.systemsRed)
                 
                 Button {
-                    print("Duplicate")
+                    observed.handleDuplicateShoppingList(list)
                 } label: {
                     Image(systemName: AppSystemIcon.plusSquareOnSquare)
                         .environment(\.symbolVariants, .none)
@@ -180,9 +190,11 @@ struct ShoppingListsView: View {
 #Preview("Empty") {
     @Previewable @State var appRouter = AppRouter()
     
-    PreviewEnvironment(.empty) { _ in
+    PreviewEnvironment(.empty) { preview in
         NavigationStack {
-            ShoppingListsView()
+            ShoppingListsView(
+                service: preview.service
+            )
         }
         .environment(appRouter)
     }
@@ -191,9 +203,11 @@ struct ShoppingListsView: View {
 #Preview("Data") {
     @Previewable @State var appRouter = AppRouter()
     
-    PreviewEnvironment(.data) { _ in
+    PreviewEnvironment(.data) { preview in
         NavigationStack {
-            ShoppingListsView()
+            ShoppingListsView(
+                service: preview.service
+            )
         }
         .environment(appRouter)
     }

@@ -11,9 +11,16 @@ extension ShoppingListFormView {
     @MainActor
     @Observable
     final class Observed {
-        var name: String = ""
+        var name: String = "" {
+            didSet {
+                validateName()
+            }
+        }
+        
         var selectedIcon: PurchaseIcon?
         var selectedColor: PurchaseColor?
+        
+        private(set) var nameErrorMessage: String?
         
         private let service: SwiftDataService
         private let currentShoppingList: ShoppingList?
@@ -24,7 +31,7 @@ extension ShoppingListFormView {
         ) {
             self.service = service
             self.currentShoppingList = shoppingList
-
+            
             if let shoppingList {
                 name = shoppingList.name
                 selectedIcon = shoppingList.icon
@@ -51,21 +58,55 @@ extension ShoppingListFormView {
             currentShoppingList != nil ? "Редактировать список" : "Создать список"
         }
         
-        var nameErrorMessage: String? {
-            if name.isEmpty || name == currentShoppingList?.name {
-                return nil
+        func handleSave(completion: Completion) {
+            guard
+                isValid,
+                let selectedIcon,
+                let selectedColor
+            else {
+                return
             }
             
-            guard ShoppingList.mocks.first(where: { $0.name.lowercased() == name.lowercased() }) != nil else {
-                return nil
+            do {
+                if let currentShoppingList {
+                    try service.updateShoppingList(
+                        currentShoppingList,
+                        name: trimmedName,
+                        icon: selectedIcon,
+                        color: selectedColor
+                    )
+                } else {
+                    try service.createShoppingList(
+                        name: trimmedName,
+                        icon: selectedIcon,
+                        color: selectedColor
+                    )
+                }
+                
+                completion()
+            } catch {
+                print("❌ [ShoppingListFormView] handleSave: \(error)")
             }
-            
-            return "Это название уже используется, пожалуйста, измените его."
         }
         
-        func handleSave(completion: Completion) {
-            // TODO: добавляем сохранение модели (добавляем или обновляем)
-            completion()
+        private func validateName() {
+            guard !trimmedName.isEmpty else {
+                nameErrorMessage = nil
+                return
+            }
+            
+            do {
+                let isAvailable = try service.isShoppingListNameAvailable(
+                    trimmedName,
+                    excluding: currentShoppingList
+                )
+                
+                nameErrorMessage = isAvailable
+                ? nil
+                : "Это название уже используется, пожалуйста, измените его."
+            } catch {
+                print("❌ [ShoppingListFormView] validateName: \(error)")
+            }
         }
     }
 }
