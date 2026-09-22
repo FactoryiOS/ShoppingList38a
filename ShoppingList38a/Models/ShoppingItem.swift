@@ -5,26 +5,30 @@
 //  Created by Андрей Макалкин on 13.09.2026.
 //
 
+import Foundation
 import SwiftData
 
 @Model
 final class ShoppingItem {
-    var title: String
+    var name: String
     var count: Int
     var unit: ShoppingItemUnit
     var isPurchased: Bool
+    var createdAt: Date = Date.now
     
     var list: ShoppingList?
     
     init(
-        title: String,
+        name: String,
         count: Int,
         unit: ShoppingItemUnit,
-        isPurchased: Bool = false
+        isPurchased: Bool = false,
+        createdAt: Date = Date.now
     ) {
-        self.title = title
+        self.name = name
         self.count = count
         self.unit = unit
         self.isPurchased = isPurchased
+        self.createdAt = createdAt
     }
 }

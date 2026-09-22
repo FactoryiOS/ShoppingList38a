@@ -8,7 +8,7 @@
 extension ShoppingItem {
     static var mockUnpurchased: ShoppingItem {
         ShoppingItem(
-            title: "текст",
+            name: "текст",
             count: 2,
             unit: .piece,
             isPurchased: false
@@ -17,7 +17,7 @@ extension ShoppingItem {
     
     static var mockPurchased: ShoppingItem {
         ShoppingItem(
-            title: "Чайник",
+            name: "Чайник",
             count: 2,
             unit: .piece,
             isPurchased: true

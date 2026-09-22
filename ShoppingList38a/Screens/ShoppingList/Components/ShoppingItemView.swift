@@ -43,7 +43,7 @@ struct ShoppingItemView: View {
             .font(AppFont.regular24)
             .frame(width: 44, height: 44)
             
-            Text(shoppingItem.title)
+            Text(shoppingItem.name)
                 .font(AppFont.regular17)
                 .foregroundStyle(textColor)
             

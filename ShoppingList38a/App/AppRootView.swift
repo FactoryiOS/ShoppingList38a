@@ -10,19 +10,23 @@ import SwiftUI
 struct AppRootView: View {
     @Environment(AppState.self) private var appState
     @Environment(AppRouter.self) private var router
-
+    
     var body: some View {
         @Bindable var router = router
-
+        
         Group {
             if appState.isFirstLaunch {
-                WelcomeScreenView(onComplete: appState.completeWelcome)
+                WelcomeScreenView(
+                    onComplete: appState.completeWelcome
+                )
             } else {
                 NavigationStack(path: $router.path) {
-                    ShoppingListsView(lists: [])
-                        .navigationDestination(for: AppRoute.self) { route in
-                            destination(for: route)
-                        }
+                    ShoppingListsView(
+                        service: appState.swiftDataService
+                    )
+                    .navigationDestination(for: AppRoute.self) { route in
+                        destination(for: route)
+                    }
                 }
                 .sheet(item: $router.presentedModal) { route in
                     NavigationStack {
@@ -31,21 +35,71 @@ struct AppRootView: View {
                 }
             }
         }
-        .preferredColorScheme(appState.appColorScheme?.preferredColorScheme)
+        .preferredColorScheme(
+            appState.appColorScheme?.preferredColorScheme
+        )
     }
-
+    
     @ViewBuilder
     private func destination(for route: AppRoute) -> some View {
         switch route {
-        case .shoppingList(let list):
-            Text(list.name)
+        case .shoppingList(let shoppingListID):
+            if let shoppingList = appState.swiftDataService.fetchShoppingList(
+                by: shoppingListID
+            ) {
+                // TODO: Раскомментировать при реализации ShoppingListView
+                // ShoppingListView(
+                //     service: appState.swiftDataService,
+                //     shoppingList: shoppingList
+                // )
+                
+                Text(shoppingList.name)
+            }
+            
         case .createShoppingList:
-            ShoppingListFormView(onComplete: router.dismissModal)
-        case .editShoppingList(let id):
             ShoppingListFormView(
-                shoppingListId: id,
+                service: appState.swiftDataService,
                 onComplete: router.dismissModal
             )
+            
+        case .editShoppingList(let shoppingListID):
+            if let shoppingList = appState.swiftDataService.fetchShoppingList(
+                by: shoppingListID
+            ) {
+                ShoppingListFormView(
+                    service: appState.swiftDataService,
+                    shoppingList: shoppingList,
+                    onComplete: router.dismissModal
+                )
+            }
+        
+        case .createShoppingItem(let shoppingListID):
+            if let shoppingList = appState.swiftDataService.fetchShoppingList(
+                by: shoppingListID
+            ) {
+                // TODO: Раскомментировать при реализации ShoppingItemFormView в режиме создания товара
+                // ShoppingItemFormView(
+                //     service: appState.swiftDataService,
+                //     shoppingList: shoppingList,
+                //     onComplete: router.dismissModal
+                // )
+                
+                EmptyView()
+            }
+
+        case .editShoppingItem(let shoppingItemID):
+            if let shoppingItem = appState.swiftDataService.fetchShoppingItem(
+                by: shoppingItemID
+            ) {
+                // TODO: Раскомментировать при реализации ShoppingItemFormView в режиме редактирования товара
+                // ShoppingItemFormView(
+                //     service: appState.swiftDataService,
+                //     shoppingItem: shoppingItem,
+                //     onComplete: router.dismissModal
+                // )
+                
+                Text(shoppingItem.name)
+            }
         }
     }
 }

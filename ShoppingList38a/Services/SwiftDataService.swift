@@ -76,22 +76,54 @@ final class SwiftDataService {
             for: shoppingList
         )
         
+        let sortedItems = shoppingList.items.sorted {
+            $0.createdAt < $1.createdAt
+        }
+        
+        let baseDate = Date.now
+        
+        let duplicatedItems = sortedItems
+            .enumerated()
+            .map { index, item in
+                ShoppingItem(
+                    name: item.name,
+                    count: item.count,
+                    unit: item.unit,
+                    // Добавляем 1 мс на каждый следующий товар,
+                    // чтобы сохранить исходный порядок элементов,
+                    // но при этом задать новым копиям собственные createdAt.
+                    createdAt: baseDate.addingTimeInterval(
+                        TimeInterval(index) * 0.001
+                    )
+                )
+            }
+        
         let model = ShoppingList(
             name: duplicateName,
             icon: shoppingList.icon,
             color: shoppingList.color,
-            items: shoppingList.items.map {
-                ShoppingItem(
-                    title: $0.title,
-                    count: $0.count,
-                    unit: $0.unit
-                )
-            }
+            items: duplicatedItems
         )
         
         modelContext.insert(model)
-        
         try modelContext.save()
+    }
+    
+    func fetchShoppingList(
+        by id: ShoppingList.ID
+    ) -> ShoppingList? {
+        let descriptor = FetchDescriptor<ShoppingList>(
+            predicate: #Predicate {
+                $0.persistentModelID == id
+            }
+        )
+        
+        do {
+            return try modelContext.fetch(descriptor).first
+        } catch {
+            print("❌ [SwiftDataService] fetchShoppingList: \(error)")
+            return nil
+        }
     }
     
     /// Проверяет, доступно ли название для списка покупок.
@@ -140,12 +172,12 @@ final class SwiftDataService {
     
     func addShoppingItem(
         to shoppingList: ShoppingList,
-        title: String,
+        name: String,
         count: Int,
         unit: ShoppingItemUnit
     ) throws {
         let model = ShoppingItem(
-            title: trimmed(title),
+            name: trimmed(name),
             count: count,
             unit: unit
         )
@@ -158,11 +190,11 @@ final class SwiftDataService {
     
     func updateShoppingItem(
         _ shoppingItem: ShoppingItem,
-        title: String,
+        name: String,
         count: Int,
         unit: ShoppingItemUnit
     ) throws {
-        shoppingItem.title = trimmed(title)
+        shoppingItem.name = trimmed(name)
         shoppingItem.count = count
         shoppingItem.unit = unit
         
@@ -183,6 +215,47 @@ final class SwiftDataService {
         shoppingItem.isPurchased.toggle()
         
         try modelContext.save()
+    }
+    
+    func resetPurchasedItems(
+        in shoppingList: ShoppingList
+    ) throws {
+        shoppingList.items.forEach {
+            $0.isPurchased = false
+        }
+        
+        try modelContext.save()
+    }
+    
+    func deletePurchasedItems(
+        in shoppingList: ShoppingList
+    ) throws {
+        let purchasedItems = shoppingList.items.filter {
+            $0.isPurchased
+        }
+        
+        purchasedItems.forEach {
+            modelContext.delete($0)
+        }
+        
+        try modelContext.save()
+    }
+    
+    func fetchShoppingItem(
+        by id: ShoppingItem.ID
+    ) -> ShoppingItem? {
+        let descriptor = FetchDescriptor<ShoppingItem>(
+            predicate: #Predicate {
+                $0.persistentModelID == id
+            }
+        )
+        
+        do {
+            return try modelContext.fetch(descriptor).first
+        } catch {
+            print("❌ [SwiftDataService] fetchShoppingItem: \(error)")
+            return nil
+        }
     }
     
     // MARK: - Helpers

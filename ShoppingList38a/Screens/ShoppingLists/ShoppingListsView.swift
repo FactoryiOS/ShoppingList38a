@@ -14,7 +14,11 @@ struct ShoppingListsView: View {
     
     @State private var observed: Observed
     
-    @Query private var lists: [ShoppingList]
+    @Query(
+        sort: \ShoppingList.createdAt,
+        order: .forward
+    )
+    private var lists: [ShoppingList]
     
     init(service: SwiftDataService) {
         _observed = State(
@@ -78,7 +82,7 @@ struct ShoppingListsView: View {
     private var shoppingList: some View {
         List(lists) { list in
             Button {
-                router.push(.shoppingList(list))
+                router.push(.shoppingList(list.id))
             } label: {
                 ListItemView(listItem: list)
             }
@@ -188,27 +192,21 @@ struct ShoppingListsView: View {
 }
 
 #Preview("Empty") {
-    @Previewable @State var appRouter = AppRouter()
-    
     PreviewEnvironment(.empty) { preview in
         NavigationStack {
             ShoppingListsView(
                 service: preview.service
             )
         }
-        .environment(appRouter)
     }
 }
 
 #Preview("Data") {
-    @Previewable @State var appRouter = AppRouter()
-    
     PreviewEnvironment(.data) { preview in
         NavigationStack {
             ShoppingListsView(
                 service: preview.service
             )
         }
-        .environment(appRouter)
     }
 }

@@ -19,6 +19,7 @@ struct PreviewContext {
 
     let service: SwiftDataService
     let appState: AppState
+    let appRouter: AppRouter
 
     fileprivate let modelContainer: ModelContainer
 
@@ -49,6 +50,14 @@ struct PreviewContext {
 
         return storedPurchasedItem
     }
+    
+    var shoppingItem: ShoppingItem {
+        guard let shoppingItem = storedShoppingList?.items.first else {
+            fatalError("ShoppingItem is unavailable in empty preview")
+        }
+
+        return shoppingItem
+    }
 
     init(_ state: State) {
         let configuration = ModelConfiguration(
@@ -73,9 +82,12 @@ struct PreviewContext {
 
         modelContainer = container
         self.service = service
+        
         appState = AppState(
             swiftDataService: service
         )
+        
+        appRouter = AppRouter()
 
         switch state {
         case .empty:
@@ -126,6 +138,7 @@ struct PreviewEnvironment<Content: View>: View {
     var body: some View {
         content(context)
             .environment(context.appState)
+            .environment(context.appRouter)
             .preferredColorScheme(
                 context.appState.appColorScheme?.preferredColorScheme
             )

@@ -86,7 +86,7 @@ extension ShoppingList {
     ) -> [ShoppingItem] {
         (0..<totalCount).map { index in
             ShoppingItem(
-                title: "Товар \(index + 1)",
+                name: "Товар \(index + 1)",
                 count: 1,
                 unit: .piece,
                 isPurchased: index < purchasedCount

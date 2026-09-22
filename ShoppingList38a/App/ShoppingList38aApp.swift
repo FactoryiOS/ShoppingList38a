@@ -18,9 +18,6 @@ struct ShoppingList38aApp: App {
             AppRootView()
                 .environment(appState)
                 .environment(appRouter)
-                .preferredColorScheme(
-                    appState.appColorScheme?.preferredColorScheme
-                )
         }
         .modelContainer(
             appState.swiftDataService.modelContainer
