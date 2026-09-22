@@ -60,16 +60,18 @@ struct ShoppingItemView: View {
 }
 
 #Preview {
-    VStack(spacing: 0) {
-        ShoppingItemView(
-            shoppingItem: .mockUnpurchased,
-            onTogglePurchased: {}
-        )
-        
-        ShoppingItemView(
-            shoppingItem: .mockPurchased,
-            onTogglePurchased: {}
-        )
+    PreviewEnvironment { preview in
+        VStack(spacing: 0) {
+            ShoppingItemView(
+                shoppingItem: preview.unpurchasedItem,
+                onTogglePurchased: { }
+            )
+            
+            ShoppingItemView(
+                shoppingItem: preview.purchasedItem,
+                onTogglePurchased: { }
+            )
+        }
+        .background(.primaryBackground)
     }
-    .background(.primaryBackground)
 }

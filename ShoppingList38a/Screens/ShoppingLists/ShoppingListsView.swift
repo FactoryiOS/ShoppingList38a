@@ -12,7 +12,7 @@ struct ShoppingListsView: View {
     @Environment(AppState.self) private var appState
     @Environment(AppRouter.self) private var router
     
-    let lists: [ShoppingList]
+    @Query private var lists: [ShoppingList]
     
     var body: some View {
         Group {
@@ -178,29 +178,23 @@ struct ShoppingListsView: View {
 }
 
 #Preview("Empty") {
-    @Previewable @State var appState = AppState()
     @Previewable @State var appRouter = AppRouter()
     
-    NavigationStack {
-        ShoppingListsView(lists: [])
+    PreviewEnvironment(.empty) { _ in
+        NavigationStack {
+            ShoppingListsView()
+        }
+        .environment(appRouter)
     }
-    .environment(appState)
-    .environment(appRouter)
-    .preferredColorScheme(
-        appState.appColorScheme?.preferredColorScheme
-    )
 }
 
 #Preview("Data") {
-    @Previewable @State var appState = AppState()
     @Previewable @State var appRouter = AppRouter()
     
-    NavigationStack {
-        ShoppingListsView(lists: ShoppingList.mocks)
+    PreviewEnvironment(.data) { _ in
+        NavigationStack {
+            ShoppingListsView()
+        }
+        .environment(appRouter)
     }
-    .environment(appState)
-    .environment(appRouter)
-    .preferredColorScheme(
-        appState.appColorScheme?.preferredColorScheme
-    )
 }

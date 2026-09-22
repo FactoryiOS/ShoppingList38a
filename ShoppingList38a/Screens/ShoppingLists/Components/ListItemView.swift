@@ -44,5 +44,9 @@ struct ListItemView: View {
 }
 
 #Preview {
-    ListItemView(listItem: .mock)
+    PreviewEnvironment { preview in
+        ListItemView(
+            listItem: preview.shoppingList
+        )
+    }
 }

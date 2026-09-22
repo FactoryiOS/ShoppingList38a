@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import SwiftData
 
 extension ShoppingListFormView {
     @MainActor
@@ -16,7 +15,22 @@ extension ShoppingListFormView {
         var selectedIcon: PurchaseIcon?
         var selectedColor: PurchaseColor?
         
-        private var currentShoppingList: ShoppingList?
+        private let service: SwiftDataService
+        private let currentShoppingList: ShoppingList?
+        
+        init(
+            service: SwiftDataService,
+            shoppingList: ShoppingList? = nil
+        ) {
+            self.service = service
+            self.currentShoppingList = shoppingList
+
+            if let shoppingList {
+                name = shoppingList.name
+                selectedIcon = shoppingList.icon
+                selectedColor = shoppingList.color
+            }
+        }
         
         private var trimmedName: String {
             name.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -49,19 +63,7 @@ extension ShoppingListFormView {
             return "Это название уже используется, пожалуйста, измените его."
         }
         
-        func fetchShoppingList(by id: ShoppingList.ID?) {
-            guard let id, let shoppingList = ShoppingList.mocks.first(where: { $0.id == id }) else {
-                return
-            }
-            
-            name = shoppingList.name
-            selectedIcon = shoppingList.icon
-            selectedColor = shoppingList.color
-            
-            currentShoppingList = shoppingList
-        }
-        
-        func saveShoppingList(with id: ShoppingList.ID?, completion: Completion) {
+        func handleSave(completion: Completion) {
             // TODO: добавляем сохранение модели (добавляем или обновляем)
             completion()
         }

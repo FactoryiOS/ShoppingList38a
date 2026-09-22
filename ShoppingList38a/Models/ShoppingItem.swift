@@ -20,7 +20,7 @@ final class ShoppingItem {
         title: String,
         count: Int,
         unit: ShoppingItemUnit,
-        isPurchased: Bool
+        isPurchased: Bool = false
     ) {
         self.title = title
         self.count = count
