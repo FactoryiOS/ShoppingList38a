@@ -14,8 +14,8 @@ extension ShoppingListView {
         var searchText = ""
         
         var products: [ShoppingItem] = [
-            .mockUnpurchased,
-            .mockUnpurchased,
+            ShoppingItem(title: "Текст", count: 2, unit: .piece, isPurchased: false),
+            ShoppingItem(title: "Текст", count: 2, unit: .piece, isPurchased: false),
             .mockPurchased
         ]
         
