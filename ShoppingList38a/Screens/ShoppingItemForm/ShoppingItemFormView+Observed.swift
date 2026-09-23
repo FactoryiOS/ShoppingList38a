@@ -44,7 +44,7 @@ extension ShoppingItemFormView {
                 self.amountText = ""
                 self.selectedUnit = .piece
             case .edit(let item):
-                self.nameText = item.title
+                self.nameText = item.name
                 self.amountText = "\(item.count)"
                 self.selectedUnit = item.unit
             }
