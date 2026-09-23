@@ -26,11 +26,17 @@ struct ShoppingListView: View {
     }
     
     var body: some View {
-        Group {
-            if observed.products.isEmpty {
-                emptyState
-            } else {
-                productsListState
+        VStack(spacing: .zero) {
+            customSearchBar
+                .padding([.horizontal, .bottom], 16)
+                .padding(.top, 4)
+                .background(.primaryBackground)
+            Group {
+                if observed.products.isEmpty {
+                    emptyState
+                } else {
+                    productsListState
+                }
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -55,19 +61,11 @@ struct ShoppingListView: View {
     private var emptyState: some View {
         VStack(spacing: 0) {
             Spacer()
-            
-            customSearchBar
-                .padding(.horizontal, 16)
-            
-            Spacer()
-            
             PlaceholderView(
                 image: AppImage.emptyShoppingList,
                 title: ShoppingListTexts.emptyStateTitle,
                 subtitle: ShoppingListTexts.emptyStateSubTitle
             )
-            
-            Spacer()
             Spacer()
         }
         .padding(.bottom, 64)
@@ -75,11 +73,6 @@ struct ShoppingListView: View {
     
     private var productsListState: some View {
         VStack(spacing: .zero) {
-            customSearchBar
-                .padding(.horizontal, 16)
-                .padding(.bottom, 16)
-                .background(.primaryBackground)
-            
             productsList
         }
     }
@@ -107,13 +100,12 @@ struct ShoppingListView: View {
         .listStyle(.plain)
         .scrollContentBackground(.hidden)
         .scrollIndicators(.hidden)
-        .contentMargins(.top, 8, for: .scrollContent)
         .contentMargins(.bottom, 86, for: .scrollContent)
     }
     
     private var customSearchBar: some View {
         HStack(spacing: 8) {
-            Image(systemName: "magnifyingglass")
+            Image(systemName: AppSystemIcon.magnifyingGlass)
                 .foregroundStyle(.secondary)
             TextField(ShoppingListTexts.searchPlaceholder, text: $observed.searchText)
                 .font(AppFont.regular17)
