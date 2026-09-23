@@ -8,16 +8,33 @@
 import SwiftUI
 
 extension ShoppingListView {
+    @MainActor
     @Observable
     final class Observed {
-        
         var searchText = ""
+        var products: [ShoppingItem] = []
         
-        var products: [ShoppingItem] = [
-            ShoppingItem(title: "Текст", count: 2, unit: .piece, isPurchased: false),
-            ShoppingItem(title: "Текст", count: 2, unit: .piece, isPurchased: false),
-            .mockPurchased
-        ]
+        private var currentShoppingList: ListItem?
+        
+        var listTitle: String {
+            currentShoppingList?.name ?? "Список покупок"
+        }
+        
+        func fetchShoppingList(by id: UUID) {
+            guard let shoppingList = ListItem.mocks.first(where: { $0.id == id }) else {
+                currentShoppingList = nil
+                products = []
+                return
+            }
+            
+            currentShoppingList = shoppingList
+            
+            products = [
+                ShoppingItem(title: "Текст", count: 2, unit: .piece, isPurchased: false),
+                ShoppingItem(title: "Текст", count: 2, unit: .piece, isPurchased: false),
+                .mockPurchased
+            ]
+        }
         
         func handleAddProductTap() {
             print("Нажата кнопка 'Добавить товар'")
