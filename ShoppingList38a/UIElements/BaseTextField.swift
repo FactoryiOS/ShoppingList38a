@@ -17,11 +17,17 @@ struct BaseTextField: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             HStack {
-                TextField(placeholder, text: $text)
-                    .font(AppFont.regular17)
-                    .focused($isFocused)
+                TextField(
+                    placeholder,
+                    text: $text,
+                    prompt: Text(placeholder)
+                        .foregroundStyle(.hintGrey)
+                )
+                .font(AppFont.regular17)
+                .foregroundStyle(.primaryText)
+                .focused($isFocused)
                 
-                if !text.isEmpty {
+                if !text.isEmpty && isFocused {
                     Button(
                         action: { text = "" },
                         label: {
