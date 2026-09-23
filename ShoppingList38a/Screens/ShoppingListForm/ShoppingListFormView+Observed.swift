@@ -11,6 +11,9 @@ extension ShoppingListFormView {
     @MainActor
     @Observable
     final class Observed {
+        
+        // MARK: - State
+        
         var name: String = "" {
             didSet {
                 validateName()
@@ -22,8 +25,12 @@ extension ShoppingListFormView {
         
         private(set) var nameErrorMessage: String?
         
+        // MARK: - Dependencies
+        
         private let service: SwiftDataService
         private let currentShoppingList: ShoppingList?
+        
+        // MARK: - Init
         
         init(
             service: SwiftDataService,
@@ -31,7 +38,7 @@ extension ShoppingListFormView {
         ) {
             self.service = service
             self.currentShoppingList = shoppingList
-            
+
             if let shoppingList {
                 name = shoppingList.name
                 selectedIcon = shoppingList.icon
@@ -39,9 +46,7 @@ extension ShoppingListFormView {
             }
         }
         
-        private var trimmedName: String {
-            name.trimmingCharacters(in: .whitespacesAndNewlines)
-        }
+        // MARK: - Computed Properties
         
         var isValid: Bool {
             !trimmedName.isEmpty
@@ -57,6 +62,12 @@ extension ShoppingListFormView {
         var titleToolbar: String {
             currentShoppingList != nil ? "Редактировать список" : "Создать список"
         }
+        
+        private var trimmedName: String {
+            name.trimmingCharacters(in: .whitespacesAndNewlines)
+        }
+        
+        // MARK: - Actions
         
         func handleSave(completion: Completion) {
             guard
@@ -89,6 +100,8 @@ extension ShoppingListFormView {
             }
         }
         
+        // MARK: - Validation
+        
         private func validateName() {
             guard !trimmedName.isEmpty else {
                 nameErrorMessage = nil
@@ -100,7 +113,7 @@ extension ShoppingListFormView {
                     trimmedName,
                     excluding: currentShoppingList
                 )
-                
+
                 nameErrorMessage = isAvailable
                 ? nil
                 : "Это название уже используется, пожалуйста, измените его."
