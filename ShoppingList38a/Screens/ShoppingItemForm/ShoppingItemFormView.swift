@@ -8,15 +8,29 @@
 import SwiftUI
 
 struct ShoppingItemFormView: View {
-    
     @Environment(\.dismiss) private var dismiss
     
     @FocusState private var isNameFocused: Bool
     @FocusState private var isAmountFocused: Bool
     @State private var observed: Observed
     
-    init(mode: ProductFormType) {
-        _observed = State(initialValue: Observed(mode: mode))
+    private let onComplete: Completion
+    
+    init(
+        service: SwiftDataService,
+        shoppingList: ShoppingList,
+        shoppingItem: ShoppingItem? = nil,
+        onComplete: @escaping Completion
+    ) {
+        _observed = State(
+            initialValue: Observed(
+                service: service,
+                shoppingList: shoppingList,
+                shoppingItem: shoppingItem
+            )
+        )
+        
+        self.onComplete = onComplete
     }
     
     var body: some View {
@@ -24,9 +38,9 @@ struct ShoppingItemFormView: View {
             
             BaseTextField(
                 isFocused: $isNameFocused,
-                placeholder: "Название списка",
+                placeholder: "Название товара",
                 text: $observed.nameText,
-                errorMessage: observed.currentError
+                errorMessage: observed.nameErrorMessage
             )
             
             HStack(spacing: 16) {
@@ -62,7 +76,7 @@ struct ShoppingItemFormView: View {
             
             ToolbarItem(placement: .confirmationAction) {
                 Button("Готово") {
-                    print("done")
+                    observed.handleSave(completion: onComplete)
                 }
                 .font(AppFont.semiBold17)
                 .foregroundStyle(
@@ -79,12 +93,12 @@ struct ShoppingItemFormView: View {
                 Text("Ед.изм.:")
                     .font(AppFont.regular17)
                     .foregroundStyle(.hintGrey)
-                // заметил что текст стандартный текст плейсхолдера не соответствует макету
+                
                 Spacer()
+                
                 Picker("Единица измерения", selection: $observed.selectedUnit) {
                     ForEach(ShoppingItemUnit.allCases, id: \.self) { unit in
                         Text(unit.displayName)
-                        // по макету "шт" должно быть без "." но у нас в ShoppingItemUnit с "."
                             .tag(unit)
                     }
                 }
@@ -101,14 +115,26 @@ struct ShoppingItemFormView: View {
 }
 
 #Preview("Create") {
-    NavigationStack {
-        ShoppingItemFormView(mode: .create)
+    PreviewEnvironment(.data) { preview in
+        NavigationStack {
+            ShoppingItemFormView(
+                service: preview.service,
+                shoppingList: preview.shoppingList,
+                onComplete: { }
+            )
+        }
     }
 }
 
 #Preview("Edit") {
-    let item = ShoppingItem.mockPurchased
-    NavigationStack {
-        ShoppingItemFormView(mode: .edit(item))
+    PreviewEnvironment(.data) { preview in
+        NavigationStack {
+            ShoppingItemFormView(
+                service: preview.service,
+                shoppingList: preview.shoppingList,
+                shoppingItem: preview.shoppingItem,
+                onComplete: { }
+            )
+        }
     }
 }

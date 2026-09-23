@@ -77,28 +77,24 @@ struct AppRootView: View {
             if let shoppingList = appState.swiftDataService.fetchShoppingList(
                 by: shoppingListID
             ) {
-                // TODO: Раскомментировать при реализации ShoppingItemFormView в режиме создания товара
-                // ShoppingItemFormView(
-                //     service: appState.swiftDataService,
-                //     shoppingList: shoppingList,
-                //     onComplete: router.dismissModal
-                // )
-                
-                EmptyView()
+                ShoppingItemFormView(
+                    service: appState.swiftDataService,
+                    shoppingList: shoppingList,
+                    onComplete: router.dismissModal
+                )
             }
 
         case .editShoppingItem(let shoppingItemID):
             if let shoppingItem = appState.swiftDataService.fetchShoppingItem(
                 by: shoppingItemID
-            ) {
-                // TODO: Раскомментировать при реализации ShoppingItemFormView в режиме редактирования товара
-                // ShoppingItemFormView(
-                //     service: appState.swiftDataService,
-                //     shoppingItem: shoppingItem,
-                //     onComplete: router.dismissModal
-                // )
-                
-                Text(shoppingItem.name)
+            ),
+               let shoppingList = shoppingItem.list {
+                ShoppingItemFormView(
+                    service: appState.swiftDataService,
+                    shoppingList: shoppingList,
+                    shoppingItem: shoppingItem,
+                    onComplete: router.dismissModal
+                )
             }
         }
     }
