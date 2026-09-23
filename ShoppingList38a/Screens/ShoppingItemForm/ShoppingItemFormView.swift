@@ -19,54 +19,60 @@ struct ShoppingItemFormView: View {
     }
     
     var body: some View {
-        VStack(spacing: 20) {
-            HStack {
-                Button {
-                    dismiss()
-                } label: {
-                    Text("Отменить")
-                        .font(AppFont.regular17)
-                        .foregroundStyle(.hintGrey)
-                }
-                Spacer()
+        NavigationStack {
+            VStack(spacing: 20) {
                 
-                Text(observed.title)
-                    .font(AppFont.semiBold17)
-                    .foregroundStyle(.primaryText)
-                
-                Spacer()
-                Button {
-                    print("done")
-                } label: {
-                    Text("Готово")
-                        .font(AppFont.semiBold17)
-                        .foregroundStyle(observed.isFormValid ? .turquoise : .hintGrey)
-                }
-                .disabled(!observed.isFormValid)
-            }
-            
-            BaseTextField(
-                isFocused: $isFocused,
-                placeholder: "Название списка",
-                text: $observed.nameText,
-                errorMessage: observed.currentError
-            )
-            
-            HStack(spacing: 16) {
                 BaseTextField(
                     isFocused: $isFocused,
-                    placeholder: "Количество",
-                    text: $observed.amountText,
-                    errorMessage: nil
+                    placeholder: "Название списка",
+                    text: $observed.nameText,
+                    errorMessage: observed.currentError
                 )
                 
-                selectUnitPicker
+                HStack(spacing: 16) {
+                    BaseTextField(
+                        isFocused: $isFocused,
+                        placeholder: "Количество",
+                        text: $observed.amountText,
+                        errorMessage: nil
+                    )
+                    
+                    selectUnitPicker
+                }
+                Spacer()
             }
-            Spacer()
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
+            .background(.primaryBackground)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Отменить") {
+                        dismiss()
+                    }
+                    .font(AppFont.regular17)
+                    .foregroundStyle(.hintGrey)
+                }
+
+                ToolbarItem(placement: .principal) {
+                    Text(observed.title)
+                        .font(AppFont.semiBold17)
+                        .foregroundStyle(.primaryText)
+                }
+
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Готово") {
+                        print("done")
+                    }
+                    .font(AppFont.semiBold17)
+                    .foregroundStyle(
+                        observed.isFormValid ? .turquoise : .hintGrey
+                    )
+                    .disabled(!observed.isFormValid)
+                }
+            }
+
         }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 21)
-        .background(.primaryBackground)
     }
     
     private var selectUnitPicker: some View {
