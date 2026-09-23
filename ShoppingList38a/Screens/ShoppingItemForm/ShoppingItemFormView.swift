@@ -1,5 +1,5 @@
 //
-//  ProductFormView.swift
+//  ShoppingItemFormView.swift
 //  ShoppingList38a
 //
 //  Created by ivan on 2026-09-22.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ProductFormView: View {
+struct ShoppingItemFormView: View {
     
     @Environment(\.dismiss) private var dismiss
     
@@ -97,10 +97,10 @@ struct ProductFormView: View {
 }
 
 #Preview("Create") {
-    ProductFormView(mode: .create)
+    ShoppingItemFormView(mode: .create)
 }
 
 #Preview("Edit") {
     let item = ShoppingItem.mockPurchased
-    ProductFormView(mode: .edit(item))
+    ShoppingItemFormView(mode: .edit(item))
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension ProductFormView {
+extension ShoppingItemFormView {
     @MainActor
     @Observable
     final class Observed {
