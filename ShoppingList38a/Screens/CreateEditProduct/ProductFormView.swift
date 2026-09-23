@@ -65,7 +65,7 @@ struct ProductFormView: View {
             Spacer()
         }
         .padding(.horizontal, 16)
-        .padding(.vertical, 8)
+        .padding(.vertical, 21)
         .background(.primaryBackground)
     }
     
