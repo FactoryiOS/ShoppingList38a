@@ -74,7 +74,7 @@ struct ProductFormView: View {
             HStack {
                 Text("Ед.изм.:")
                     .font(AppFont.regular17)
-                    .foregroundStyle(Color(uiColor: .placeholderText))
+                    .foregroundStyle(.hintGrey)
                 // заметил что текст стандартный текст плейсхолдера не соответствует макету
                 Spacer()
                 Picker("skdjfskdf", selection: $observed.selectedUnit) {
