@@ -20,59 +20,56 @@ struct ShoppingItemFormView: View {
     }
     
     var body: some View {
-        NavigationStack {
-            VStack(spacing: 20) {
-                
+        VStack(spacing: 20) {
+            
+            BaseTextField(
+                isFocused: $isNameFocused,
+                placeholder: "Название списка",
+                text: $observed.nameText,
+                errorMessage: observed.currentError
+            )
+            
+            HStack(spacing: 16) {
                 BaseTextField(
-                    isFocused: $isNameFocused,
-                    placeholder: "Название списка",
-                    text: $observed.nameText,
-                    errorMessage: observed.currentError
+                    isFocused: $isAmountFocused,
+                    placeholder: "Количество",
+                    text: $observed.amountText,
+                    errorMessage: nil
                 )
                 
-                HStack(spacing: 16) {
-                    BaseTextField(
-                        isFocused: $isAmountFocused,
-                        placeholder: "Количество",
-                        text: $observed.amountText,
-                        errorMessage: nil
-                    )
-                    
-                    selectUnitPicker
-                }
-                Spacer()
+                selectUnitPicker
             }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 12)
-            .background(.primaryBackground)
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Отменить") {
-                        dismiss()
-                    }
-                    .font(AppFont.regular17)
-                    .foregroundStyle(.hintGrey)
+            Spacer()
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
+        .background(.primaryBackground)
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .cancellationAction) {
+                Button("Отменить") {
+                    dismiss()
                 }
-
-                ToolbarItem(placement: .principal) {
-                    Text(observed.title)
-                        .font(AppFont.semiBold17)
-                        .foregroundStyle(.primaryText)
-                }
-
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Готово") {
-                        print("done")
-                    }
+                .font(AppFont.regular17)
+                .foregroundStyle(.hintGrey)
+            }
+            
+            ToolbarItem(placement: .principal) {
+                Text(observed.title)
                     .font(AppFont.semiBold17)
-                    .foregroundStyle(
-                        observed.isFormValid ? .turquoise : .hintGrey
-                    )
-                    .disabled(!observed.isFormValid)
-                }
+                    .foregroundStyle(.primaryText)
             }
-
+            
+            ToolbarItem(placement: .confirmationAction) {
+                Button("Готово") {
+                    print("done")
+                }
+                .font(AppFont.semiBold17)
+                .foregroundStyle(
+                    observed.isFormValid ? .turquoise : .hintGrey
+                )
+                .disabled(!observed.isFormValid)
+            }
         }
     }
     
@@ -104,10 +101,14 @@ struct ShoppingItemFormView: View {
 }
 
 #Preview("Create") {
-    ShoppingItemFormView(mode: .create)
+    NavigationStack {
+        ShoppingItemFormView(mode: .create)
+    }
 }
 
 #Preview("Edit") {
     let item = ShoppingItem.mockPurchased
-    ShoppingItemFormView(mode: .edit(item))
+    NavigationStack {
+        ShoppingItemFormView(mode: .edit(item))
+    }
 }
