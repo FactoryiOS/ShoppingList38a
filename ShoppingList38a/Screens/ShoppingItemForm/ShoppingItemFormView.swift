@@ -84,7 +84,7 @@ struct ShoppingItemFormView: View {
                     .foregroundStyle(.hintGrey)
                 // заметил что текст стандартный текст плейсхолдера не соответствует макету
                 Spacer()
-                Picker("skdjfskdf", selection: $observed.selectedUnit) {
+                Picker("Единица измерения", selection: $observed.selectedUnit) {
                     ForEach(ShoppingItemUnit.allCases, id: \.self) { unit in
                         Text(unit.displayName)
                         // по макету "шт" должно быть без "." но у нас в ShoppingItemUnit с "."
