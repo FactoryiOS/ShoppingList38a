@@ -11,7 +11,8 @@ struct ShoppingItemFormView: View {
     
     @Environment(\.dismiss) private var dismiss
     
-    @FocusState private var isFocused: Bool
+    @FocusState private var isNameFocused: Bool
+    @FocusState private var isAmountFocused: Bool
     @State private var observed: Observed
     
     init(mode: ProductFormType) {
@@ -23,7 +24,7 @@ struct ShoppingItemFormView: View {
             VStack(spacing: 20) {
                 
                 BaseTextField(
-                    isFocused: $isFocused,
+                    isFocused: $isNameFocused,
                     placeholder: "Название списка",
                     text: $observed.nameText,
                     errorMessage: observed.currentError
@@ -31,7 +32,7 @@ struct ShoppingItemFormView: View {
                 
                 HStack(spacing: 16) {
                     BaseTextField(
-                        isFocused: $isFocused,
+                        isFocused: $isAmountFocused,
                         placeholder: "Количество",
                         text: $observed.amountText,
                         errorMessage: nil
