@@ -17,7 +17,12 @@ struct BaseTextField: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             HStack {
-                TextField(placeholder, text: $text)
+                TextField(
+                    placeholder,
+                    text: $text,
+                    prompt: Text(placeholder)
+                        .foregroundStyle(.hintGrey)
+                )
                     .font(AppFont.regular17)
                     .focused($isFocused)
                 
