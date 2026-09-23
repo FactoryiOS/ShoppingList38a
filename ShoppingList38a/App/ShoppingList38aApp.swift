@@ -10,12 +10,13 @@ import SwiftUI
 @main
 struct ShoppingList38aApp: App {
     @State private var appState = AppState()
-    
+    @State private var appRouter = AppRouter()
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            AppRootView()
                 .environment(appState)
-                .preferredColorScheme(appState.appColorScheme?.preferredColorScheme)
+                .environment(appRouter)
         }
     }
 }

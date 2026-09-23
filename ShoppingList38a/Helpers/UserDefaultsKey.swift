@@ -6,5 +6,6 @@
 //
 
 enum UserDefaultsKey: String {
+    case hasCompletedWelcome
     case appColorScheme
 }
