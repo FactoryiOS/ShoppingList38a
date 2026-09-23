@@ -27,7 +27,7 @@ struct BaseTextField: View {
                 .foregroundStyle(.primaryText)
                 .focused($isFocused)
                 
-                if !text.isEmpty {
+                if !text.isEmpty && isFocused {
                     Button(
                         action: { text = "" },
                         label: {
