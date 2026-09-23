@@ -23,8 +23,9 @@ struct BaseTextField: View {
                     prompt: Text(placeholder)
                         .foregroundStyle(.hintGrey)
                 )
-                    .font(AppFont.regular17)
-                    .focused($isFocused)
+                .font(AppFont.regular17)
+                .foregroundStyle(.primaryText)
+                .focused($isFocused)
                 
                 if !text.isEmpty {
                     Button(
