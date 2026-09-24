@@ -43,7 +43,9 @@ extension ShoppingListView {
         }
         
         var items: [ShoppingItem] {
-            shoppingList.items
+            shoppingList.items.sorted {
+                $0.createdAt < $1.createdAt
+            }
         }
         
         var filteredItems: [ShoppingItem] {
