@@ -11,43 +11,111 @@ extension ShoppingItemFormView {
     @MainActor
     @Observable
     final class Observed {
-        let mode: ProductFormType
         
-        var item: ShoppingItem?
+        // MARK: - State
+        
+        var nameText: String = "" {
+            didSet {
+                validateName()
+            }
+        }
+        
+        var amountText: String = ""
+        var selectedUnit: ShoppingItemUnit = .piece
+        
+        private(set) var nameErrorMessage: String?
+        
+        // MARK: - Dependencies
+        
+        private let service: SwiftDataService
+        private let shoppingList: ShoppingList
+        private let currentShoppingItem: ShoppingItem?
+        
+        // MARK: - Init
+        
+        init(
+            service: SwiftDataService,
+            shoppingList: ShoppingList,
+            shoppingItem: ShoppingItem? = nil
+        ) {
+            self.service = service
+            self.shoppingList = shoppingList
+            self.currentShoppingItem = shoppingItem
+
+            if let shoppingItem {
+                nameText = shoppingItem.name
+                amountText = "\(shoppingItem.count)"
+                selectedUnit = shoppingItem.unit
+            }
+        }
+        
+        // MARK: - Computed Properties
         
         var title: String {
-            mode.displayName
+            currentShoppingItem == nil
+            ? "Создание товара"
+            : "Редактировать"
         }
-        
-        var nameText: String
-        
-        var currentError: String? {
-            nameText == "Новый год" // как тут получать все существующие названия ?
-            ? "Этот товар уже есть в списке, добавьте другой"
-            : nil
-        }
-        
-        var amountText: String
-        
-        var selectedUnit: ShoppingItemUnit
         
         var isFormValid: Bool {
-            nameText != "" && amountText != ""
+            isNameValid && isAmountValid
         }
         
-        init(mode: ProductFormType) {
-            self.mode = mode
-            
-            switch mode {
-            case .create:
-                self.nameText = ""
-                self.amountText = ""
-                self.selectedUnit = .piece
-            case .edit(let item):
-                self.nameText = item.title
-                self.amountText = "\(item.count)"
-                self.selectedUnit = item.unit
+        private var trimmedName: String {
+            nameText.trimmingCharacters(in: .whitespacesAndNewlines)
+        }
+        
+        private var count: Int? {
+            Int(amountText)
+        }
+        
+        private var isNameValid: Bool {
+            !trimmedName.isEmpty
+            && nameErrorMessage == nil
+        }
+        
+        private var isAmountValid: Bool {
+            count != nil
+        }
+
+        // MARK: - Actions
+        
+        func handleSave(completion: Completion) {
+            guard
+                isFormValid,
+                let count
+            else {
+                return
             }
+            
+            do {
+                if let currentShoppingItem {
+                    try service.updateShoppingItem(
+                        currentShoppingItem,
+                        name: trimmedName,
+                        count: count,
+                        unit: selectedUnit
+                    )
+                } else {
+                    try service.addShoppingItem(
+                        to: shoppingList,
+                        name: trimmedName,
+                        count: count,
+                        unit: selectedUnit
+                    )
+                }
+                
+                completion()
+            } catch {
+                print("❌ [ShoppingItemFormView] handleSave: \(error)")
+            }
+        }
+        
+        // MARK: - Validation
+        
+        private func validateName() {
+            // TODO: Реализовать проверку дубликатов
+            nameErrorMessage = nil
         }
     }
 }

@@ -43,7 +43,7 @@ struct ShoppingItemView: View {
             .font(AppFont.regular24)
             .frame(width: 44, height: 44)
             
-            Text(shoppingItem.title)
+            Text(shoppingItem.name)
                 .font(AppFont.regular17)
                 .foregroundStyle(textColor)
             
@@ -60,16 +60,18 @@ struct ShoppingItemView: View {
 }
 
 #Preview {
-    VStack(spacing: 0) {
-        ShoppingItemView(
-            shoppingItem: .mockUnpurchased,
-            onTogglePurchased: {}
-        )
-        
-        ShoppingItemView(
-            shoppingItem: .mockPurchased,
-            onTogglePurchased: {}
-        )
+    PreviewEnvironment { preview in
+        VStack(spacing: 0) {
+            ShoppingItemView(
+                shoppingItem: preview.unpurchasedItem,
+                onTogglePurchased: { }
+            )
+            
+            ShoppingItemView(
+                shoppingItem: preview.purchasedItem,
+                onTogglePurchased: { }
+            )
+        }
+        .background(.primaryBackground)
     }
-    .background(.primaryBackground)
 }

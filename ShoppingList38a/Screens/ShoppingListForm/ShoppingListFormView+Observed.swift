@@ -11,15 +11,42 @@ extension ShoppingListFormView {
     @MainActor
     @Observable
     final class Observed {
-        var name: String = ""
+        
+        // MARK: - State
+        
+        var name: String = "" {
+            didSet {
+                validateName()
+            }
+        }
+        
         var selectedIcon: PurchaseIcon?
         var selectedColor: PurchaseColor?
         
-        private var currentShoppingList: ListItem?
+        private(set) var nameErrorMessage: String?
         
-        private var trimmedName: String {
-            name.trimmingCharacters(in: .whitespacesAndNewlines)
+        // MARK: - Dependencies
+        
+        private let service: SwiftDataService
+        private let currentShoppingList: ShoppingList?
+        
+        // MARK: - Init
+        
+        init(
+            service: SwiftDataService,
+            shoppingList: ShoppingList? = nil
+        ) {
+            self.service = service
+            self.currentShoppingList = shoppingList
+
+            if let shoppingList {
+                name = shoppingList.name
+                selectedIcon = shoppingList.icon
+                selectedColor = shoppingList.color
+            }
         }
+        
+        // MARK: - Computed Properties
         
         var isValid: Bool {
             !trimmedName.isEmpty
@@ -36,33 +63,63 @@ extension ShoppingListFormView {
             currentShoppingList != nil ? "Редактировать список" : "Создать список"
         }
         
-        var nameErrorMessage: String? {
-            if name.isEmpty || name == currentShoppingList?.name {
-                return nil
-            }
-            
-            guard ListItem.mocks.first(where: { $0.name.lowercased() == name.lowercased() }) != nil else {
-                return nil
-            }
-            
-            return "Это название уже используется, пожалуйста, измените его."
+        private var trimmedName: String {
+            name.trimmingCharacters(in: .whitespacesAndNewlines)
         }
         
-        func fetchShoppingList(by id: UUID?) {
-            guard let id, let shoppingList = ListItem.mocks.first(where: { $0.id == id }) else {
+        // MARK: - Actions
+        
+        func handleSave(completion: Completion) {
+            guard
+                isValid,
+                let selectedIcon,
+                let selectedColor
+            else {
                 return
             }
             
-            name = shoppingList.name
-            selectedIcon = shoppingList.icon
-            selectedColor = shoppingList.color
-            
-            currentShoppingList = shoppingList
+            do {
+                if let currentShoppingList {
+                    try service.updateShoppingList(
+                        currentShoppingList,
+                        name: trimmedName,
+                        icon: selectedIcon,
+                        color: selectedColor
+                    )
+                } else {
+                    try service.createShoppingList(
+                        name: trimmedName,
+                        icon: selectedIcon,
+                        color: selectedColor
+                    )
+                }
+                
+                completion()
+            } catch {
+                print("❌ [ShoppingListFormView] handleSave: \(error)")
+            }
         }
         
-        func saveShoppingList(with id: UUID?, completion: Completion) {
-            // TODO: добавляем сохранение модели (добавляем или обновляем)
-            completion()
+        // MARK: - Validation
+        
+        private func validateName() {
+            guard !trimmedName.isEmpty else {
+                nameErrorMessage = nil
+                return
+            }
+            
+            do {
+                let isAvailable = try service.isShoppingListNameAvailable(
+                    trimmedName,
+                    excluding: currentShoppingList
+                )
+
+                nameErrorMessage = isAvailable
+                ? nil
+                : "Это название уже используется, пожалуйста, измените его."
+            } catch {
+                print("❌ [ShoppingListFormView] validateName: \(error)")
+            }
         }
     }
 }

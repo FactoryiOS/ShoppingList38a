@@ -10,8 +10,8 @@ import Foundation
 @Observable
 @MainActor
 final class AppState {
-
     private let userDefaultsService: UserDefaultsService
+    let swiftDataService: SwiftDataService
 
     private(set) var isFirstLaunch: Bool
 
@@ -22,9 +22,11 @@ final class AppState {
     }
 
     init(
-        userDefaultsService: UserDefaultsService = UserDefaultsService()
+        userDefaultsService: UserDefaultsService = UserDefaultsService(),
+        swiftDataService: SwiftDataService = SwiftDataService()
     ) {
         self.userDefaultsService = userDefaultsService
+        self.swiftDataService = swiftDataService
 
         isFirstLaunch = !userDefaultsService.fetchHasCompletedWelcome()
         appColorScheme = userDefaultsService.fetchAppColorScheme()

@@ -5,7 +5,7 @@
 //  Created by Андрей Макалкин on 14.09.2026.
 //
 
-enum PurchaseColor: String, CaseIterable, Hashable {
+enum PurchaseColor: String, CaseIterable, Hashable, Codable {
     case green
     case purple
     case red

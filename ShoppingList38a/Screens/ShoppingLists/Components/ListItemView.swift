@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ListItemView: View {
-    let listItem: ListItem
+    let listItem: ShoppingList
     
     var body: some View {
         HStack(spacing: 12) {
@@ -44,5 +44,9 @@ struct ListItemView: View {
 }
 
 #Preview {
-    ListItemView(listItem: .mock)
+    PreviewEnvironment { preview in
+        ListItemView(
+            listItem: preview.shoppingList
+        )
+    }
 }

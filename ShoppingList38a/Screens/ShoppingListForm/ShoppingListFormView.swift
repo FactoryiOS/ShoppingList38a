@@ -11,13 +11,22 @@ struct ShoppingListFormView: View {
     @Environment(\.dismiss) private var dismiss
     
     @FocusState private var isNameFieldFocused: Bool
-    @State private var observed = Observed()
-    
-    private let shoppingListId: UUID?
+    @State private var observed: Observed
+
     private let onComplete: Completion
     
-    init(shoppingListId: UUID? = nil, onComplete: @escaping Completion) {
-        self.shoppingListId = shoppingListId
+    init(
+        service: SwiftDataService,
+        shoppingList: ShoppingList? = nil,
+        onComplete: @escaping Completion
+    ) {
+        _observed = State(
+            initialValue: Observed(
+                service: service,
+                shoppingList: shoppingList
+            )
+        )
+
         self.onComplete = onComplete
     }
     
@@ -54,9 +63,6 @@ struct ShoppingListFormView: View {
         .onTapGesture {
             isNameFieldFocused = false
         }
-        .onAppear {
-            observed.fetchShoppingList(by: shoppingListId)
-        }
         .ignoresSafeArea(.keyboard, edges: .bottom)
     }
     
@@ -65,7 +71,7 @@ struct ShoppingListFormView: View {
             title: observed.submitButtonTitle,
             isActive: observed.isValid,
             action: {
-                observed.saveShoppingList(with: shoppingListId, completion: onComplete)
+                observed.handleSave(completion: onComplete)
             }
         )
         .padding(.horizontal, 16)
@@ -92,14 +98,25 @@ struct ShoppingListFormView: View {
     }
 }
 
-#Preview {
-    NavigationStack {
-        ShoppingListFormView(onComplete: { })
+#Preview("Create") {
+    PreviewEnvironment(.empty) { preview in
+        NavigationStack {
+            ShoppingListFormView(
+                service: preview.service,
+                onComplete: { }
+            )
+        }
     }
 }
 
-#Preview {
-    NavigationStack {
-        ShoppingListFormView(shoppingListId: ListItem.mocks.first?.id ?? UUID(), onComplete: { })
+#Preview("Edit") {
+    PreviewEnvironment(.data) { preview in
+        NavigationStack {
+            ShoppingListFormView(
+                service: preview.service,
+                shoppingList: preview.shoppingList,
+                onComplete: { }
+            )
+        }
     }
 }

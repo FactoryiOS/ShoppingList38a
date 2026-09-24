@@ -32,7 +32,8 @@ struct BaseTextField: View {
                         action: { text = "" },
                         label: {
                             Image(systemName: AppSystemIcon.xmarkCircleFill)
-                                .foregroundColor(Color(.hintGrey))
+                                .symbolRenderingMode(.palette)
+                                .foregroundStyle(.clearIconForeground, .hintGrey)
                         }
                     )
                 }

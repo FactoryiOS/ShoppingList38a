@@ -5,7 +5,7 @@
 //  Created by Андрей Макалкин on 13.09.2026.
 //
 
-enum ShoppingItemUnit: String, CaseIterable, Hashable {
+enum ShoppingItemUnit: String, CaseIterable, Hashable, Codable {
     case piece
     case kilogram
     case gram

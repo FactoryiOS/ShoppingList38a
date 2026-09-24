@@ -5,21 +5,16 @@
 //  Created by Anastasia Belyakova on 21.09.2026.
 //
 
-import Foundation
-
 enum AppRoute: Hashable, Identifiable {
-    case shoppingList(ListItem)
+    case shoppingList(ShoppingList.ID)
+    
     case createShoppingList
-    case editShoppingList(UUID)
-
-    var id: String {
-        switch self {
-        case .shoppingList(let list):
-            "shoppingList-\(list.id.uuidString)"
-        case .createShoppingList:
-            "createShoppingList"
-        case .editShoppingList(let id):
-            "editShoppingList-\(id.uuidString)"
-        }
+    case editShoppingList(ShoppingList.ID)
+    
+    case createShoppingItem(ShoppingList.ID)
+    case editShoppingItem(ShoppingItem.ID)
+    
+    var id: Self {
+        self
     }
 }

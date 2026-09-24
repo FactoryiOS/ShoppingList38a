@@ -6,13 +6,28 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ShoppingListsView: View {
     @Environment(AppState.self) private var appState
     @Environment(AppRouter.self) private var router
     
-    let lists: [ListItem]
+    @State private var observed: Observed
     
+    @Query(
+        sort: \ShoppingList.createdAt,
+        order: .forward
+    )
+    private var lists: [ShoppingList]
+    
+    init(service: SwiftDataService) {
+        _observed = State(
+            initialValue: Observed(
+                service: service
+            )
+        )
+    }
+
     var body: some View {
         Group {
             if lists.isEmpty {
@@ -67,7 +82,7 @@ struct ShoppingListsView: View {
     private var shoppingList: some View {
         List(lists) { list in
             Button {
-                router.push(.shoppingList(list))
+                router.push(.shoppingList(list.id))
             } label: {
                 ListItemView(listItem: list)
             }
@@ -84,7 +99,7 @@ struct ShoppingListsView: View {
             )
             .swipeActions(allowsFullSwipe: false) {
                 Button(role: .destructive) {
-                    print("Delete")
+                    observed.handleDeleteShoppingList(list)
                 } label: {
                     Image(systemName: AppSystemIcon.trash)
                         .environment(\.symbolVariants, .none)
@@ -92,7 +107,7 @@ struct ShoppingListsView: View {
                 .tint(.systemsRed)
                 
                 Button {
-                    print("Duplicate")
+                    observed.handleDuplicateShoppingList(list)
                 } label: {
                     Image(systemName: AppSystemIcon.plusSquareOnSquare)
                         .environment(\.symbolVariants, .none)
@@ -177,29 +192,21 @@ struct ShoppingListsView: View {
 }
 
 #Preview("Empty") {
-    @Previewable @State var appState = AppState()
-    @Previewable @State var appRouter = AppRouter()
-    
-    NavigationStack {
-        ShoppingListsView(lists: [])
+    PreviewEnvironment(.empty) { preview in
+        NavigationStack {
+            ShoppingListsView(
+                service: preview.service
+            )
+        }
     }
-    .environment(appState)
-    .environment(appRouter)
-    .preferredColorScheme(
-        appState.appColorScheme?.preferredColorScheme
-    )
 }
 
 #Preview("Data") {
-    @Previewable @State var appState = AppState()
-    @Previewable @State var appRouter = AppRouter()
-    
-    NavigationStack {
-        ShoppingListsView(lists: ListItem.mocks)
+    PreviewEnvironment(.data) { preview in
+        NavigationStack {
+            ShoppingListsView(
+                service: preview.service
+            )
+        }
     }
-    .environment(appState)
-    .environment(appRouter)
-    .preferredColorScheme(
-        appState.appColorScheme?.preferredColorScheme
-    )
 }
