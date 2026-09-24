@@ -80,32 +80,32 @@ final class SwiftDataService {
             $0.createdAt < $1.createdAt
         }
         
-        let baseDate = Date.now
-        
-        let duplicatedItems = sortedItems
-            .enumerated()
-            .map { index, item in
-                ShoppingItem(
-                    name: item.name,
-                    count: item.count,
-                    unit: item.unit,
-                    // Добавляем 1 мс на каждый следующий товар,
-                    // чтобы сохранить исходный порядок элементов,
-                    // но при этом задать новым копиям собственные createdAt.
-                    createdAt: baseDate.addingTimeInterval(
-                        TimeInterval(index) * 0.001
-                    )
-                )
-            }
-        
         let model = ShoppingList(
             name: duplicateName,
             icon: shoppingList.icon,
-            color: shoppingList.color,
-            items: duplicatedItems
+            color: shoppingList.color
         )
         
         modelContext.insert(model)
+        
+        let baseDate = Date.now
+        
+        for (index, item) in sortedItems.enumerated() {
+            let duplicatedItem = ShoppingItem(
+                name: item.name,
+                count: item.count,
+                unit: item.unit,
+                // Добавляем 1 мс на каждый следующий товар,
+                // чтобы сохранить исходный порядок элементов,
+                // но при этом задать новым копиям собственные createdAt.
+                createdAt: baseDate.addingTimeInterval(
+                    TimeInterval(index) * 0.001
+                )
+            )
+            model.items.append(duplicatedItem)
+            modelContext.insert(duplicatedItem)
+        }
+        
         try modelContext.save()
     }
     

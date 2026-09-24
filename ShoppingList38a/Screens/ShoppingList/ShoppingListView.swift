@@ -5,6 +5,7 @@
 //  Created by Albina Musugalieva on 19.09.2026.
 //
 
+import SwiftData
 import SwiftUI
 
 struct ShoppingListView: View {
@@ -16,13 +17,20 @@ struct ShoppingListView: View {
     }
     
     @Environment(\.dismiss) private var dismiss
+    @Environment(AppRouter.self) private var router
     
-    @State private var observed = Observed()
+    @State private var observed: Observed
     
-    private let shoppingListId: UUID
-    
-    init(shoppingListId: UUID) {
-        self.shoppingListId = shoppingListId
+    init(
+        service: SwiftDataService,
+        shoppingList: ShoppingList
+    ) {
+        _observed = State(
+            initialValue: Observed(
+                service: service,
+                shoppingList: shoppingList
+            )
+        )
     }
     
     var body: some View {
@@ -32,10 +40,10 @@ struct ShoppingListView: View {
                 .padding(.top, 4)
                 .background(.primaryBackground)
             Group {
-                if observed.products.isEmpty {
+                if observed.items.isEmpty {
                     emptyState
                 } else {
-                    productsListState
+                    shoppingListState
                 }
             }
         }
@@ -53,9 +61,6 @@ struct ShoppingListView: View {
         }
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
-        .onAppear {
-            observed.fetchShoppingList(by: shoppingListId)
-        }
     }
     
     private var emptyState: some View {
@@ -71,19 +76,19 @@ struct ShoppingListView: View {
         .padding(.bottom, 64)
     }
     
-    private var productsListState: some View {
+    private var shoppingListState: some View {
         VStack(spacing: .zero) {
-            productsList
+            shoppingList
         }
     }
     
-    private var productsList: some View {
-        List(observed.products) { item in
+    private var shoppingList: some View {
+        List(observed.filteredItems) { item in
             VStack(spacing: .zero) {
                 ShoppingItemView(
                     shoppingItem: item,
                     onTogglePurchased: {
-                        observed.handleToggleCheck(for: item.id)
+                        observed.handleToggleShoppingItem(item)
                     }
                 )
                 
@@ -94,7 +99,7 @@ struct ShoppingListView: View {
             .listRowSeparator(.hidden)
             .listRowInsets(EdgeInsets())
             .swipeActions(allowsFullSwipe: false) {
-                swipeButtons(for: item.id)
+                swipeButtons(for: item)
             }
         }
         .listStyle(.plain)
@@ -106,10 +111,27 @@ struct ShoppingListView: View {
     private var customSearchBar: some View {
         HStack(spacing: 8) {
             Image(systemName: AppSystemIcon.magnifyingGlass)
-                .foregroundStyle(.secondary)
-            TextField(ShoppingListTexts.searchPlaceholder, text: $observed.searchText)
-                .font(AppFont.regular17)
-                .foregroundStyle(.primaryText)
+                .foregroundStyle(.hintGrey)
+            
+            TextField(
+                ShoppingListTexts.searchPlaceholder,
+                text: $observed.searchText,
+                prompt: Text(ShoppingListTexts.searchPlaceholder)
+                    .foregroundStyle(.hintGrey)
+            )
+            .font(AppFont.regular17)
+            .foregroundStyle(.primaryText)
+            
+            if !observed.searchText.isEmpty {
+                Button {
+                    observed.searchText = ""
+                } label: {
+                    Image(systemName: AppSystemIcon.xmarkCircleFill)
+                        .symbolRenderingMode(.palette)
+                        .foregroundStyle(.clearIconForeground, .hintGrey)
+                }
+                .buttonStyle(.plain)
+            }
         }
         .padding(.horizontal, 8)
         .frame(height: 38)
@@ -117,10 +139,10 @@ struct ShoppingListView: View {
         .clipShape(RoundedRectangle(cornerRadius: 10))
     }
     
-    private func swipeButtons(for id: UUID) -> some View {
+    private func swipeButtons(for item: ShoppingItem) -> some View {
         Group {
             Button(role: .destructive) {
-                observed.handleDeleteProduct(for: id)
+                observed.handleDeleteShoppingItem(item)
             } label: {
                 Image(systemName: AppSystemIcon.trash)
                     .environment(\.symbolVariants, .none)
@@ -128,7 +150,9 @@ struct ShoppingListView: View {
             .tint(.systemsRed)
             
             Button {
-                observed.handleEditProduct(for: id)
+                router.showModal(
+                    .editShoppingItem(item.id)
+                )
             } label: {
                 Image(systemName: AppSystemIcon.squareAndPencil)
                     .environment(\.symbolVariants, .none)
@@ -142,7 +166,9 @@ struct ShoppingListView: View {
             title: ShoppingListTexts.addButtonTitle,
             isActive: true,
             action: {
-                observed.handleAddProductTap()
+                router.showModal(
+                    .createShoppingItem(observed.shoppingListID)
+                )
             }
         )
         .padding(.horizontal, 16)
@@ -183,19 +209,27 @@ struct ShoppingListView: View {
 }
 
 #Preview("Empty") {
-    @Previewable @State var appState = AppState()
-    NavigationStack {
-        ShoppingListView(shoppingListId: UUID())
+    PreviewEnvironment(.empty) { preview in
+        NavigationStack {
+            ShoppingListView(
+                service: preview.service,
+                shoppingList: ShoppingList(
+                    name: "Новый год",
+                    icon: .calendarNumber,
+                    color: .blue
+                )
+            )
+        }
     }
-    .environment(appState)
-    .preferredColorScheme(.light)
 }
 
 #Preview("Data") {
-    @Previewable @State var appState = AppState()
-    NavigationStack {
-        ShoppingListView(shoppingListId: ListItem.mocks.first?.id ?? UUID())
+    PreviewEnvironment(.data) { preview in
+        NavigationStack {
+            ShoppingListView(
+                service: preview.service,
+                shoppingList: preview.shoppingList
+            )
+        }
     }
-    .environment(appState)
-    .preferredColorScheme(.light)
 }

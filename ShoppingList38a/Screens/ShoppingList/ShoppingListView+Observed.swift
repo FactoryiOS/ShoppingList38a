@@ -5,54 +5,80 @@
 //  Created by Albina Musugalieva on 19.09.2026.
 //
 
+import SwiftData
 import SwiftUI
 
 extension ShoppingListView {
     @MainActor
     @Observable
     final class Observed {
-        var searchText = ""
-        var products: [ShoppingItem] = []
         
-        private var currentShoppingList: ListItem?
+        // MARK: - State
+        
+        var searchText = ""
+        
+        // MARK: - Dependencies
+        
+        private let service: SwiftDataService
+        private let shoppingList: ShoppingList
+        
+        // MARK: - Init
+        
+        init(
+            service: SwiftDataService,
+            shoppingList: ShoppingList
+        ) {
+            self.service = service
+            self.shoppingList = shoppingList
+        }
+        
+        // MARK: - Computed Properties
         
         var listTitle: String {
-            currentShoppingList?.name ?? "Список покупок"
+            shoppingList.name
         }
         
-        func fetchShoppingList(by id: UUID) {
-            guard let shoppingList = ListItem.mocks.first(where: { $0.id == id }) else {
-                currentShoppingList = nil
-                products = []
-                return
+        var shoppingListID: ShoppingList.ID {
+            shoppingList.id
+        }
+        
+        var items: [ShoppingItem] {
+            shoppingList.items
+        }
+        
+        var filteredItems: [ShoppingItem] {
+            let query = searchText.trimmingCharacters(
+                in: .whitespacesAndNewlines
+            )
+            
+            guard !query.isEmpty else {
+                return items
             }
             
-            currentShoppingList = shoppingList
-            
-            products = [
-                ShoppingItem(title: "Текст", count: 2, unit: .piece, isPurchased: false),
-                ShoppingItem(title: "Текст", count: 2, unit: .piece, isPurchased: false),
-                .mockPurchased
-            ]
-        }
-        
-        func handleAddProductTap() {
-            print("Нажата кнопка 'Добавить товар'")
-        }
-        
-        func handleEditProduct(for id: UUID) {
-            print("Редактирование товара с ID: \(id)")
-        }
-        
-        func handleDeleteProduct(for id: UUID) {
-            if let index = products.firstIndex(where: { $0.id == id }) {
-                products.remove(at: index)
+            return items.filter {
+                $0.name.localizedCaseInsensitiveContains(query)
             }
         }
         
-        func handleToggleCheck(for id: UUID) {
-            if let index = products.firstIndex(where: { $0.id == id }) {
-                products[index].isPurchased.toggle()
+        // MARK: - Actions
+        
+        func handleDeleteShoppingItem(
+            _ shoppingItem: ShoppingItem
+        ) {
+            do {
+                try service.deleteShoppingItem(shoppingItem)
+            } catch {
+                print("❌ [ShoppingListView] handleDeleteShoppingItem: \(error)")
+            }
+        }
+        
+        func handleToggleShoppingItem(
+            _ shoppingItem: ShoppingItem
+        ) {
+            do {
+                try service.toggleShoppingItem(shoppingItem)
+            } catch {
+                print("❌ [ShoppingListView] handleToggleShoppingItem: \(error)")
             }
         }
     }

@@ -11,13 +11,22 @@ extension ShoppingListsView {
     @MainActor
     @Observable
     final class Observed {
+        
+        // MARK: - Dependencies
+        
         private let service: SwiftDataService
+        
+        // MARK: - Init
         
         init(service: SwiftDataService) {
             self.service = service
         }
         
-        func handleDeleteShoppingList(_ shoppingList: ShoppingList) {
+        // MARK: - Actions
+        
+        func handleDeleteShoppingList(
+            _ shoppingList: ShoppingList
+        ) {
             do {
                 try service.deleteShoppingList(shoppingList)
             } catch {
@@ -25,7 +34,9 @@ extension ShoppingListsView {
             }
         }
         
-        func handleDuplicateShoppingList(_ shoppingList: ShoppingList) {
+        func handleDuplicateShoppingList(
+            _ shoppingList: ShoppingList
+        ) {
             do {
                 try service.duplicateShoppingList(shoppingList)
             } catch {

@@ -47,13 +47,10 @@ struct AppRootView: View {
             if let shoppingList = appState.swiftDataService.fetchShoppingList(
                 by: shoppingListID
             ) {
-                // TODO: Раскомментировать при реализации ShoppingListView
-                // ShoppingListView(
-                //     service: appState.swiftDataService,
-                //     shoppingList: shoppingList
-                // )
-                
-                Text(shoppingList.name)
+                ShoppingListView(
+                    service: appState.swiftDataService,
+                    shoppingList: shoppingList
+                )
             }
             
         case .createShoppingList:
