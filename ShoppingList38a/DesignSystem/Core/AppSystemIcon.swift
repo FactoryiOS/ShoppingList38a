@@ -38,4 +38,6 @@ enum AppSystemIcon {
     static let checkmarkSquareFill = "checkmark.square.fill"
     // не выбран/не отмечен
     static let square = "square"
+    // поиск
+    static let magnifyingGlass = "magnifyingglass"
 }
