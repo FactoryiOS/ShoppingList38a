@@ -129,7 +129,9 @@ struct ShoppingListsView: View {
                 .tint(.systemsRed)
                 
                 Button {
-                    observed.handleDuplicateShoppingList(list)
+                    withAnimation {
+                        observed.handleDuplicateShoppingList(list)
+                    }
                 } label: {
                     Image(systemName: AppSystemIcon.plusSquareOnSquare)
                         .environment(\.symbolVariants, .none)
