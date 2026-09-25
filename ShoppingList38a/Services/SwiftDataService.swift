@@ -204,8 +204,14 @@ final class SwiftDataService {
     func deleteShoppingItem(
         _ shoppingItem: ShoppingItem
     ) throws {
+        if let shoppingList = shoppingItem.list {
+            shoppingList.items.removeAll {
+                $0.id == shoppingItem.id
+            }
+        }
+
         modelContext.delete(shoppingItem)
-        
+
         try modelContext.save()
     }
     
@@ -233,11 +239,15 @@ final class SwiftDataService {
         let purchasedItems = shoppingList.items.filter {
             $0.isPurchased
         }
-        
+
+        shoppingList.items.removeAll {
+            $0.isPurchased
+        }
+
         purchasedItems.forEach {
             modelContext.delete($0)
         }
-        
+
         try modelContext.save()
     }
     

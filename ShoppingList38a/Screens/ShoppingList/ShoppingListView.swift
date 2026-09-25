@@ -22,12 +22,9 @@ struct ShoppingListView: View {
         
         static let deleteShoppingItemAlertTitle = "Удаление товара"
         static let deleteShoppingItemAlertMessage = "Вы действительно хотите удалить товар?"
-
+        
         static let deletePurchasedItemsAlertTitle = "Удаление купленных товаров"
         static let deletePurchasedItemsAlertMessage = "Вы действительно хотите удалить все купленные товары?"
-
-        static let cancelButtonTitle = "Отменить"
-        static let deleteButtonTitle = "Удалить"
     }
     
     @Environment(\.dismiss) private var dismiss
@@ -73,36 +70,35 @@ struct ShoppingListView: View {
         .overlay(alignment: .bottom) {
             addButton
         }
-        .alert(
-            ShoppingListTexts.deleteShoppingItemAlertTitle,
+        .deleteAlert(
+            title: ShoppingListTexts.deleteShoppingItemAlertTitle,
+            message: ShoppingListTexts.deleteShoppingItemAlertMessage,
             isPresented: $showDeleteShoppingItemAlert,
-            presenting: shoppingItemToDelete
-        ) { item in
-            Button(ShoppingListTexts.cancelButtonTitle, role: .cancel) {
+            onCancel: {
                 shoppingItemToDelete = nil
-            }
-
-            Button(ShoppingListTexts.deleteButtonTitle, role: .destructive) {
+            },
+            onDelete: {
+                guard let item = shoppingItemToDelete else {
+                    return
+                }
+                
                 shoppingItemToDelete = nil
-                observed.handleDeleteShoppingItem(item)
+                
+                withAnimation {
+                    observed.handleDeleteShoppingItem(item)
+                }
             }
-        } message: { _ in
-            Text(ShoppingListTexts.deleteShoppingItemAlertMessage)
-        }
-        
-        .alert(
-            ShoppingListTexts.deletePurchasedItemsAlertTitle,
-            isPresented: $showDeletePurchasedItemsAlert
-        ) {
-            Button(ShoppingListTexts.cancelButtonTitle, role: .cancel) { }
-
-            Button(ShoppingListTexts.deleteButtonTitle, role: .destructive) {
-                observed.handleDeletePurchasedItems()
+        )
+        .deleteAlert(
+            title: ShoppingListTexts.deletePurchasedItemsAlertTitle,
+            message: ShoppingListTexts.deletePurchasedItemsAlertMessage,
+            isPresented: $showDeletePurchasedItemsAlert,
+            onDelete: {
+                withAnimation {
+                    observed.handleDeletePurchasedItems()
+                }
             }
-        } message: {
-            Text(ShoppingListTexts.deletePurchasedItemsAlertMessage)
-        }
-        
+        )
         .toolbar {
             titleToolbarItem
             contextMenuToolbarItem
@@ -247,7 +243,18 @@ struct ShoppingListView: View {
     private var contextMenuToolbarItem: some ToolbarContent {
         ToolbarItem(placement: .topBarTrailing) {
             Menu {
-                Toggle(isOn: $observed.isSortedByAlphabet) {
+                Toggle(
+                    isOn: Binding(
+                        get: {
+                            observed.isSortedByAlphabet
+                        },
+                        set: { newValue in
+                            withAnimation {
+                                observed.isSortedByAlphabet = newValue
+                            }
+                        }
+                    )
+                ) {
                     Label(
                         ShoppingListTexts.contextMenuSortByAlphabet,
                         systemImage: AppSystemIcon.arrowUpArrowDown

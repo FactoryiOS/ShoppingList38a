@@ -54,22 +54,25 @@ struct ShoppingListsView: View {
             .padding(.horizontal, 16)
             .padding(.bottom, 20)
         }
-        .alert(
-            "Удаление списка",
+        .deleteAlert(
+            title: "Удаление списка",
+            message: "Вы действительно хотите удалить список?",
             isPresented: $showDeleteShoppingListAlert,
-            presenting: shoppingListToDelete
-        ) { shoppingList in
-            Button("Отменить", role: .cancel) {
+            onCancel: {
                 shoppingListToDelete = nil
-            }
-
-            Button("Удалить", role: .destructive) {
+            },
+            onDelete: {
+                guard let list = shoppingListToDelete else {
+                    return
+                }
+                
                 shoppingListToDelete = nil
-                observed.handleDeleteShoppingList(shoppingList)
+                
+                withAnimation {
+                    observed.handleDeleteShoppingList(list)
+                }
             }
-        } message: { _ in
-            Text("Вы действительно хотите удалить список?")
-        }
+        )
         .toolbar {
             titleToolbarItem
             contextMenuToolbarItem
@@ -193,9 +196,20 @@ struct ShoppingListsView: View {
                 
                 Divider()
                 
-                Toggle(isOn: $observed.isSortedByAlphabet) {
+                Toggle(
+                    isOn: Binding(
+                        get: {
+                            observed.isSortedByAlphabet
+                        },
+                        set: { newValue in
+                            withAnimation {
+                                observed.isSortedByAlphabet = newValue
+                            }
+                        }
+                    )
+                ) {
                     Label(
-                        "Сортировать по алфавиту",
+                        "Сортировка по алфавиту",
                         systemImage: AppSystemIcon.arrowUpArrowDown
                     )
                 }
