@@ -9,6 +9,8 @@ import SwiftUI
 import UIKit
 
 private struct DeleteAlertModifier: ViewModifier {
+    @Environment(\.colorScheme) private var colorScheme
+    
     let title: String
     let message: String
     
@@ -23,6 +25,7 @@ private struct DeleteAlertModifier: ViewModifier {
                 DeleteAlertPresenter(
                     title: title,
                     message: message,
+                    colorScheme: colorScheme,
                     isPresented: $isPresented,
                     onCancel: onCancel,
                     onDelete: onDelete
@@ -40,6 +43,7 @@ private struct DeleteAlertPresenter: UIViewControllerRepresentable {
     
     let title: String
     let message: String
+    let colorScheme: ColorScheme
     
     @Binding var isPresented: Bool
     
@@ -103,6 +107,9 @@ private struct DeleteAlertPresenter: UIViewControllerRepresentable {
         
         alert.preferredAction = deleteAction
         alert.view.tintColor = UIColor(Color.turquoise)
+        alert.overrideUserInterfaceStyle = colorScheme == .dark
+            ? .dark
+            : .light
         
         uiViewController.present(
             alert,
