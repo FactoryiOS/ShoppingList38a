@@ -12,6 +12,10 @@ extension ShoppingListsView {
     @Observable
     final class Observed {
         
+        // MARK: - State
+        
+        var isSortedByAlphabet = false
+        
         // MARK: - Dependencies
         
         private let service: SwiftDataService
@@ -41,6 +45,18 @@ extension ShoppingListsView {
                 try service.duplicateShoppingList(shoppingList)
             } catch {
                 print("❌ [ShoppingListsView] handleDuplicateShoppingList: \(error)")
+            }
+        }
+        
+        // MARK: - Helpers
+        
+        func sortLists(_ lists: [ShoppingList]) -> [ShoppingList] {
+            guard isSortedByAlphabet else {
+                return lists
+            }
+
+            return lists.sorted {
+                $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending
             }
         }
     }

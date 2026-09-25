@@ -13,6 +13,8 @@ struct ShoppingListsView: View {
     @Environment(AppRouter.self) private var router
     
     @State private var observed: Observed
+    @State private var showDeleteShoppingListAlert = false
+    @State private var shoppingListToDelete: ShoppingList?
     
     @Query(
         sort: \ShoppingList.createdAt,
@@ -52,6 +54,22 @@ struct ShoppingListsView: View {
             .padding(.horizontal, 16)
             .padding(.bottom, 20)
         }
+        .alert(
+            "Удаление списка",
+            isPresented: $showDeleteShoppingListAlert,
+            presenting: shoppingListToDelete
+        ) { shoppingList in
+            Button("Отменить", role: .cancel) {
+                shoppingListToDelete = nil
+            }
+
+            Button("Удалить", role: .destructive) {
+                shoppingListToDelete = nil
+                observed.handleDeleteShoppingList(shoppingList)
+            }
+        } message: { _ in
+            Text("Вы действительно хотите удалить список?")
+        }
         .toolbar {
             titleToolbarItem
             contextMenuToolbarItem
@@ -80,7 +98,7 @@ struct ShoppingListsView: View {
     }
     
     private var shoppingList: some View {
-        List(lists) { list in
+        List(observed.sortLists(lists)) { list in
             Button {
                 router.push(.shoppingList(list.id))
             } label: {
@@ -98,8 +116,9 @@ struct ShoppingListsView: View {
                 )
             )
             .swipeActions(allowsFullSwipe: false) {
-                Button(role: .destructive) {
-                    observed.handleDeleteShoppingList(list)
+                Button {
+                    shoppingListToDelete = list
+                    showDeleteShoppingListAlert = true
                 } label: {
                     Image(systemName: AppSystemIcon.trash)
                         .environment(\.symbolVariants, .none)
@@ -174,9 +193,7 @@ struct ShoppingListsView: View {
                 
                 Divider()
                 
-                Button {
-                    
-                } label: {
+                Toggle(isOn: $observed.isSortedByAlphabet) {
                     Label(
                         "Сортировать по алфавиту",
                         systemImage: AppSystemIcon.arrowUpArrowDown

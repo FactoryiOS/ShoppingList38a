@@ -14,12 +14,30 @@ struct ShoppingListView: View {
         static let addButtonTitle = "Добавить товар"
         static let emptyStateTitle = "Давайте спланируем покупки!"
         static let emptyStateSubTitle = "Начните добавлять товары"
+        
+        static let contextMenuSortByAlphabet = "Сортировать по алфавиту"
+        static let contextMenuShare = "Поделиться"
+        static let contextMenuResetPurchased = "Снять отметки со всех товаров"
+        static let contextMenuDeletePurchased = "Удалить купленные товары"
+        
+        static let deleteShoppingItemAlertTitle = "Удаление товара"
+        static let deleteShoppingItemAlertMessage = "Вы действительно хотите удалить товар?"
+
+        static let deletePurchasedItemsAlertTitle = "Удаление купленных товаров"
+        static let deletePurchasedItemsAlertMessage = "Вы действительно хотите удалить все купленные товары?"
+
+        static let cancelButtonTitle = "Отменить"
+        static let deleteButtonTitle = "Удалить"
     }
     
     @Environment(\.dismiss) private var dismiss
     @Environment(AppRouter.self) private var router
     
     @State private var observed: Observed
+    
+    @State private var showDeletePurchasedItemsAlert = false
+    @State private var showDeleteShoppingItemAlert = false
+    @State private var shoppingItemToDelete: ShoppingItem?
     
     init(
         service: SwiftDataService,
@@ -55,9 +73,39 @@ struct ShoppingListView: View {
         .overlay(alignment: .bottom) {
             addButton
         }
+        .alert(
+            ShoppingListTexts.deleteShoppingItemAlertTitle,
+            isPresented: $showDeleteShoppingItemAlert,
+            presenting: shoppingItemToDelete
+        ) { item in
+            Button(ShoppingListTexts.cancelButtonTitle, role: .cancel) {
+                shoppingItemToDelete = nil
+            }
+
+            Button(ShoppingListTexts.deleteButtonTitle, role: .destructive) {
+                shoppingItemToDelete = nil
+                observed.handleDeleteShoppingItem(item)
+            }
+        } message: { _ in
+            Text(ShoppingListTexts.deleteShoppingItemAlertMessage)
+        }
+        
+        .alert(
+            ShoppingListTexts.deletePurchasedItemsAlertTitle,
+            isPresented: $showDeletePurchasedItemsAlert
+        ) {
+            Button(ShoppingListTexts.cancelButtonTitle, role: .cancel) { }
+
+            Button(ShoppingListTexts.deleteButtonTitle, role: .destructive) {
+                observed.handleDeletePurchasedItems()
+            }
+        } message: {
+            Text(ShoppingListTexts.deletePurchasedItemsAlertMessage)
+        }
+        
         .toolbar {
-            titleToolbar
-            trailingToolbar
+            titleToolbarItem
+            contextMenuToolbarItem
         }
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
@@ -141,8 +189,9 @@ struct ShoppingListView: View {
     
     private func swipeButtons(for item: ShoppingItem) -> some View {
         Group {
-            Button(role: .destructive) {
-                observed.handleDeleteShoppingItem(item)
+            Button {
+                shoppingItemToDelete = item
+                showDeleteShoppingItemAlert = true
             } label: {
                 Image(systemName: AppSystemIcon.trash)
                     .environment(\.symbolVariants, .none)
@@ -176,7 +225,7 @@ struct ShoppingListView: View {
     }
     
     @ToolbarContentBuilder
-    private var titleToolbar: some ToolbarContent {
+    private var titleToolbarItem: some ToolbarContent {
         ToolbarItemGroup(placement: .topBarLeading) {
             Button {
                 dismiss()
@@ -195,10 +244,44 @@ struct ShoppingListView: View {
     }
     
     @ToolbarContentBuilder
-    private var trailingToolbar: some ToolbarContent {
+    private var contextMenuToolbarItem: some ToolbarContent {
         ToolbarItem(placement: .topBarTrailing) {
-            Button {
-                // Экшен для троеточия
+            Menu {
+                Toggle(isOn: $observed.isSortedByAlphabet) {
+                    Label(
+                        ShoppingListTexts.contextMenuSortByAlphabet,
+                        systemImage: AppSystemIcon.arrowUpArrowDown
+                    )
+                }
+                
+                ShareLink(
+                    item: observed.shareText,
+                    subject: Text(observed.listTitle)
+                ) {
+                    Label(
+                        ShoppingListTexts.contextMenuShare,
+                        systemImage: AppSystemIcon.squareAndArrowUp
+                    )
+                }
+                
+                Button {
+                    observed.handleResetPurchasedItems()
+                } label: {
+                    Label(
+                        ShoppingListTexts.contextMenuResetPurchased,
+                        systemImage: AppSystemIcon.arrow2Circlepath
+                    )
+                }
+                
+                Button(role: .destructive) {
+                    showDeletePurchasedItemsAlert = true
+                } label: {
+                    Label(
+                        ShoppingListTexts.contextMenuDeletePurchased,
+                        systemImage: AppSystemIcon.trash
+                    )
+                }
+                
             } label: {
                 Image(systemName: AppSystemIcon.ellipsisCircle)
                     .foregroundStyle(.titleText)
