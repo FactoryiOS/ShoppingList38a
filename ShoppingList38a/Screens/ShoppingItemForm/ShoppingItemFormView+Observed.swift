@@ -114,8 +114,11 @@ extension ShoppingItemFormView {
         // MARK: - Validation
         
         private func validateName() {
-            // TODO: Реализовать проверку дубликатов
-            nameErrorMessage = nil
+            let isDuplicateName = shoppingList.items.contains {
+                $0.id != currentShoppingItem?.id && $0.name.lowercased() == trimmedName.lowercased()
+            }
+            
+            nameErrorMessage = isDuplicateName ? "Этот товар уже есть в списке, добавьте другой" : nil
         }
     }
 }
