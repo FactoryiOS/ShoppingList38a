@@ -211,7 +211,7 @@ struct ShoppingListsView: View {
                     )
                 ) {
                     Label(
-                        "Сортировка по алфавиту",
+                        "Сортировать по алфавиту",
                         systemImage: AppSystemIcon.arrowUpArrowDown
                     )
                 }
