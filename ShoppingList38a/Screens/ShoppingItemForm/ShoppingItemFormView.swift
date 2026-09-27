@@ -44,7 +44,7 @@ struct ShoppingItemFormView: View {
                 )
                 
                 if isNameFocused && !observed.suggestions.isEmpty {
-                    VStack(alignment: .leading, spacing: 0) {
+                    VStack(alignment: .leading, spacing: 4) {
                         ForEach(observed.suggestions, id: \.self) { suggestion in
                             Button(
                                 action: {
@@ -64,13 +64,12 @@ struct ShoppingItemFormView: View {
                                     .frame(height: 44)
                                 }
                             )
-                            
-                            if suggestion != observed.suggestions.last {
-                                Divider()
-                                    .overlay(.borderGrey)
-                                    .padding(.horizontal, 16)
-                                    .frame(height: 4)
-                                
+                            .overlay(alignment: .bottom) {
+                                if suggestion != observed.suggestions.last {
+                                    Divider()
+                                        .overlay(.borderGrey)
+                                        .padding(.horizontal, 16)
+                                }
                             }
                         }
                     }
