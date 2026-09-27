@@ -104,6 +104,12 @@ struct PreviewContext {
                 container.mainContext.insert($0)
             }
 
+            lists.forEach { list in
+                list.items.forEach { item in
+                    item.list = list
+                }
+            }
+
             container.mainContext.insert(unpurchasedItem)
             container.mainContext.insert(purchasedItem)
 
