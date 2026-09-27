@@ -61,6 +61,16 @@
         }
       }
     },
+    "Are you sure you want to delete this list?" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вы действительно хотите удалить список?"
+          }
+        }
+      }
+    },
     "Cancel" : {
       "localizations" : {
         "ru" : {
@@ -151,12 +161,32 @@
         }
       }
     },
+    "Delete" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Удалить"
+          }
+        }
+      }
+    },
     "Delete Item" : {
       "localizations" : {
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Удаление товара"
+          }
+        }
+      }
+    },
+    "Delete List" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Удаление списка"
           }
         }
       }
@@ -262,7 +292,14 @@
       }
     },
     "L" : {
-
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "л"
+          }
+        }
+      }
     },
     "Let's plan your shopping!" : {
       "localizations" : {
@@ -285,7 +322,14 @@
       }
     },
     "mL" : {
-
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "мл"
+          }
+        }
+      }
     },
     "My Lists" : {
       "localizations" : {

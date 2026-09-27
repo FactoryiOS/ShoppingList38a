@@ -55,8 +55,8 @@ struct ShoppingListsView: View {
             .padding(.bottom, 20)
         }
         .deleteAlert(
-            title: "Удаление списка",
-            message: "Вы действительно хотите удалить список?",
+            title: String(localized: "Delete List"),
+            message: String(localized: "Are you sure you want to delete this list?"),
             isPresented: $showDeleteShoppingListAlert,
             onCancel: {
                 shoppingListToDelete = nil

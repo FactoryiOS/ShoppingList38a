@@ -10,6 +10,12 @@
             "state" : "new",
             "value" : "ShoppingList38a"
           }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ShoppingList38a"
+          }
         }
       }
     },
