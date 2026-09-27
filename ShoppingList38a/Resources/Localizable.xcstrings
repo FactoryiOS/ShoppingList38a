@@ -41,6 +41,26 @@
         }
       }
     },
+    "Are you sure you want to delete all purchased items?" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вы действительно хотите удалить все купленные товары?"
+          }
+        }
+      }
+    },
+    "Are you sure you want to delete this item?" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вы действительно хотите удалить товар?"
+          }
+        }
+      }
+    },
     "Cancel" : {
       "localizations" : {
         "ru" : {
@@ -131,6 +151,36 @@
         }
       }
     },
+    "Delete Item" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Удаление товара"
+          }
+        }
+      }
+    },
+    "Delete Purchased Items" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Удалить купленные товары"
+          }
+        }
+      }
+    },
+    "Delete Purchased Items?" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Удаление купленных товаров"
+          }
+        }
+      }
+    },
     "Done" : {
       "localizations" : {
         "ru" : {
@@ -211,15 +261,8 @@
         }
       }
     },
-    "l" : {
-      "localizations" : {
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "л"
-          }
-        }
-      }
+    "L" : {
+
     },
     "Let's plan your shopping!" : {
       "localizations" : {
@@ -241,15 +284,8 @@
         }
       }
     },
-    "ml" : {
-      "localizations" : {
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "мл"
-          }
-        }
-      }
+    "mL" : {
+
     },
     "My Lists" : {
       "localizations" : {
@@ -331,6 +367,16 @@
         }
       }
     },
+    "Share" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Поделиться"
+          }
+        }
+      }
+    },
     "Sort Alphabetically" : {
       "localizations" : {
         "ru" : {
@@ -387,6 +433,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Это название уже используется, пожалуйста, измените его."
+          }
+        }
+      }
+    },
+    "Uncheck All Items" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Снять отметки со всех товаров"
           }
         }
       }

@@ -23,9 +23,9 @@ enum ShoppingItemUnit: String, CaseIterable, Hashable, Codable {
         case .gram:
             String(localized: "g")
         case .liter:
-            String(localized: "l")
+            String(localized: "L")
         case .milliliter:
-            String(localized: "ml")
+            String(localized: "mL")
         }
     }
 }
