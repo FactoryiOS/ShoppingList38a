@@ -42,17 +42,13 @@ struct ShoppingItemFormView: View {
                     text: $observed.nameText,
                     errorMessage: observed.nameErrorMessage
                 )
-                .onChange(of: observed.nameText) { _, _ in
-                    observed.updateSuggestions()
-                }
                 
-                if !observed.suggestions.isEmpty {
+                if isNameFocused && !observed.suggestions.isEmpty {
                     VStack(alignment: .leading, spacing: 0) {
                         ForEach(observed.suggestions, id: \.self) { suggestion in
                             Button(
                                 action: {
                                     observed.nameText = suggestion
-                                    observed.clearSuggestions()
                                     isNameFocused = false
                                     isAmountFocused = true
                                 },
@@ -63,21 +59,24 @@ struct ShoppingItemFormView: View {
                                             .foregroundStyle(.primaryText)
                                         Spacer()
                                     }
-                                    .padding(.vertical, 12)
+                                    
                                     .padding(.horizontal, 16)
+                                    .frame(height: 44)
                                 }
                             )
                             
                             if suggestion != observed.suggestions.last {
                                 Divider()
+                                    .overlay(.borderGrey)
                                     .padding(.horizontal, 16)
-                                    .background(.borderGrey)
+                                    .frame(height: 4)
+                                
                             }
                         }
                     }
                     .background(Color(.baseElementsBackground))
                     .cornerRadius(12)
-                    .padding(.top, 4)
+                    .padding(.top, 10)
                     .transition(.move(edge: .top).combined(with: .opacity))
                 }
             }

@@ -5,8 +5,7 @@
 //  Created by ivan on 2026-09-23.
 //
 
-import SwiftUI
-import SwiftData
+import Foundation
 
 extension ShoppingItemFormView {
     @MainActor
@@ -24,8 +23,28 @@ extension ShoppingItemFormView {
         var amountText: String = ""
         var selectedUnit: ShoppingItemUnit = .piece
         
-        var suggestions: [String] = []
         private var allUniqueNames: Set<String> = []
+        
+        var suggestions: [String] {
+            let query = trimmedName
+            
+            guard !query.isEmpty else {
+                return []
+            }
+            
+            return allUniqueNames
+                .filter { name in
+                    guard let range = name.localizedStandardRange(of: query) else {
+                        return false
+                    }
+                    
+                    return range.lowerBound == name.startIndex
+                    && name.localizedCaseInsensitiveCompare(query) != .orderedSame
+                }
+                .sorted()
+                .prefix(3)
+                .map { $0 }
+        }
         
         private(set) var nameErrorMessage: String?
         
@@ -130,26 +149,5 @@ extension ShoppingItemFormView {
         func loadAllExistingItems() {
             self.allUniqueNames = service.fetchAllUniqueItemNames()
         }
-        
-        func updateSuggestions() {
-            let query = trimmedName
-            
-            guard !query.isEmpty else {
-                suggestions = []
-                return
-            }
-            
-            let filtered = allUniqueNames.filter { name in
-                guard let range = name.localizedStandardRange(of: query) else { return false }
-                return range.lowerBound == name.startIndex && name.lowercased() != query.lowercased()
-            }
-            
-            self.suggestions = Array(filtered.sorted().prefix(3))
-        }
-        
-        func clearSuggestions() {
-            suggestions = []
-        }
-        
     }
 }

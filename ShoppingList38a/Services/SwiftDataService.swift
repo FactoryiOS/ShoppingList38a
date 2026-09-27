@@ -316,10 +316,20 @@ final class SwiftDataService {
     
     func fetchAllUniqueItemNames() -> Set<String> {
         let descriptor = FetchDescriptor<ShoppingItem>()
+        
         do {
             let allItems = try modelContext.fetch(descriptor)
-            let names = allItems.map { $0.name.trimmingCharacters(in: .whitespacesAndNewlines) }
-            return Set(names)
+            
+            let names = allItems
+                .map { $0.name.trimmingCharacters(in: .whitespacesAndNewlines) }
+                .filter { !$0.isEmpty }
+            
+            let uniqueNames = Dictionary(
+                names.map { ($0.lowercased(), $0) },
+                uniquingKeysWith: { first, _ in first }
+            )
+            
+            return Set(uniqueNames.values)
         } catch {
             print("❌ [SwiftDataService] fetchAllUniqueItemNames: \(error)")
             return []
