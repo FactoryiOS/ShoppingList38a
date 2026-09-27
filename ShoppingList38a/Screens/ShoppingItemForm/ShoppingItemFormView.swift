@@ -35,13 +35,52 @@ struct ShoppingItemFormView: View {
     
     var body: some View {
         VStack(spacing: 20) {
-            
-            BaseTextField(
-                isFocused: $isNameFocused,
-                placeholder: "Название товара",
-                text: $observed.nameText,
-                errorMessage: observed.nameErrorMessage
-            )
+            VStack(spacing: 0) {
+                BaseTextField(
+                    isFocused: $isNameFocused,
+                    placeholder: "Название товара",
+                    text: $observed.nameText,
+                    errorMessage: observed.nameErrorMessage
+                )
+                .onChange(of: observed.nameText) { _, _ in
+                    observed.updateSuggestions()
+                }
+                
+                if !observed.suggestions.isEmpty {
+                    VStack(alignment: .leading, spacing: 0) {
+                        ForEach(observed.suggestions, id: \.self) { suggestion in
+                            Button(
+                                action: {
+                                    observed.nameText = suggestion
+                                    observed.clearSuggestions()
+                                    isNameFocused = false
+                                    isAmountFocused = true
+                                },
+                                label: {
+                                    HStack {
+                                        Text(suggestion)
+                                            .font(AppFont.regular17)
+                                            .foregroundStyle(.primaryText)
+                                        Spacer()
+                                    }
+                                    .padding(.vertical, 12)
+                                    .padding(.horizontal, 16)
+                                }
+                            )
+                            
+                            if suggestion != observed.suggestions.last {
+                                Divider()
+                                    .padding(.horizontal, 16)
+                                    .background(.borderGrey)
+                            }
+                        }
+                    }
+                    .background(Color(.baseElementsBackground))
+                    .cornerRadius(12)
+                    .padding(.top, 4)
+                    .transition(.move(edge: .top).combined(with: .opacity))
+                }
+            }
             
             HStack(spacing: 16) {
                 BaseTextField(
@@ -59,6 +98,9 @@ struct ShoppingItemFormView: View {
         .padding(.vertical, 12)
         .background(.primaryBackground)
         .navigationBarTitleDisplayMode(.inline)
+        .onAppear {
+            observed.loadAllExistingItems()
+        }
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
                 Button("Отменить") {

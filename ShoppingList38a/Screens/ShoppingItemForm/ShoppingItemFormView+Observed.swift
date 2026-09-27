@@ -5,7 +5,8 @@
 //  Created by ivan on 2026-09-23.
 //
 
-import Foundation
+import SwiftUI
+import SwiftData
 
 extension ShoppingItemFormView {
     @MainActor
@@ -22,6 +23,9 @@ extension ShoppingItemFormView {
         
         var amountText: String = ""
         var selectedUnit: ShoppingItemUnit = .piece
+        
+        var suggestions: [String] = []
+        private var allUniqueNames: Set<String> = []
         
         private(set) var nameErrorMessage: String?
         
@@ -41,7 +45,7 @@ extension ShoppingItemFormView {
             self.service = service
             self.shoppingList = shoppingList
             self.currentShoppingItem = shoppingItem
-
+            
             if let shoppingItem {
                 nameText = shoppingItem.name
                 amountText = "\(shoppingItem.count)"
@@ -77,7 +81,7 @@ extension ShoppingItemFormView {
         private var isAmountValid: Bool {
             count != nil
         }
-
+        
         // MARK: - Actions
         
         func handleSave(completion: Completion) {
@@ -120,5 +124,32 @@ extension ShoppingItemFormView {
             
             nameErrorMessage = isDuplicateName ? "Этот товар уже есть в списке, добавьте другой" : nil
         }
+        
+        // MARK: - Auto-Suggestions
+        
+        func loadAllExistingItems() {
+            self.allUniqueNames = service.fetchAllUniqueItemNames()
+        }
+        
+        func updateSuggestions() {
+            let query = trimmedName
+            
+            guard !query.isEmpty else {
+                suggestions = []
+                return
+            }
+            
+            let filtered = allUniqueNames.filter { name in
+                guard let range = name.localizedStandardRange(of: query) else { return false }
+                return range.lowerBound == name.startIndex && name.lowercased() != query.lowercased()
+            }
+            
+            self.suggestions = Array(filtered.sorted().prefix(3))
+        }
+        
+        func clearSuggestions() {
+            suggestions = []
+        }
+        
     }
 }
