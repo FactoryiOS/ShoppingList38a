@@ -53,8 +53,8 @@ extension ShoppingItemFormView {
         
         var title: String {
             currentShoppingItem == nil
-            ? "Создание товара"
-            : "Редактировать"
+            ? String(localized: "New Item")
+            : String(localized: "Edit")
         }
         
         var isFormValid: Bool {
@@ -118,7 +118,9 @@ extension ShoppingItemFormView {
                 $0.id != currentShoppingItem?.id && $0.name.lowercased() == trimmedName.lowercased()
             }
             
-            nameErrorMessage = isDuplicateName ? "Этот товар уже есть в списке, добавьте другой" : nil
+            nameErrorMessage = isDuplicateName
+                ? String(localized: "This item is already in the list, add another")
+                : nil
         }
     }
 }

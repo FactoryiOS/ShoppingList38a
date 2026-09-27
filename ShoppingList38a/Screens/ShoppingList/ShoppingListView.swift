@@ -10,10 +10,21 @@ import SwiftUI
 
 struct ShoppingListView: View {
     private enum ShoppingListTexts {
-        static let searchPlaceholder = "Поиск"
-        static let addButtonTitle = "Добавить товар"
-        static let emptyStateTitle = "Давайте спланируем покупки!"
-        static let emptyStateSubTitle = "Начните добавлять товары"
+        static var searchPlaceholder: String {
+            String(localized: "Search")
+        }
+
+        static var addButtonTitle: String {
+            String(localized: "Add Item")
+        }
+
+        static var emptyStateTitle: String {
+            String(localized: "Let's plan your shopping!")
+        }
+
+        static var emptyStateSubTitle: String {
+            String(localized: "Start adding items")
+        }
     }
     
     @Environment(\.dismiss) private var dismiss

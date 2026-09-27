@@ -67,12 +67,12 @@ struct BaseTextField: View {
     @FocusState var isFocused: Bool
     
     let currentError = text == "Новый год"
-    ? "Это название уже используется, пожалуйста, измените его."
+    ? String(localized: "This name is already in use, please change it.")
     : nil
     
     BaseTextField(
         isFocused: $isFocused,
-        placeholder: "Введите название",
+        placeholder: String(localized: "Enter a name"),
         text: $text,
         errorMessage: currentError
     )

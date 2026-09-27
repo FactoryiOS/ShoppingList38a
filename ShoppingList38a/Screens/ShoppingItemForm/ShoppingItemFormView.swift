@@ -38,7 +38,7 @@ struct ShoppingItemFormView: View {
             
             BaseTextField(
                 isFocused: $isNameFocused,
-                placeholder: "Название товара",
+                placeholder: String(localized: "Item name"),
                 text: $observed.nameText,
                 errorMessage: observed.nameErrorMessage
             )
@@ -46,7 +46,7 @@ struct ShoppingItemFormView: View {
             HStack(spacing: 16) {
                 BaseTextField(
                     isFocused: $isAmountFocused,
-                    placeholder: "Количество",
+                    placeholder: String(localized: "Quantity"),
                     text: $observed.amountText,
                     errorMessage: nil
                 )
@@ -61,7 +61,7 @@ struct ShoppingItemFormView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
-                Button("Отменить") {
+                Button("Cancel") {
                     dismiss()
                 }
                 .font(AppFont.regular17)
@@ -75,7 +75,7 @@ struct ShoppingItemFormView: View {
             }
             
             ToolbarItem(placement: .confirmationAction) {
-                Button("Готово") {
+                Button("Done") {
                     observed.handleSave(completion: onComplete)
                 }
                 .font(AppFont.semiBold17)
@@ -90,13 +90,13 @@ struct ShoppingItemFormView: View {
     private var selectUnitPicker: some View {
         VStack(alignment: .leading, spacing: 4) {
             HStack {
-                Text("Ед.изм.:")
+                Text("Unit:")
                     .font(AppFont.regular17)
                     .foregroundStyle(.hintGrey)
                 
                 Spacer()
                 
-                Picker("Единица измерения", selection: $observed.selectedUnit) {
+                Picker("Unit of measure", selection: $observed.selectedUnit) {
                     ForEach(ShoppingItemUnit.allCases, id: \.self) { unit in
                         Text(unit.displayName)
                             .tag(unit)

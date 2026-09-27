@@ -20,7 +20,7 @@ struct IconSelectorView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Выберите дизайн")
+            Text("Choose a design")
                 .font(AppFont.regular16)
                 .foregroundStyle(.primaryText)
             

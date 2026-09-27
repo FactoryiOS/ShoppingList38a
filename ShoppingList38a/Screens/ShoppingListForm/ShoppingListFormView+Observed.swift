@@ -56,11 +56,15 @@ extension ShoppingListFormView {
         }
         
         var submitButtonTitle: String {
-            currentShoppingList != nil ? "Сохранить" : "Создать"
+            currentShoppingList != nil
+                ? String(localized: "Save")
+                : String(localized: "Create")
         }
         
         var titleToolbar: String {
-            currentShoppingList != nil ? "Редактировать список" : "Создать список"
+            currentShoppingList != nil
+                ? String(localized: "Edit List")
+                : String(localized: "Create List")
         }
         
         private var trimmedName: String {
@@ -116,7 +120,7 @@ extension ShoppingListFormView {
 
                 nameErrorMessage = isAvailable
                 ? nil
-                : "Это название уже используется, пожалуйста, измените его."
+                : String(localized: "This name is already in use, please change it.")
             } catch {
                 print("❌ [ShoppingListFormView] validateName: \(error)")
             }

@@ -5,6 +5,8 @@
 //  Created by Андрей Макалкин on 19.09.2026.
 //
 
+import Foundation
+
 enum AppColorScheme: String, CaseIterable, Identifiable {
     var id: Self { self }
     
@@ -15,11 +17,11 @@ enum AppColorScheme: String, CaseIterable, Identifiable {
     var displayName: String {
         switch self {
         case .light:
-            "Светлая"
+            String(localized: "Light")
         case .dark:
-            "Темная"
+            String(localized: "Dark")
         case .system:
-            "Системная"
+            String(localized: "System")
         }
     }
 }

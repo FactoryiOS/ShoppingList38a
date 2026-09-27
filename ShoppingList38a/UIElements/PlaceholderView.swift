@@ -34,13 +34,13 @@ struct PlaceholderView: View {
 #Preview {
     PlaceholderView(
         image: AppImage.emptyShoppingLists,
-        title: "Давайте спланируем покупки!",
-        subtitle: "Создайте свой первый список"
+        title: String(localized: "Let's plan your shopping!"),
+        subtitle: String(localized: "Create your first list")
     )
     
     PlaceholderView(
         image: AppImage.emptyShoppingList,
-        title: "Давайте спланируем покупки!",
-        subtitle: "Начните добавлять товары"
+        title: String(localized: "Let's plan your shopping!"),
+        subtitle: String(localized: "Start adding items")
     )
 }
