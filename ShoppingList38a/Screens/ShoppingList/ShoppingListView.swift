@@ -85,15 +85,16 @@ struct ShoppingListView: View {
     var body: some View {
         VStack(spacing: .zero) {
             customSearchBar
-                .padding([.horizontal, .bottom], 16)
+                .padding(.horizontal, 16)
                 .padding(.top, 4)
                 .background(.primaryBackground)
-            Group {
-                if observed.items.isEmpty {
-                    emptyState
-                } else {
-                    shoppingListState
-                }
+
+            if observed.items.isEmpty {
+                emptyState
+                addButton
+            } else {
+                shoppingListState
+                    .padding(.top, 16)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -102,8 +103,11 @@ struct ShoppingListView: View {
                 .ignoresSafeArea()
         }
         .overlay(alignment: .bottom) {
-            addButton
+            if !observed.items.isEmpty {
+                addButton
+            }
         }
+        .ignoresSafeArea(.keyboard, edges: .bottom)
         .deleteAlert(
             title: ShoppingListTexts.deleteShoppingItemAlertTitle,
             message: ShoppingListTexts.deleteShoppingItemAlertMessage,
@@ -142,16 +146,22 @@ struct ShoppingListView: View {
     }
     
     private var emptyState: some View {
-        VStack(spacing: 0) {
-            Spacer()
-            PlaceholderView(
-                image: AppImage.emptyShoppingList,
-                title: ShoppingListTexts.emptyStateTitle,
-                subtitle: ShoppingListTexts.emptyStateSubTitle
-            )
-            Spacer()
+        ScrollView {
+            VStack(spacing: .zero) {
+                Spacer()
+                
+                PlaceholderView(
+                    image: AppImage.emptyShoppingList,
+                    title: ShoppingListTexts.emptyStateTitle,
+                    subtitle: ShoppingListTexts.emptyStateSubTitle
+                )
+                
+                Spacer()
+            }
+            .containerRelativeFrame(.vertical)
         }
-        .padding(.bottom, 64)
+        .scrollDisabled(true)
+        .scrollIndicators(.hidden)
     }
     
     private var shoppingListState: some View {
