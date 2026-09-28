@@ -45,7 +45,7 @@ struct ShoppingListsView: View {
         }
         .overlay(alignment: .bottom) {
             BaseButton(
-                title: "Создать список",
+                title: String(localized: "Create List"),
                 isActive: true,
                 action: {
                     router.showModal(.createShoppingList)
@@ -55,8 +55,8 @@ struct ShoppingListsView: View {
             .padding(.bottom, 20)
         }
         .deleteAlert(
-            title: "Удаление списка",
-            message: "Вы действительно хотите удалить список?",
+            title: String(localized: "Delete List"),
+            message: String(localized: "Are you sure you want to delete this list?"),
             isPresented: $showDeleteShoppingListAlert,
             onCancel: {
                 shoppingListToDelete = nil
@@ -89,8 +89,8 @@ struct ShoppingListsView: View {
             
             PlaceholderView(
                 image: AppImage.emptyShoppingLists,
-                title: "Давайте спланируем покупки!",
-                subtitle: "Создайте свой первый список"
+                title: String(localized: "Let's plan your shopping!"),
+                subtitle: String(localized: "Create your first list")
             )
             
             Spacer()
@@ -163,7 +163,7 @@ struct ShoppingListsView: View {
     private var titleToolbarItem: some ToolbarContent {
         if #available(iOS 26.0, *) {
             ToolbarItem(placement: .topBarLeading) {
-                Text("Мои списки")
+                Text("My Lists")
                     .font(AppFont.semiBold28)
                     .foregroundStyle(.titleText)
                     .fixedSize(horizontal: true, vertical: false)
@@ -171,7 +171,7 @@ struct ShoppingListsView: View {
             .sharedBackgroundVisibility(.hidden)
         } else {
             ToolbarItem(placement: .topBarLeading) {
-                Text("Мои списки")
+                Text("My Lists")
                     .font(AppFont.semiBold28)
                     .foregroundStyle(.titleText)
             }
@@ -185,7 +185,7 @@ struct ShoppingListsView: View {
         ToolbarItem(placement: .topBarTrailing) {
             Menu {
                 Picker(
-                    "Установить тему",
+                    "Set Theme",
                     systemImage: AppSystemIcon.circleLefthalfFilledInverse,
                     selection: $appState.appColorScheme
                 ) {
@@ -211,7 +211,7 @@ struct ShoppingListsView: View {
                     )
                 ) {
                     Label(
-                        "Сортировать по алфавиту",
+                        "Sort Alphabetically",
                         systemImage: AppSystemIcon.arrowUpArrowDown
                     )
                 }

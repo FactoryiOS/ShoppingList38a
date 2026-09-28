@@ -10,21 +10,55 @@ import SwiftUI
 
 struct ShoppingListView: View {
     private enum ShoppingListTexts {
-        static let searchPlaceholder = "Поиск"
-        static let addButtonTitle = "Добавить товар"
-        static let emptyStateTitle = "Давайте спланируем покупки!"
-        static let emptyStateSubTitle = "Начните добавлять товары"
-        
-        static let contextMenuSortByAlphabet = "Сортировать по алфавиту"
-        static let contextMenuShare = "Поделиться"
-        static let contextMenuResetPurchased = "Снять отметки со всех товаров"
-        static let contextMenuDeletePurchased = "Удалить купленные товары"
-        
-        static let deleteShoppingItemAlertTitle = "Удаление товара"
-        static let deleteShoppingItemAlertMessage = "Вы действительно хотите удалить товар?"
-        
-        static let deletePurchasedItemsAlertTitle = "Удаление купленных товаров"
-        static let deletePurchasedItemsAlertMessage = "Вы действительно хотите удалить все купленные товары?"
+
+        static var searchPlaceholder: String {
+            String(localized: "Search")
+        }
+
+        static var addButtonTitle: String {
+            String(localized: "Add Item")
+        }
+
+        static var emptyStateTitle: String {
+            String(localized: "Let's plan your shopping!")
+        }
+
+        static var emptyStateSubTitle: String {
+            String(localized: "Start adding items")
+        }
+
+        static var contextMenuSortByAlphabet: String {
+            String(localized: "Sort Alphabetically")
+        }
+
+        static var contextMenuShare: String {
+            String(localized: "Share")
+        }
+
+        static var contextMenuResetPurchased: String {
+            String(localized: "Uncheck All Items")
+        }
+
+        static var contextMenuDeletePurchased: String {
+            String(localized: "Delete Purchased Items")
+        }
+
+        static var deleteShoppingItemAlertTitle: String {
+            String(localized: "Delete Item")
+        }
+
+        static var deleteShoppingItemAlertMessage: String {
+            String(localized: "Are you sure you want to delete this item?")
+        }
+
+        static var deletePurchasedItemsAlertTitle: String {
+            String(localized: "Delete Purchased Items?")
+        }
+
+        static var deletePurchasedItemsAlertMessage: String {
+            String(localized: "Are you sure you want to delete all purchased items?")
+        }
+
     }
     
     @Environment(\.dismiss) private var dismiss

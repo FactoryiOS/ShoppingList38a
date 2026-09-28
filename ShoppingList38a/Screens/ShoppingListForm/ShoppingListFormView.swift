@@ -35,7 +35,7 @@ struct ShoppingListFormView: View {
             VStack(spacing: 24) {
                 BaseTextField(
                     isFocused: $isNameFieldFocused,
-                    placeholder: "Введите название списка",
+                    placeholder: String(localized: "Enter list name"),
                     text: $observed.name,
                     errorMessage: observed.nameErrorMessage
                 )

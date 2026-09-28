@@ -9,10 +9,21 @@ import SwiftUI
 
 struct WelcomeScreenView: View {
     private enum WelcomeTexts {
-        static let largeTitle = "Добро пожаловать!"
-        static let headLineTitle = "Никогда не забывайте,\nчто нужно купить"
-        static let supportingTextTitle = "Создавайте списки\nи не переживайте о покупках"
-        static let startButtonTitle = "Начать"
+        static var largeTitle: String {
+            String(localized: "Welcome!")
+        }
+
+        static var headLineTitle: String {
+            String(localized: "Never forget\nwhat you need to buy")
+        }
+
+        static var supportingTextTitle: String {
+            String(localized: "Create lists\nand don't worry about shopping")
+        }
+
+        static var startButtonTitle: String {
+            String(localized: "Start")
+        }
     }
 
     var onComplete: () -> Void = {}

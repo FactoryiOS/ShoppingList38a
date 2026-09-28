@@ -5,6 +5,8 @@
 //  Created by Андрей Макалкин on 13.09.2026.
 //
 
+import Foundation
+
 enum ShoppingItemUnit: String, CaseIterable, Hashable, Codable {
     case piece
     case kilogram
@@ -15,15 +17,15 @@ enum ShoppingItemUnit: String, CaseIterable, Hashable, Codable {
     var displayName: String {
         switch self {
         case .piece:
-            "шт."
+            String(localized: "pcs")
         case .kilogram:
-            "кг"
+            String(localized: "kg")
         case .gram:
-            "г"
+            String(localized: "g")
         case .liter:
-            "л"
+            String(localized: "L")
         case .milliliter:
-            "мл"
+            String(localized: "mL")
         }
     }
 }

@@ -29,13 +29,13 @@ struct BaseButton: View {
 #Preview {
     VStack(spacing: 16) {
         BaseButton(
-            title: "Создать",
+            title: String(localized: "Create"),
             isActive: false, // неактивная кнопка
             action: {}
         )
         
         BaseButton(
-            title: "Создать",
+            title: String(localized: "Create"),
             isActive: true, // активная кнопка
             action: {}
         )

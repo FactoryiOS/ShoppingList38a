@@ -37,8 +37,13 @@ private struct DeleteAlertModifier: ViewModifier {
 private struct DeleteAlertPresenter: UIViewControllerRepresentable {
     
     private enum DeleteAlertTexts {
-        static let cancel = "Отменить"
-        static let delete = "Удалить"
+        static var cancel: String {
+            String(localized: "Cancel")
+        }
+
+        static var delete: String {
+            String(localized: "Delete")
+        }
     }
     
     let title: String
