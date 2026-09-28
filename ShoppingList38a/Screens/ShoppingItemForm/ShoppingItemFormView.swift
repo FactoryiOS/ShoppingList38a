@@ -90,12 +90,27 @@ struct ShoppingItemFormView: View {
                 )
                 
                 selectUnitPicker
+                    .simultaneousGesture(
+                        TapGesture()
+                            .onEnded {
+                                isNameFocused = false
+                                isAmountFocused = false
+                            }
+                    )
             }
             Spacer()
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
-        .background(.primaryBackground)
+        .background {
+            Color.primaryBackground
+                .ignoresSafeArea()
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    isNameFocused = false
+                    isAmountFocused = false
+                }
+        }
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             observed.loadAllExistingItems()
