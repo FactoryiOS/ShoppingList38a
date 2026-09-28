@@ -34,6 +34,15 @@ extension ShoppingItemFormView {
             
             return allUniqueNames
                 .filter { name in
+                    let isAlreadyInList = shoppingList.items.contains {
+                        $0.id != currentShoppingItem?.id
+                        && $0.name.lowercased() == name.lowercased()
+                    }
+                    
+                    guard !isAlreadyInList else {
+                        return false
+                    }
+                    
                     guard let range = name.localizedStandardRange(of: query) else {
                         return false
                     }

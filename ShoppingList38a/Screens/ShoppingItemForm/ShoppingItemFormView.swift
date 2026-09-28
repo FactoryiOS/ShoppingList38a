@@ -50,7 +50,6 @@ struct ShoppingItemFormView: View {
                             Button(
                                 action: {
                                     observed.nameText = suggestion
-                                    isNameFocused = false
                                     isAmountFocused = true
                                 },
                                 label: {
