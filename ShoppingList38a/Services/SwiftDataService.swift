@@ -128,14 +128,14 @@ final class SwiftDataService {
     
     /// Проверяет, доступно ли название для списка покупок.
     ///
-    /// Сравнение выполняется с учётом регистра.
+    /// Сравнение выполняется с без учёта регистра.
     /// Пробелы и переносы строк в начале и конце названия игнорируются.
     ///
     /// Например:
-    /// `Продукты` и `Продукты` — дубликат.
-    /// ` Продукты ` и `Продукты` — дубликат.
-    /// `Продукты` и `продукты` — разные названия.
-    /// `Продукты` и `ПРОДУКТЫ` — разные названия.
+    ///
+    /// `Продукты` и `продукты` — дубликат;
+    /// `Продукты` и `ПРОДУКТЫ` — дубликат;
+    /// ` Продукты ` и `продукты` — дубликат.
     ///
     /// При редактировании текущий список исключается из проверки,
     /// поэтому его собственное название не считается дубликатом.
@@ -154,6 +154,7 @@ final class SwiftDataService {
         
         let normalizedName = name
             .trimmingCharacters(in: .whitespacesAndNewlines)
+            .lowercased()
         
         return !lists.contains { list in
             if let shoppingList,
@@ -163,7 +164,8 @@ final class SwiftDataService {
             
             let existingName = list.name
                 .trimmingCharacters(in: .whitespacesAndNewlines)
-            
+                .lowercased()
+
             return existingName == normalizedName
         }
     }
