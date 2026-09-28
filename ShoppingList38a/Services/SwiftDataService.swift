@@ -209,9 +209,9 @@ final class SwiftDataService {
                 $0.id == shoppingItem.id
             }
         }
-
+        
         modelContext.delete(shoppingItem)
-
+        
         try modelContext.save()
     }
     
@@ -239,15 +239,15 @@ final class SwiftDataService {
         let purchasedItems = shoppingList.items.filter {
             $0.isPurchased
         }
-
+        
         shoppingList.items.removeAll {
             $0.isPurchased
         }
-
+        
         purchasedItems.forEach {
             modelContext.delete($0)
         }
-
+        
         try modelContext.save()
     }
     
@@ -313,5 +313,27 @@ final class SwiftDataService {
     
     private func trimmed(_ value: String) -> String {
         value.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+    
+    func fetchAllUniqueItemNames() -> Set<String> {
+        let descriptor = FetchDescriptor<ShoppingItem>()
+        
+        do {
+            let allItems = try modelContext.fetch(descriptor)
+            
+            let names = allItems
+                .map { $0.name.trimmingCharacters(in: .whitespacesAndNewlines) }
+                .filter { !$0.isEmpty }
+            
+            let uniqueNames = Dictionary(
+                names.map { ($0.lowercased(), $0) },
+                uniquingKeysWith: { first, _ in first }
+            )
+            
+            return Set(uniqueNames.values)
+        } catch {
+            print("❌ [SwiftDataService] fetchAllUniqueItemNames: \(error)")
+            return []
+        }
     }
 }
