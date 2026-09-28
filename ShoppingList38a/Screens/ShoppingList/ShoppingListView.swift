@@ -66,6 +66,8 @@ struct ShoppingListView: View {
     
     @State private var observed: Observed
     
+    @FocusState private var isSearchFocused: Bool
+    
     @State private var showDeletePurchasedItemsAlert = false
     @State private var showDeleteShoppingItemAlert = false
     @State private var shoppingItemToDelete: ShoppingItem?
@@ -159,6 +161,10 @@ struct ShoppingListView: View {
                 Spacer()
             }
             .containerRelativeFrame(.vertical)
+            .contentShape(Rectangle())
+            .onTapGesture {
+                isSearchFocused = false
+            }
         }
         .scrollDisabled(true)
         .scrollIndicators(.hidden)
@@ -179,9 +185,13 @@ struct ShoppingListView: View {
                         observed.handleToggleShoppingItem(item)
                     }
                 )
-                
+
                 Divider()
                     .background(.borderGrey)
+            }
+            .contentShape(Rectangle())
+            .onTapGesture {
+                isSearchFocused = false
             }
             .listRowBackground(Color.clear)
             .listRowSeparator(.hidden)
@@ -193,6 +203,7 @@ struct ShoppingListView: View {
         .listStyle(.plain)
         .scrollContentBackground(.hidden)
         .scrollIndicators(.hidden)
+        .scrollDismissesKeyboard(.immediately)
         .contentMargins(.bottom, 86, for: .scrollContent)
     }
     
@@ -209,10 +220,12 @@ struct ShoppingListView: View {
             )
             .font(AppFont.regular17)
             .foregroundStyle(.primaryText)
+            .focused($isSearchFocused)
             
             if !observed.searchText.isEmpty {
                 Button {
                     observed.searchText = ""
+                    isSearchFocused = false
                 } label: {
                     Image(systemName: AppSystemIcon.xmarkCircleFill)
                         .symbolRenderingMode(.palette)
@@ -239,6 +252,7 @@ struct ShoppingListView: View {
             .tint(.systemsRed)
             
             Button {
+                isSearchFocused = false
                 router.showModal(
                     .editShoppingItem(item.id)
                 )
@@ -255,6 +269,8 @@ struct ShoppingListView: View {
             title: ShoppingListTexts.addButtonTitle,
             isActive: true,
             action: {
+                isSearchFocused = false
+                
                 router.showModal(
                     .createShoppingItem(observed.shoppingListID)
                 )
@@ -338,6 +354,12 @@ struct ShoppingListView: View {
                     .foregroundStyle(.titleText)
                     .frame(width: 44, height: 44)
             }
+            .simultaneousGesture(
+                TapGesture()
+                    .onEnded {
+                        isSearchFocused = false
+                    }
+                )
         }
     }
 }
