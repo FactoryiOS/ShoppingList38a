@@ -45,7 +45,7 @@ struct ShoppingListsView: View {
         }
         .overlay(alignment: .bottom) {
             BaseButton(
-                title: String(localized: "Create List"),
+                title: .createList,
                 isActive: true,
                 action: {
                     router.showModal(.createShoppingList)
@@ -55,8 +55,8 @@ struct ShoppingListsView: View {
             .padding(.bottom, 20)
         }
         .deleteAlert(
-            title: String(localized: "Delete List"),
-            message: String(localized: "Are you sure you want to delete this list?"),
+            title: .deleteListTitle,
+            message: .deleteListMessage,
             isPresented: $showDeleteShoppingListAlert,
             onCancel: {
                 shoppingListToDelete = nil
@@ -89,8 +89,8 @@ struct ShoppingListsView: View {
             
             PlaceholderView(
                 image: AppImage.emptyShoppingLists,
-                title: String(localized: "Let's plan your shopping!"),
-                subtitle: String(localized: "Create your first list")
+                title: .emptyStateTitle,
+                subtitle: .shoppingListsEmptyStateSubtitle
             )
             
             Spacer()
@@ -163,7 +163,7 @@ struct ShoppingListsView: View {
     private var titleToolbarItem: some ToolbarContent {
         if #available(iOS 26.0, *) {
             ToolbarItem(placement: .topBarLeading) {
-                Text("My Lists")
+                Text(.shoppingListsTitle)
                     .font(AppFont.semiBold28)
                     .foregroundStyle(.titleText)
                     .fixedSize(horizontal: true, vertical: false)
@@ -171,7 +171,7 @@ struct ShoppingListsView: View {
             .sharedBackgroundVisibility(.hidden)
         } else {
             ToolbarItem(placement: .topBarLeading) {
-                Text("My Lists")
+                Text(.shoppingListsTitle)
                     .font(AppFont.semiBold28)
                     .foregroundStyle(.titleText)
             }
@@ -185,7 +185,7 @@ struct ShoppingListsView: View {
         ToolbarItem(placement: .topBarTrailing) {
             Menu {
                 Picker(
-                    "Set Theme",
+                    .themePickerTitle,
                     systemImage: AppSystemIcon.circleLefthalfFilledInverse,
                     selection: $appState.appColorScheme
                 ) {
@@ -211,7 +211,7 @@ struct ShoppingListsView: View {
                     )
                 ) {
                     Label(
-                        "Sort Alphabetically",
+                        .sortAlphabetically,
                         systemImage: AppSystemIcon.arrowUpArrowDown
                     )
                 }

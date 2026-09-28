@@ -295,7 +295,7 @@ final class SwiftDataService {
         let descriptor = FetchDescriptor<ShoppingList>()
         let lists = try modelContext.fetch(descriptor)
         
-        let copySuffix = String(localized: "copy")
+        let copySuffix = String(localized: .copySuffix)
         let prefix = "\(shoppingList.name) \(copySuffix) "
         
         let lastCopyNumber = lists

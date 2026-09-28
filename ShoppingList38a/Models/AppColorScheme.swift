@@ -14,14 +14,14 @@ enum AppColorScheme: String, CaseIterable, Identifiable {
     case dark
     case system
     
-    var displayName: String {
+    var displayName: LocalizedStringResource {
         switch self {
         case .light:
-            String(localized: "Light")
+            .themeLight
         case .dark:
-            String(localized: "Dark")
+            .themeDark
         case .system:
-            String(localized: "System")
+            .themeSystem
         }
     }
 }

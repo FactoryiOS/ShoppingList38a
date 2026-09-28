@@ -9,58 +9,6 @@ import SwiftData
 import SwiftUI
 
 struct ShoppingListView: View {
-    private enum ShoppingListTexts {
-
-        static var searchPlaceholder: String {
-            String(localized: "Search")
-        }
-
-        static var addButtonTitle: String {
-            String(localized: "Add Item")
-        }
-
-        static var emptyStateTitle: String {
-            String(localized: "Let's plan your shopping!")
-        }
-
-        static var emptyStateSubTitle: String {
-            String(localized: "Start adding items")
-        }
-
-        static var contextMenuSortByAlphabet: String {
-            String(localized: "Sort Alphabetically")
-        }
-
-        static var contextMenuShare: String {
-            String(localized: "Share")
-        }
-
-        static var contextMenuResetPurchased: String {
-            String(localized: "Uncheck All Items")
-        }
-
-        static var contextMenuDeletePurchased: String {
-            String(localized: "Delete Purchased Items")
-        }
-
-        static var deleteShoppingItemAlertTitle: String {
-            String(localized: "Delete Item")
-        }
-
-        static var deleteShoppingItemAlertMessage: String {
-            String(localized: "Are you sure you want to delete this item?")
-        }
-
-        static var deletePurchasedItemsAlertTitle: String {
-            String(localized: "Delete Purchased Items?")
-        }
-
-        static var deletePurchasedItemsAlertMessage: String {
-            String(localized: "Are you sure you want to delete all purchased items?")
-        }
-
-    }
-    
     @Environment(\.dismiss) private var dismiss
     @Environment(AppRouter.self) private var router
     
@@ -111,8 +59,8 @@ struct ShoppingListView: View {
         }
         .ignoresSafeArea(.keyboard, edges: .bottom)
         .deleteAlert(
-            title: ShoppingListTexts.deleteShoppingItemAlertTitle,
-            message: ShoppingListTexts.deleteShoppingItemAlertMessage,
+            title: .deleteItemTitle,
+            message: .deleteItemMessage,
             isPresented: $showDeleteShoppingItemAlert,
             onCancel: {
                 shoppingItemToDelete = nil
@@ -130,8 +78,8 @@ struct ShoppingListView: View {
             }
         )
         .deleteAlert(
-            title: ShoppingListTexts.deletePurchasedItemsAlertTitle,
-            message: ShoppingListTexts.deletePurchasedItemsAlertMessage,
+            title: .deletePurchasedItemsTitle,
+            message: .deletePurchasedItemsMessage,
             isPresented: $showDeletePurchasedItemsAlert,
             onDelete: {
                 withAnimation {
@@ -154,8 +102,8 @@ struct ShoppingListView: View {
                 
                 PlaceholderView(
                     image: AppImage.emptyShoppingList,
-                    title: ShoppingListTexts.emptyStateTitle,
-                    subtitle: ShoppingListTexts.emptyStateSubTitle
+                    title: .emptyStateTitle,
+                    subtitle: .shoppingListEmptyStateSubtitle
                 )
                 
                 Spacer()
@@ -207,9 +155,9 @@ struct ShoppingListView: View {
                 .foregroundStyle(.hintGrey)
             
             TextField(
-                ShoppingListTexts.searchPlaceholder,
+                .shoppingListSearchPlaceholder,
                 text: $observed.searchText,
-                prompt: Text(ShoppingListTexts.searchPlaceholder)
+                prompt: Text(.shoppingListSearchPlaceholder)
                     .foregroundStyle(.hintGrey)
             )
             .font(AppFont.regular17)
@@ -260,7 +208,7 @@ struct ShoppingListView: View {
     
     private var addButton: some View {
         BaseButton(
-            title: ShoppingListTexts.addButtonTitle,
+            title: .addItem,
             isActive: true,
             action: {
                 isSearchFocused = false
@@ -310,7 +258,7 @@ struct ShoppingListView: View {
                     )
                 ) {
                     Label(
-                        ShoppingListTexts.contextMenuSortByAlphabet,
+                        .sortAlphabetically,
                         systemImage: AppSystemIcon.arrowUpArrowDown
                     )
                 }
@@ -320,7 +268,7 @@ struct ShoppingListView: View {
                     subject: Text(observed.listTitle)
                 ) {
                     Label(
-                        ShoppingListTexts.contextMenuShare,
+                        .share,
                         systemImage: AppSystemIcon.squareAndArrowUp
                     )
                 }
@@ -329,7 +277,7 @@ struct ShoppingListView: View {
                     observed.handleResetPurchasedItems()
                 } label: {
                     Label(
-                        ShoppingListTexts.contextMenuResetPurchased,
+                        .uncheckAllItems,
                         systemImage: AppSystemIcon.arrow2Circlepath
                     )
                 }
@@ -338,7 +286,7 @@ struct ShoppingListView: View {
                     showDeletePurchasedItemsAlert = true
                 } label: {
                     Label(
-                        ShoppingListTexts.contextMenuDeletePurchased,
+                        .deletePurchasedItems,
                         systemImage: AppSystemIcon.trash
                     )
                 }

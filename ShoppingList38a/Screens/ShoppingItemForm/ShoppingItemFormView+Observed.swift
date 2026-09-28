@@ -54,7 +54,7 @@ extension ShoppingItemFormView {
                 .map { $0 }
         }
         
-        private(set) var nameErrorMessage: String?
+        private(set) var nameErrorMessage: LocalizedStringResource?
         
         // MARK: - Dependencies
         
@@ -82,10 +82,10 @@ extension ShoppingItemFormView {
         
         // MARK: - Computed Properties
         
-        var title: String {
+        var title: LocalizedStringResource {
             currentShoppingItem == nil
-            ? String(localized: "New Item")
-            : String(localized: "Edit")
+                ? .newItemTitle
+                : .editItemTitle
         }
         
         var isFormValid: Bool {
@@ -154,7 +154,7 @@ extension ShoppingItemFormView {
             }
             
             nameErrorMessage = isDuplicateName
-                ? String(localized: "This item is already in the list, add another")
+                ? .shoppingItemDuplicateNameError
                 : nil
         }
         

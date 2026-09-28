@@ -11,8 +11,8 @@ import UIKit
 private struct DeleteAlertModifier: ViewModifier {
     @Environment(\.colorScheme) private var colorScheme
     
-    let title: String
-    let message: String
+    let title: LocalizedStringResource
+    let message: LocalizedStringResource
     
     @Binding var isPresented: Bool
     
@@ -23,8 +23,8 @@ private struct DeleteAlertModifier: ViewModifier {
         content
             .background {
                 DeleteAlertPresenter(
-                    title: title,
-                    message: message,
+                    title: String(localized: title),
+                    message: String(localized: message),
                     colorScheme: colorScheme,
                     isPresented: $isPresented,
                     onCancel: onCancel,
@@ -35,16 +35,6 @@ private struct DeleteAlertModifier: ViewModifier {
 }
 
 private struct DeleteAlertPresenter: UIViewControllerRepresentable {
-    
-    private enum DeleteAlertTexts {
-        static var cancel: String {
-            String(localized: "Cancel")
-        }
-
-        static var delete: String {
-            String(localized: "Delete")
-        }
-    }
     
     let title: String
     let message: String
@@ -94,14 +84,14 @@ private struct DeleteAlertPresenter: UIViewControllerRepresentable {
         )
         
         let cancelAction = UIAlertAction(
-            title: DeleteAlertTexts.cancel,
+            title: String(localized: .cancel),
             style: .cancel
         ) { _ in
             context.coordinator.cancel()
         }
         
         let deleteAction = UIAlertAction(
-            title: DeleteAlertTexts.delete,
+            title: String(localized: .delete),
             style: .destructive
         ) { _ in
             context.coordinator.delete()
@@ -151,8 +141,8 @@ private final class Coordinator {
 
 extension View {
     func deleteAlert(
-        title: String,
-        message: String,
+        title: LocalizedStringResource,
+        message: LocalizedStringResource,
         isPresented: Binding<Bool>,
         onCancel: @escaping () -> Void = { },
         onDelete: @escaping () -> Void

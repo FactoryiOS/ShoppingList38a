@@ -10,9 +10,9 @@ import SwiftUI
 struct BaseTextField: View {
     @FocusState.Binding var isFocused: Bool
     
-    let placeholder: String
+    let placeholder: LocalizedStringResource
     @Binding var text: String
-    let errorMessage: String?
+    let errorMessage: LocalizedStringResource?
     
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
@@ -66,13 +66,13 @@ struct BaseTextField: View {
     @Previewable @State var text = "Новый год"
     @FocusState var isFocused: Bool
     
-    let currentError = text == "Новый год"
-    ? String(localized: "This name is already in use, please change it.")
-    : nil
+    let currentError: LocalizedStringResource? = text == "Новый год"
+        ? .shoppingListDuplicateNameError
+        : nil
     
     BaseTextField(
         isFocused: $isFocused,
-        placeholder: String(localized: "Enter a name"),
+        placeholder: .shoppingListNamePlaceholder,
         text: $text,
         errorMessage: currentError
     )

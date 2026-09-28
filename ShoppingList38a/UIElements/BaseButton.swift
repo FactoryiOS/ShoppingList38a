@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct BaseButton: View {
-    let title: String
+    let title: LocalizedStringResource
     let isActive: Bool
     let action: () -> Void
     
@@ -29,13 +29,13 @@ struct BaseButton: View {
 #Preview {
     VStack(spacing: 16) {
         BaseButton(
-            title: String(localized: "Create"),
+            title: .create,
             isActive: false, // неактивная кнопка
             action: {}
         )
         
         BaseButton(
-            title: String(localized: "Create"),
+            title: .create,
             isActive: true, // активная кнопка
             action: {}
         )

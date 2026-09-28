@@ -8,24 +8,6 @@
 import SwiftUI
 
 struct WelcomeScreenView: View {
-    private enum WelcomeTexts {
-        static var largeTitle: String {
-            String(localized: "Welcome!")
-        }
-
-        static var headLineTitle: String {
-            String(localized: "Never forget\nwhat you need to buy")
-        }
-
-        static var supportingTextTitle: String {
-            String(localized: "Create lists\nand don't worry about shopping")
-        }
-
-        static var startButtonTitle: String {
-            String(localized: "Start")
-        }
-    }
-
     var onComplete: () -> Void = {}
 
     var body: some View {
@@ -46,7 +28,7 @@ struct WelcomeScreenView: View {
     }
 
     private var titleView: some View {
-        Text(WelcomeTexts.largeTitle)
+        Text(.welcomeTitle)
             .font(AppFont.regular34)
             .foregroundStyle(.titleText)
             .multilineTextAlignment(.center)
@@ -61,10 +43,10 @@ struct WelcomeScreenView: View {
 
     private var descriptionView: some View {
         VStack(spacing: 12) {
-            Text(WelcomeTexts.headLineTitle)
+            Text(.welcomeHeadline)
                 .font(AppFont.semiBold22)
 
-            Text(WelcomeTexts.supportingTextTitle)
+            Text(.welcomeDescription)
                 .font(AppFont.regular17)
         }
         .foregroundStyle(.primaryText)
@@ -73,7 +55,7 @@ struct WelcomeScreenView: View {
 
     private var actionButton: some View {
         BaseButton(
-            title: WelcomeTexts.startButtonTitle,
+            title: .welcomeStartButton,
             isActive: true,
             action: onComplete
         )

@@ -31,8 +31,15 @@
         }
       }
     },
-    "Add Item" : {
+    "addItem" : {
+      "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add Item"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -41,38 +48,15 @@
         }
       }
     },
-    "Are you sure you want to delete all purchased items?" : {
+    "cancel" : {
+      "extractionState" : "manual",
       "localizations" : {
-        "ru" : {
+        "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Вы действительно хотите удалить все купленные товары?"
+            "value" : "Cancel"
           }
-        }
-      }
-    },
-    "Are you sure you want to delete this item?" : {
-      "localizations" : {
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Вы действительно хотите удалить товар?"
-          }
-        }
-      }
-    },
-    "Are you sure you want to delete this list?" : {
-      "localizations" : {
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Вы действительно хотите удалить список?"
-          }
-        }
-      }
-    },
-    "Cancel" : {
-      "localizations" : {
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -81,8 +65,15 @@
         }
       }
     },
-    "Choose a color" : {
+    "chooseColor" : {
+      "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose a color"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -91,8 +82,15 @@
         }
       }
     },
-    "Choose a design" : {
+    "chooseDesign" : {
+      "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose a design"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -101,8 +99,15 @@
         }
       }
     },
-    "copy" : {
+    "copySuffix" : {
+      "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "copy"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -111,8 +116,15 @@
         }
       }
     },
-    "Create" : {
+    "create" : {
+      "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -121,8 +133,15 @@
         }
       }
     },
-    "Create List" : {
+    "createList" : {
+      "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create List"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -131,38 +150,15 @@
         }
       }
     },
-    "Create lists\nand don't worry about shopping" : {
+    "delete" : {
+      "extractionState" : "manual",
       "localizations" : {
-        "ru" : {
+        "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Создавайте списки\nи не переживайте о покупках"
+            "value" : "Delete"
           }
-        }
-      }
-    },
-    "Create your first list" : {
-      "localizations" : {
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Создайте свой первый список"
-          }
-        }
-      }
-    },
-    "Dark" : {
-      "localizations" : {
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Темная"
-          }
-        }
-      }
-    },
-    "Delete" : {
-      "localizations" : {
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -171,8 +167,32 @@
         }
       }
     },
-    "Delete Item" : {
+    "deleteItemMessage" : {
+      "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Are you sure you want to delete this item?"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вы действительно хотите удалить товар?"
+          }
+        }
+      }
+    },
+    "deleteItemTitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete Item"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -181,8 +201,32 @@
         }
       }
     },
-    "Delete List" : {
+    "deleteListMessage" : {
+      "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Are you sure you want to delete this list?"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вы действительно хотите удалить список?"
+          }
+        }
+      }
+    },
+    "deleteListTitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete List"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -191,8 +235,15 @@
         }
       }
     },
-    "Delete Purchased Items" : {
+    "deletePurchasedItems" : {
+      "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete Purchased Items"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -201,8 +252,32 @@
         }
       }
     },
-    "Delete Purchased Items?" : {
+    "deletePurchasedItemsMessage" : {
+      "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Are you sure you want to delete all purchased items?"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вы действительно хотите удалить все купленные товары?"
+          }
+        }
+      }
+    },
+    "deletePurchasedItemsTitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete Purchased Items?"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -211,8 +286,15 @@
         }
       }
     },
-    "Done" : {
+    "done" : {
+      "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Done"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -221,8 +303,15 @@
         }
       }
     },
-    "Edit" : {
+    "editItemTitle" : {
+      "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -231,8 +320,15 @@
         }
       }
     },
-    "Edit List" : {
+    "editListTitle" : {
+      "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit List"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -241,58 +337,15 @@
         }
       }
     },
-    "Enter list name" : {
+    "emptyStateTitle" : {
+      "extractionState" : "manual",
       "localizations" : {
-        "ru" : {
+        "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Введите название списка"
+            "value" : "Let's plan your shopping!"
           }
-        }
-      }
-    },
-    "g" : {
-      "localizations" : {
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "г"
-          }
-        }
-      }
-    },
-    "Item name" : {
-      "localizations" : {
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Название товара"
-          }
-        }
-      }
-    },
-    "kg" : {
-      "localizations" : {
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "кг"
-          }
-        }
-      }
-    },
-    "L" : {
-      "localizations" : {
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "л"
-          }
-        }
-      }
-    },
-    "Let's plan your shopping!" : {
-      "localizations" : {
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -301,48 +354,15 @@
         }
       }
     },
-    "Light" : {
+    "newItemTitle" : {
+      "extractionState" : "manual",
       "localizations" : {
-        "ru" : {
+        "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Светлая"
+            "value" : "New Item"
           }
-        }
-      }
-    },
-    "mL" : {
-      "localizations" : {
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "мл"
-          }
-        }
-      }
-    },
-    "My Lists" : {
-      "localizations" : {
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Мои списки"
-          }
-        }
-      }
-    },
-    "Never forget\nwhat you need to buy" : {
-      "localizations" : {
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Никогда не забывайте,\nчто нужно купить"
-          }
-        }
-      }
-    },
-    "New Item" : {
-      "localizations" : {
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -351,28 +371,15 @@
         }
       }
     },
-    "pcs" : {
+    "save" : {
+      "extractionState" : "manual",
       "localizations" : {
-        "ru" : {
+        "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "шт."
+            "value" : "Save"
           }
-        }
-      }
-    },
-    "Quantity" : {
-      "localizations" : {
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Количество"
-          }
-        }
-      }
-    },
-    "Save" : {
-      "localizations" : {
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -381,28 +388,15 @@
         }
       }
     },
-    "Search" : {
+    "share" : {
+      "extractionState" : "manual",
       "localizations" : {
-        "ru" : {
+        "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Поиск"
+            "value" : "Share"
           }
-        }
-      }
-    },
-    "Set Theme" : {
-      "localizations" : {
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Установить тему"
-          }
-        }
-      }
-    },
-    "Share" : {
-      "localizations" : {
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -411,48 +405,15 @@
         }
       }
     },
-    "Sort Alphabetically" : {
+    "shoppingItemDuplicateNameError" : {
+      "extractionState" : "manual",
       "localizations" : {
-        "ru" : {
+        "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Сортировать по алфавиту"
+            "value" : "This item is already in the list, add another"
           }
-        }
-      }
-    },
-    "Start" : {
-      "localizations" : {
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Начать"
-          }
-        }
-      }
-    },
-    "Start adding items" : {
-      "localizations" : {
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Начните добавлять товары"
-          }
-        }
-      }
-    },
-    "System" : {
-      "localizations" : {
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Системная"
-          }
-        }
-      }
-    },
-    "This item is already in the list, add another" : {
-      "localizations" : {
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -461,8 +422,49 @@
         }
       }
     },
-    "This name is already in use, please change it." : {
+    "shoppingItemNamePlaceholder" : {
+      "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Item name"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Название товара"
+          }
+        }
+      }
+    },
+    "shoppingItemQuantityPlaceholder" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quantity"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Количество"
+          }
+        }
+      }
+    },
+    "shoppingListDuplicateNameError" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This name is already in use, please change it."
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -471,8 +473,185 @@
         }
       }
     },
-    "Uncheck All Items" : {
+    "shoppingListEmptyStateSubtitle" : {
+      "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start adding items"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Начните добавлять товары"
+          }
+        }
+      }
+    },
+    "shoppingListNamePlaceholder" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter list name"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Введите название списка"
+          }
+        }
+      }
+    },
+    "shoppingListSearchPlaceholder" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Поиск"
+          }
+        }
+      }
+    },
+    "shoppingListsEmptyStateSubtitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create your first list"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Создайте свой первый список"
+          }
+        }
+      }
+    },
+    "shoppingListsTitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "My Lists"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Мои списки"
+          }
+        }
+      }
+    },
+    "sortAlphabetically" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sort Alphabetically"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сортировать по алфавиту"
+          }
+        }
+      }
+    },
+    "themeDark" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dark"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Темная"
+          }
+        }
+      }
+    },
+    "themeLight" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Light"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Светлая"
+          }
+        }
+      }
+    },
+    "themePickerTitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Set Theme"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Установить тему"
+          }
+        }
+      }
+    },
+    "themeSystem" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "System"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Системная"
+          }
+        }
+      }
+    },
+    "uncheckAllItems" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uncheck All Items"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -481,18 +660,49 @@
         }
       }
     },
-    "Unit of measure" : {
+    "unitGrams" : {
+      "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "g"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Единица измерения"
+            "value" : "г"
           }
         }
       }
     },
-    "Unit:" : {
+    "unitKilograms" : {
+      "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "kg"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "кг"
+          }
+        }
+      }
+    },
+    "unitLabel" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unit:"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -501,8 +711,134 @@
         }
       }
     },
-    "Welcome!" : {
+    "unitLiters" : {
+      "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "л"
+          }
+        }
+      }
+    },
+    "unitMilliliters" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "mL"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "мл"
+          }
+        }
+      }
+    },
+    "unitPickerTitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unit of measure"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Единица измерения"
+          }
+        }
+      }
+    },
+    "unitPieces" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "pcs"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "шт."
+          }
+        }
+      }
+    },
+    "welcomeDescription" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create lists\nand don't worry about shopping"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Создавайте списки\nи не переживайте о покупках"
+          }
+        }
+      }
+    },
+    "welcomeHeadline" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Never forget\nwhat you need to buy"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Никогда не забывайте,\nчто нужно купить"
+          }
+        }
+      }
+    },
+    "welcomeStartButton" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Начать"
+          }
+        }
+      }
+    },
+    "welcomeTitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Welcome!"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",

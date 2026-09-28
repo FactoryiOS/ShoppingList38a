@@ -39,7 +39,7 @@ struct ShoppingItemFormView: View {
             VStack(spacing: 0) {
                 BaseTextField(
                     isFocused: $isNameFocused,
-                    placeholder: String(localized: "Item name"),
+                    placeholder: .shoppingItemNamePlaceholder,
                     text: $observed.nameText,
                     errorMessage: observed.nameErrorMessage
                 )
@@ -83,7 +83,7 @@ struct ShoppingItemFormView: View {
             HStack(spacing: 16) {
                 BaseTextField(
                     isFocused: $isAmountFocused,
-                    placeholder: String(localized: "Quantity"),
+                    placeholder: .shoppingItemQuantityPlaceholder,
                     text: $observed.amountText,
                     errorMessage: nil
                 )
@@ -117,7 +117,7 @@ struct ShoppingItemFormView: View {
         }
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
-                Button("Cancel") {
+                Button(.cancel) {
                     dismiss()
                 }
                 .font(AppFont.regular17)
@@ -131,7 +131,7 @@ struct ShoppingItemFormView: View {
             }
             
             ToolbarItem(placement: .confirmationAction) {
-                Button("Done") {
+                Button(.done) {
                     observed.handleSave(completion: onComplete)
                 }
                 .font(AppFont.semiBold17)
@@ -146,13 +146,13 @@ struct ShoppingItemFormView: View {
     private var selectUnitPicker: some View {
         VStack(alignment: .leading, spacing: 4) {
             HStack {
-                Text("Unit:")
+                Text(.unitLabel)
                     .font(AppFont.regular17)
                     .foregroundStyle(.hintGrey)
                 
                 Spacer()
                 
-                Picker("Unit of measure", selection: $observed.selectedUnit) {
+                Picker(.unitPickerTitle, selection: $observed.selectedUnit) {
                     ForEach(ShoppingItemUnit.allCases, id: \.self) { unit in
                         Text(unit.displayName)
                             .tag(unit)

@@ -23,7 +23,7 @@ extension ShoppingListFormView {
         var selectedIcon: PurchaseIcon?
         var selectedColor: PurchaseColor?
         
-        private(set) var nameErrorMessage: String?
+        private(set) var nameErrorMessage: LocalizedStringResource?
         
         // MARK: - Dependencies
         
@@ -55,16 +55,16 @@ extension ShoppingListFormView {
             && selectedColor != nil
         }
         
-        var submitButtonTitle: String {
+        var submitButtonTitle: LocalizedStringResource {
             currentShoppingList != nil
-                ? String(localized: "Save")
-                : String(localized: "Create")
+            ? .save
+            : .create
         }
         
-        var titleToolbar: String {
+        var titleToolbar: LocalizedStringResource {
             currentShoppingList != nil
-                ? String(localized: "Edit List")
-                : String(localized: "Create List")
+            ? .editListTitle
+            : .createList
         }
         
         private var trimmedName: String {
@@ -120,7 +120,7 @@ extension ShoppingListFormView {
 
                 nameErrorMessage = isAvailable
                 ? nil
-                : String(localized: "This name is already in use, please change it.")
+                : .shoppingListDuplicateNameError
             } catch {
                 print("❌ [ShoppingListFormView] validateName: \(error)")
             }

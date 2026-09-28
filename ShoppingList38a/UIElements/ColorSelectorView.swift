@@ -12,7 +12,7 @@ struct ColorSelectorView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Choose a color")
+            Text(.chooseColor)
                 .font(AppFont.regular16)
                 .foregroundStyle(.primaryText)
                 .padding(.horizontal, 12)
