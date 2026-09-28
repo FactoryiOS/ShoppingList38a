@@ -261,16 +261,6 @@
         }
       }
     },
-    "Hello, world!" : {
-      "localizations" : {
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Привет, мир!"
-          }
-        }
-      }
-    },
     "Item name" : {
       "localizations" : {
         "ru" : {

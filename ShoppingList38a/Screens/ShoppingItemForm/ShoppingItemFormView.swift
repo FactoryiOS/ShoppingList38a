@@ -14,13 +14,13 @@ struct ShoppingItemFormView: View {
     @FocusState private var isAmountFocused: Bool
     @State private var observed: Observed
     
-    private let onComplete: Completion
+    private let onComplete: () -> Void
     
     init(
         service: SwiftDataService,
         shoppingList: ShoppingList,
         shoppingItem: ShoppingItem? = nil,
-        onComplete: @escaping Completion
+        onComplete: @escaping () -> Void
     ) {
         _observed = State(
             initialValue: Observed(

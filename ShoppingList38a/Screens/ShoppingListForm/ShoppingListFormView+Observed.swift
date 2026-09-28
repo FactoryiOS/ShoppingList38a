@@ -73,7 +73,7 @@ extension ShoppingListFormView {
         
         // MARK: - Actions
         
-        func handleSave(completion: Completion) {
+        func handleSave(completion: () -> Void) {
             guard
                 isValid,
                 let selectedIcon,

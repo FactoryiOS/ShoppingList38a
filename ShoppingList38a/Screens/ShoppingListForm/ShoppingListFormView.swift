@@ -13,12 +13,12 @@ struct ShoppingListFormView: View {
     @FocusState private var isNameFieldFocused: Bool
     @State private var observed: Observed
 
-    private let onComplete: Completion
+    private let onComplete: () -> Void
     
     init(
         service: SwiftDataService,
         shoppingList: ShoppingList? = nil,
-        onComplete: @escaping Completion
+        onComplete: @escaping () -> Void
     ) {
         _observed = State(
             initialValue: Observed(

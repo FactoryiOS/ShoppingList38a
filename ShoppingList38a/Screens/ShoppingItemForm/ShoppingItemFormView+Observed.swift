@@ -112,7 +112,7 @@ extension ShoppingItemFormView {
         
         // MARK: - Actions
         
-        func handleSave(completion: Completion) {
+        func handleSave(completion: () -> Void) {
             guard
                 isFormValid,
                 let count
