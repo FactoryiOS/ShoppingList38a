@@ -107,7 +107,11 @@ extension ShoppingItemFormView {
         }
         
         private var isAmountValid: Bool {
-            count != nil
+            guard let count else {
+                return false
+            }
+
+            return count > 0
         }
         
         // MARK: - Actions

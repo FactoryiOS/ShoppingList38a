@@ -87,6 +87,7 @@ struct ShoppingItemFormView: View {
                     text: $observed.amountText,
                     errorMessage: nil
                 )
+                .keyboardType(.numberPad)
                 
                 selectUnitPicker
                     .simultaneousGesture(
