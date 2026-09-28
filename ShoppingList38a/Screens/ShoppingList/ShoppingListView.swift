@@ -95,7 +95,7 @@ struct ShoppingListView: View {
                 emptyState
                 addButton
             } else {
-                shoppingListState
+                shoppingList
                     .padding(.top, 16)
             }
         }
@@ -168,12 +168,6 @@ struct ShoppingListView: View {
         }
         .scrollDisabled(true)
         .scrollIndicators(.hidden)
-    }
-    
-    private var shoppingListState: some View {
-        VStack(spacing: .zero) {
-            shoppingList
-        }
     }
     
     private var shoppingList: some View {
