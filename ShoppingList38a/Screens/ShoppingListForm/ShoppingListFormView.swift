@@ -84,21 +84,39 @@ struct ShoppingListFormView: View {
     
     @ToolbarContentBuilder
     private var titleToolbar: some ToolbarContent {
-        ToolbarItemGroup(placement: .topBarLeading) {
-            Button {
-                dismiss()
-            } label: {
-                Image(systemName: AppSystemIcon.chevronLeft)
-                    .foregroundStyle(.titleText)
-                    .frame(width: 28, height: 44)
-                    .contentShape(Rectangle())
+        if #available(iOS 26.0, *) {
+            ToolbarItem(placement: .topBarLeading) {
+                HStack(spacing: 8) {
+                    backButton
+                    toolbarTitle
+                        .fixedSize(horizontal: true, vertical: false)
+                }
             }
-            .buttonStyle(.plain)
-            
-            Text(observed.titleToolbar)
-                .font(AppFont.medium17)
-                .foregroundStyle(.titleText)
+            .sharedBackgroundVisibility(.hidden)
+        } else {
+            ToolbarItemGroup(placement: .topBarLeading) {
+                backButton
+                toolbarTitle
+            }
         }
+    }
+    
+    private var backButton: some View {
+        Button {
+            dismiss()
+        } label: {
+            Image(systemName: AppSystemIcon.chevronLeft)
+                .foregroundStyle(.titleText)
+                .frame(width: 28, height: 44)
+                .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+    }
+    
+    private var toolbarTitle: some View {
+        Text(observed.titleToolbar)
+            .font(AppFont.medium17)
+            .foregroundStyle(.titleText)
     }
 }
 

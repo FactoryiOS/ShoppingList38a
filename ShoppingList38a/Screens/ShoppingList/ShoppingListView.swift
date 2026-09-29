@@ -224,21 +224,40 @@ struct ShoppingListView: View {
     
     @ToolbarContentBuilder
     private var titleToolbarItem: some ToolbarContent {
-        ToolbarItemGroup(placement: .topBarLeading) {
-            Button {
-                dismiss()
-            } label: {
-                Image(systemName: AppSystemIcon.chevronLeft)
-                    .foregroundStyle(.titleText)
-                    .frame(width: 28, height: 44)
-                    .contentShape(Rectangle())
+        if #available(iOS 26.0, *) {
+            ToolbarItem(placement: .topBarLeading) {
+                backButton
             }
-            .buttonStyle(.plain)
-            
-            Text(observed.listTitle)
-                .font(AppFont.medium17)
-                .foregroundStyle(.titleText)
+            .sharedBackgroundVisibility(.hidden)
+
+            ToolbarItem(placement: .title) {
+                toolbarTitle
+            }
+        } else {
+            ToolbarItemGroup(placement: .topBarLeading) {
+                backButton
+                toolbarTitle
+            }
         }
+    }
+
+    private var backButton: some View {
+        Button {
+            dismiss()
+        } label: {
+            Image(systemName: AppSystemIcon.chevronLeft)
+                .foregroundStyle(.titleText)
+                .frame(width: 28, height: 44)
+                .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+    }
+
+    private var toolbarTitle: some View {
+        Text(observed.listTitle)
+            .font(AppFont.medium17)
+            .foregroundStyle(.titleText)
+            .lineLimit(1)
     }
     
     @ToolbarContentBuilder
