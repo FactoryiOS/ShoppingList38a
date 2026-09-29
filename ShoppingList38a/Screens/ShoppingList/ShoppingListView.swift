@@ -163,6 +163,10 @@ struct ShoppingListView: View {
             .font(AppFont.regular17)
             .foregroundStyle(.primaryText)
             .focused($isSearchFocused)
+            .submitLabel(.search)
+            .onSubmit {
+                isSearchFocused = false
+            }
             
             if !observed.searchText.isEmpty {
                 Button {
