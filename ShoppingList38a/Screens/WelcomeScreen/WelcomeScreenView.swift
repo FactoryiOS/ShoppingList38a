@@ -12,19 +12,26 @@ struct WelcomeScreenView: View {
 
     var body: some View {
         VStack(spacing: .zero) {
-            VStack(spacing: 48) {
-                titleView
-                imageView
-                descriptionView
-            }
-            .padding(.top, 40)
+            VStack(spacing: .zero) {
+                Spacer()
 
-            Spacer()
+                welcomeContent
+
+                Spacer()
+            }
 
             actionButton
         }
         .padding(.horizontal, 16)
         .background(.primaryBackground)
+    }
+
+    private var welcomeContent: some View {
+        VStack(spacing: 48) {
+            titleView
+            imageView
+            descriptionView
+        }
     }
 
     private var titleView: some View {

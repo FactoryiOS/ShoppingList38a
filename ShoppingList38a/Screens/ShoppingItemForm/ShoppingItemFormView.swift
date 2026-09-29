@@ -34,90 +34,93 @@ struct ShoppingItemFormView: View {
     }
     
     var body: some View {
-        VStack(spacing: 20) {
-
-            VStack(spacing: 0) {
-                BaseTextField(
-                    isFocused: $isNameFocused,
-                    placeholder: .shoppingItemNamePlaceholder,
-                    text: $observed.nameText,
-                    errorMessage: observed.nameErrorMessage
-                )
-
-                if isNameFocused && !observed.suggestions.isEmpty {
-                    VStack(alignment: .leading, spacing: 4) {
-                        ForEach(observed.suggestions, id: \.self) { suggestion in
-                            Button(
-                                action: {
-                                    observed.nameText = suggestion
-                                    isAmountFocused = true
-                                },
-                                label: {
-                                    HStack {
-                                        Text(suggestion)
-                                            .font(AppFont.regular17)
-                                            .foregroundStyle(.primaryText)
-                                        Spacer()
-                                    }
-                                    
-                                    .padding(.horizontal, 16)
-                                    .frame(height: 44)
-                                }
-                            )
-                            .overlay(alignment: .bottom) {
-                                if suggestion != observed.suggestions.last {
-                                    Divider()
-                                        .overlay(.borderGrey)
+        ScrollView {
+            VStack(spacing: 20) {
+                
+                VStack(spacing: 0) {
+                    BaseTextField(
+                        isFocused: $isNameFocused,
+                        placeholder: .shoppingItemNamePlaceholder,
+                        text: $observed.nameText,
+                        errorMessage: observed.nameErrorMessage
+                    )
+                    
+                    if isNameFocused && !observed.suggestions.isEmpty {
+                        VStack(alignment: .leading, spacing: 4) {
+                            ForEach(observed.suggestions, id: \.self) { suggestion in
+                                Button(
+                                    action: {
+                                        observed.nameText = suggestion
+                                        isAmountFocused = true
+                                    },
+                                    label: {
+                                        HStack {
+                                            Text(suggestion)
+                                                .font(AppFont.regular17)
+                                                .foregroundStyle(.primaryText)
+                                            Spacer()
+                                        }
+                                        
                                         .padding(.horizontal, 16)
+                                        .frame(height: 44)
+                                    }
+                                )
+                                .overlay(alignment: .bottom) {
+                                    if suggestion != observed.suggestions.last {
+                                        Divider()
+                                            .overlay(.borderGrey)
+                                            .padding(.horizontal, 16)
+                                    }
                                 }
                             }
                         }
-                    }
-                    .background(Color(.baseElementsBackground))
-                    .cornerRadius(12)
-                    .padding(.top, 10)
-                    .transition(
-                        .opacity.combined(
-                            with: .offset(y: -6)
+                        .background(Color(.baseElementsBackground))
+                        .cornerRadius(12)
+                        .padding(.top, 10)
+                        .transition(
+                            .opacity.combined(
+                                with: .offset(y: -6)
+                            )
                         )
+                    }
+                }
+                
+                HStack(spacing: 16) {
+                    BaseTextField(
+                        isFocused: $isAmountFocused,
+                        placeholder: .shoppingItemQuantityPlaceholder,
+                        text: $observed.amountText,
+                        errorMessage: nil
                     )
+                    .keyboardType(.numberPad)
+                    
+                    selectUnitPicker
+                        .simultaneousGesture(
+                            TapGesture()
+                                .onEnded {
+                                    isNameFocused = false
+                                    isAmountFocused = false
+                                }
+                        )
                 }
             }
-            
-            HStack(spacing: 16) {
-                BaseTextField(
-                    isFocused: $isAmountFocused,
-                    placeholder: .shoppingItemQuantityPlaceholder,
-                    text: $observed.amountText,
-                    errorMessage: nil
-                )
-                .keyboardType(.numberPad)
-                
-                selectUnitPicker
-                    .simultaneousGesture(
-                        TapGesture()
-                            .onEnded {
-                                isNameFocused = false
-                                isAmountFocused = false
-                            }
-                    )
-            }
-            Spacer()
+            .animation(
+                .easeInOut(duration: 0.2),
+                value: observed.nameErrorMessage != nil
+            )
+            .animation(
+                .easeInOut(duration: 0.2),
+                value: isNameFocused && !observed.suggestions.isEmpty
+            )
+            .animation(
+                .easeInOut(duration: 0.2),
+                value: observed.suggestions.count
+            )
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
         }
-        .animation(
-            .easeInOut(duration: 0.2),
-            value: observed.nameErrorMessage != nil
-        )
-        .animation(
-            .easeInOut(duration: 0.2),
-            value: isNameFocused && !observed.suggestions.isEmpty
-        )
-        .animation(
-            .easeInOut(duration: 0.2),
-            value: observed.suggestions.count
-        )
-        .padding(.horizontal, 16)
-        .padding(.vertical, 12)
+        .scrollIndicators(.hidden)
+        .scrollDismissesKeyboard(.interactively)
         .background {
             Color.primaryBackground
                 .ignoresSafeArea()
