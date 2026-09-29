@@ -9,14 +9,14 @@ import SwiftUI
 
 struct ShoppingItemFormView: View {
     @Environment(\.dismiss) private var dismiss
-
+    
     @FocusState private var isNameFocused: Bool
     @FocusState private var isAmountFocused: Bool
-
+    
     @State private var observed: Observed
-
+    
     private let onComplete: () -> Void
-
+    
     init(
         service: SwiftDataService,
         shoppingList: ShoppingList,
@@ -30,96 +30,95 @@ struct ShoppingItemFormView: View {
                 shoppingItem: shoppingItem
             )
         )
-
+        
         self.onComplete = onComplete
     }
-
+    
     var body: some View {
-        ScrollView {
-            VStack(spacing: 20) {
-                VStack(spacing: 0) {
-                    BaseTextField(
-                        text: $observed.nameText,
-                        isFocused: $isNameFocused,
-                        placeholder: .shoppingItemNamePlaceholder,
-                        errorMessage: observed.nameErrorMessage
-                    )
-
-                    if isNameFocused && !observed.suggestions.isEmpty {
-                        VStack(alignment: .leading, spacing: 4) {
-                            ForEach(observed.suggestions, id: \.self) { suggestion in
-                                Button(
-                                    action: {
-                                        observed.nameText = suggestion
-                                        isAmountFocused = true
-                                    },
-                                    label: {
-                                        HStack {
-                                            Text(suggestion)
-                                                .font(AppFont.regular17)
-                                                .foregroundStyle(.primaryText)
-                                            Spacer()
-                                        }
+        VStack(spacing: 20) {
+            VStack(spacing: 0) {
+                BaseTextField(
+                    text: $observed.nameText,
+                    isFocused: $isNameFocused,
+                    placeholder: .shoppingItemNamePlaceholder,
+                    errorMessage: observed.nameErrorMessage
+                )
+                
+                if isNameFocused && !observed.suggestions.isEmpty {
+                    VStack(alignment: .leading, spacing: 4) {
+                        ForEach(observed.suggestions, id: \.self) { suggestion in
+                            Button(
+                                action: {
+                                    observed.nameText = suggestion
+                                    isAmountFocused = true
+                                },
+                                label: {
+                                    HStack {
+                                        Text(suggestion)
+                                            .font(AppFont.regular17)
+                                            .foregroundStyle(.primaryText)
+                                        
+                                        Spacer()
+                                    }
+                                    .padding(.horizontal, 16)
+                                    .frame(height: 44)
+                                }
+                            )
+                            .overlay(alignment: .bottom) {
+                                if suggestion != observed.suggestions.last {
+                                    Divider()
+                                        .overlay(.borderGrey)
                                         .padding(.horizontal, 16)
-                                        .frame(height: 44)
-                                    }
-                                )
-                                .overlay(alignment: .bottom) {
-                                    if suggestion != observed.suggestions.last {
-                                        Divider()
-                                            .overlay(.borderGrey)
-                                            .padding(.horizontal, 16)
-                                    }
                                 }
                             }
                         }
-                        .background(.baseElementsBackground)
-                        .cornerRadius(12)
-                        .padding(.top, 10)
-                        .transition(
-                            .opacity.combined(
-                                with: .offset(y: -6)
-                            )
-                        )
                     }
-                }
-
-                HStack(spacing: 16) {
-                    BaseTextField(
-                        text: $observed.amountText,
-                        isFocused: $isAmountFocused,
-                        placeholder: .shoppingItemQuantityPlaceholder,
-                        errorMessage: nil
-                    )
-                    .keyboardType(.numberPad)
-
-                    selectUnitPicker
-                        .simultaneousGesture(
-                            TapGesture()
-                                .onEnded {
-                                    isNameFocused = false
-                                    isAmountFocused = false
-                                }
+                    .background(.baseElementsBackground)
+                    .cornerRadius(12)
+                    .padding(.top, 10)
+                    .transition(
+                        .opacity.combined(
+                            with: .offset(y: -6)
                         )
+                    )
                 }
             }
-            .animation(
-                .easeInOut(duration: 0.2),
-                value: observed.nameErrorMessage != nil
-            )
-            .animation(
-                .easeInOut(duration: 0.2),
-                value: isNameFocused && !observed.suggestions.isEmpty
-            )
-            .animation(
-                .easeInOut(duration: 0.2),
-                value: observed.suggestions.count
-            )
-            .padding(.horizontal, 16)
-            .padding(.vertical, 12)
+            
+            HStack(spacing: 16) {
+                BaseTextField(
+                    text: $observed.amountText,
+                    isFocused: $isAmountFocused,
+                    placeholder: .shoppingItemQuantityPlaceholder,
+                    errorMessage: nil
+                )
+                .keyboardType(.numberPad)
+                
+                selectUnitPicker
+                    .simultaneousGesture(
+                        TapGesture()
+                            .onEnded {
+                                isNameFocused = false
+                                isAmountFocused = false
+                            }
+                    )
+            }
+            
+            Spacer()
         }
-        .scrollIndicators(.hidden)
-        .scrollDismissesKeyboard(.interactively)
+        .animation(
+            .easeInOut(duration: 0.2),
+            value: observed.nameErrorMessage != nil
+        )
+        .animation(
+            .easeInOut(duration: 0.2),
+            value: isNameFocused && !observed.suggestions.isEmpty
+        )
+        .animation(
+            .easeInOut(duration: 0.2),
+            value: observed.suggestions.count
+        )
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
         .background {
             Color.primaryBackground
                 .ignoresSafeArea()
