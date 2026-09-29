@@ -76,7 +76,11 @@ struct ShoppingItemFormView: View {
                     .background(Color(.baseElementsBackground))
                     .cornerRadius(12)
                     .padding(.top, 10)
-                    .transition(.move(edge: .top).combined(with: .opacity))
+                    .transition(
+                        .opacity.combined(
+                            with: .offset(y: -6)
+                        )
+                    )
                 }
             }
             
@@ -100,6 +104,18 @@ struct ShoppingItemFormView: View {
             }
             Spacer()
         }
+        .animation(
+            .easeInOut(duration: 0.2),
+            value: observed.nameErrorMessage != nil
+        )
+        .animation(
+            .easeInOut(duration: 0.2),
+            value: isNameFocused && !observed.suggestions.isEmpty
+        )
+        .animation(
+            .easeInOut(duration: 0.2),
+            value: observed.suggestions.count
+        )
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
         .background {

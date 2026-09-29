@@ -48,6 +48,10 @@ struct ShoppingListFormView: View {
                 )
             }
             .padding(.top, 12)
+            .animation(
+                .easeInOut(duration: 0.2),
+                value: observed.nameErrorMessage != nil
+            )
         }
         .padding(.horizontal, 16)
         .background(.primaryBackground)

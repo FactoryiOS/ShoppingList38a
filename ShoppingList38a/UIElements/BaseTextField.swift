@@ -57,8 +57,17 @@ struct BaseTextField: View {
                     .font(AppFont.regular13)
                     .foregroundColor(Color(.systemsRed))
                     .padding(.horizontal, 8)
+                    .transition(
+                        .opacity.combined(
+                            with: .offset(y: -4)
+                        )
+                    )
             }
         }
+        .animation(
+            .easeInOut(duration: 0.2),
+            value: errorMessage != nil
+        )
     }
 }
 
