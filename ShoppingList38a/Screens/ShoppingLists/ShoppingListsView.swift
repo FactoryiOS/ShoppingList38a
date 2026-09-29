@@ -48,7 +48,7 @@ struct ShoppingListsView: View {
                 title: .createList,
                 isActive: true,
                 action: {
-                    router.showModal(.createShoppingList)
+                    router.push(.createShoppingList)
                 }
             )
             .padding(.horizontal, 16)
@@ -135,7 +135,7 @@ struct ShoppingListsView: View {
                 .tint(.systemsOrange)
 
                 Button {
-                    router.showModal(.editShoppingList(list.id))
+                    router.push(.editShoppingList(list.id))
                 } label: {
                     Image(systemName: AppSystemIcon.squareAndPencil)
                         .environment(\.symbolVariants, .none)

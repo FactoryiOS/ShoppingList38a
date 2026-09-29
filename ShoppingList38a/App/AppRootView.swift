@@ -56,7 +56,7 @@ struct AppRootView: View {
         case .createShoppingList:
             ShoppingListFormView(
                 service: appState.swiftDataService,
-                onComplete: router.dismissModal
+                onComplete: router.pop
             )
 
         case .editShoppingList(let shoppingListID):
@@ -66,7 +66,7 @@ struct AppRootView: View {
                 ShoppingListFormView(
                     service: appState.swiftDataService,
                     shoppingList: shoppingList,
-                    onComplete: router.dismissModal
+                    onComplete: router.pop
                 )
             }
 
