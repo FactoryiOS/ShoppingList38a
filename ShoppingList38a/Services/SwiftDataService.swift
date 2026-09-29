@@ -5,17 +5,17 @@
 //  Created by Андрей Макалкин on 21.09.2026.
 //
 
-import SwiftData
 import Foundation
+import SwiftData
 
 @MainActor
 final class SwiftDataService {
     let modelContainer: ModelContainer
-    
+
     private var modelContext: ModelContext {
         modelContainer.mainContext
     }
-    
+
     init() {
         do {
             modelContainer = try ModelContainer(
@@ -25,13 +25,13 @@ final class SwiftDataService {
             fatalError("Failed to create ModelContainer: \(error)")
         }
     }
-    
+
     init(modelContainer: ModelContainer) {
         self.modelContainer = modelContainer
     }
-    
-    // MARK: - Работа с ShoppingList
-    
+
+    // MARK: - ShoppingList
+
     func createShoppingList(
         name: String,
         icon: PurchaseIcon,
@@ -42,12 +42,12 @@ final class SwiftDataService {
             icon: icon,
             color: color
         )
-        
+
         modelContext.insert(model)
-        
+
         try modelContext.save()
     }
-    
+
     func updateShoppingList(
         _ shoppingList: ShoppingList,
         name: String,
@@ -57,39 +57,39 @@ final class SwiftDataService {
         shoppingList.name = trimmed(name)
         shoppingList.icon = icon
         shoppingList.color = color
-        
+
         try modelContext.save()
     }
-    
+
     func deleteShoppingList(
         _ shoppingList: ShoppingList
     ) throws {
         modelContext.delete(shoppingList)
-        
+
         try modelContext.save()
     }
-    
+
     func duplicateShoppingList(
         _ shoppingList: ShoppingList
     ) throws {
         let duplicateName = try nextDuplicateName(
             for: shoppingList
         )
-        
+
         let sortedItems = shoppingList.items.sorted {
             $0.createdAt < $1.createdAt
         }
-        
+
         let model = ShoppingList(
             name: duplicateName,
             icon: shoppingList.icon,
             color: shoppingList.color
         )
-        
+
         modelContext.insert(model)
-        
+
         let baseDate = Date.now
-        
+
         for (index, item) in sortedItems.enumerated() {
             let duplicatedItem = ShoppingItem(
                 name: item.name,
@@ -105,10 +105,10 @@ final class SwiftDataService {
             model.items.append(duplicatedItem)
             modelContext.insert(duplicatedItem)
         }
-        
+
         try modelContext.save()
     }
-    
+
     func fetchShoppingList(
         by id: ShoppingList.ID
     ) -> ShoppingList? {
@@ -117,7 +117,7 @@ final class SwiftDataService {
                 $0.persistentModelID == id
             }
         )
-        
+
         do {
             return try modelContext.fetch(descriptor).first
         } catch {
@@ -125,25 +125,20 @@ final class SwiftDataService {
             return nil
         }
     }
-    
-    /// Проверяет, доступно ли название для списка покупок.
+
+    /// Проверяет доступность названия без учёта регистра и крайних пробелов.
+    /// При редактировании исключает переданный список из проверки.
     ///
-    /// Сравнение выполняется без учёта регистра.
-    /// Пробелы и переносы строк в начале и конце названия игнорируются.
-    ///
-    /// Например:
+    /// Пример:
     ///
     /// `Продукты` и `продукты` — дубликат;
     /// `Продукты` и `ПРОДУКТЫ` — дубликат;
     /// ` Продукты ` и `продукты` — дубликат.
     ///
-    /// При редактировании текущий список исключается из проверки,
-    /// поэтому его собственное название не считается дубликатом.
-    ///
     /// - Parameters:
-    ///   - name: Название, которое нужно проверить.
-    ///   - shoppingList: Текущий редактируемый список, который нужно исключить из проверки.
-    /// - Returns: `true`, если список с таким названием отсутствует, иначе `false`.
+    ///   - name: Проверяемое название.
+    ///   - shoppingList: Редактируемый список, исключаемый из проверки.
+    /// - Returns: `true`, если название доступно.
     /// - Throws: Ошибка получения списков из SwiftData.
     func isShoppingListNameAvailable(
         _ name: String,
@@ -151,17 +146,17 @@ final class SwiftDataService {
     ) throws -> Bool {
         let descriptor = FetchDescriptor<ShoppingList>()
         let lists = try modelContext.fetch(descriptor)
-        
+
         let normalizedName = name
             .trimmingCharacters(in: .whitespacesAndNewlines)
             .lowercased()
-        
+
         return !lists.contains { list in
             if let shoppingList,
                list.id == shoppingList.id {
                 return false
             }
-            
+
             let existingName = list.name
                 .trimmingCharacters(in: .whitespacesAndNewlines)
                 .lowercased()
@@ -169,9 +164,9 @@ final class SwiftDataService {
             return existingName == normalizedName
         }
     }
-    
-    // MARK: - Работа с ShoppingItem
-    
+
+    // MARK: - ShoppingItem
+
     func addShoppingItem(
         to shoppingList: ShoppingList,
         name: String,
@@ -183,13 +178,13 @@ final class SwiftDataService {
             count: count,
             unit: unit
         )
-        
+
         shoppingList.items.append(model)
         modelContext.insert(model)
-        
+
         try modelContext.save()
     }
-    
+
     func updateShoppingItem(
         _ shoppingItem: ShoppingItem,
         name: String,
@@ -199,10 +194,10 @@ final class SwiftDataService {
         shoppingItem.name = trimmed(name)
         shoppingItem.count = count
         shoppingItem.unit = unit
-        
+
         try modelContext.save()
     }
-    
+
     func deleteShoppingItem(
         _ shoppingItem: ShoppingItem
     ) throws {
@@ -211,48 +206,48 @@ final class SwiftDataService {
                 $0.id == shoppingItem.id
             }
         }
-        
+
         modelContext.delete(shoppingItem)
-        
+
         try modelContext.save()
     }
-    
+
     func toggleShoppingItem(
         _ shoppingItem: ShoppingItem
     ) throws {
         shoppingItem.isPurchased.toggle()
-        
+
         try modelContext.save()
     }
-    
+
     func resetPurchasedItems(
         in shoppingList: ShoppingList
     ) throws {
         shoppingList.items.forEach {
             $0.isPurchased = false
         }
-        
+
         try modelContext.save()
     }
-    
+
     func deletePurchasedItems(
         in shoppingList: ShoppingList
     ) throws {
         let purchasedItems = shoppingList.items.filter {
             $0.isPurchased
         }
-        
+
         shoppingList.items.removeAll {
             $0.isPurchased
         }
-        
+
         purchasedItems.forEach {
             modelContext.delete($0)
         }
-        
+
         try modelContext.save()
     }
-    
+
     func fetchShoppingItem(
         by id: ShoppingItem.ID
     ) -> ShoppingItem? {
@@ -261,7 +256,7 @@ final class SwiftDataService {
                 $0.persistentModelID == id
             }
         )
-        
+
         do {
             return try modelContext.fetch(descriptor).first
         } catch {
@@ -269,73 +264,65 @@ final class SwiftDataService {
             return nil
         }
     }
-    
-    // MARK: - Helpers
-    
-    /// Формирует имя для нового дубликата списка.
-    ///
-    /// Метод ищет среди существующих списков дубликаты текущего списка
-    /// с именами в формате `<название> копия N`, находит максимальный номер
-    /// и увеличивает его на 1.
-    ///
-    /// Например, если существуют:
-    /// `Продукты копия 1`, `Продукты копия 2` и `Продукты копия 4`,
-    /// следующий дубликат получит имя `Продукты копия 5`.
-    ///
-    /// Если дублируется уже существующая копия, она считается отдельной основой.
-    /// Например, для `Продукты копия 2` следующий дубликат может называться
-    /// `Продукты копия 2 копия 1`.
-    ///
-    /// - Parameter shoppingList: Список, для которого нужно сформировать имя дубликата.
-    /// - Returns: Имя нового дубликата с очередным номером.
-    /// - Throws: Ошибка получения существующих списков из SwiftData.
-    private func nextDuplicateName(
-        for shoppingList: ShoppingList
-    ) throws -> String {
-        let descriptor = FetchDescriptor<ShoppingList>()
-        let lists = try modelContext.fetch(descriptor)
-        
-        let copySuffix = String(localized: .copySuffix)
-        let prefix = "\(shoppingList.name) \(copySuffix) "
-        
-        let lastCopyNumber = lists
-            .compactMap { list -> Int? in
-                guard list.name.hasPrefix(prefix) else {
-                    return nil
-                }
-                
-                let suffix = list.name.dropFirst(prefix.count)
-                
-                return Int(suffix)
-            }
-            .max() ?? 0
-        
-        return "\(prefix)\(lastCopyNumber + 1)"
-    }
-    
-    private func trimmed(_ value: String) -> String {
-        value.trimmingCharacters(in: .whitespacesAndNewlines)
-    }
-    
+
     func fetchAllUniqueItemNames() -> Set<String> {
         let descriptor = FetchDescriptor<ShoppingItem>()
-        
+
         do {
             let allItems = try modelContext.fetch(descriptor)
-            
+
             let names = allItems
                 .map { $0.name.trimmingCharacters(in: .whitespacesAndNewlines) }
                 .filter { !$0.isEmpty }
-            
+
             let uniqueNames = Dictionary(
                 names.map { ($0.lowercased(), $0) },
                 uniquingKeysWith: { first, _ in first }
             )
-            
+
             return Set(uniqueNames.values)
         } catch {
             print("❌ [SwiftDataService] fetchAllUniqueItemNames: \(error)")
             return []
         }
+    }
+
+    // MARK: - Helpers
+
+    /// Формирует имя следующего дубликата в формате `<название> копия N`.
+    ///
+    /// Номер выбирается как следующий после максимального существующего.
+    /// Уже продублированный список считается самостоятельной основой:
+    /// `Продукты копия 2` → `Продукты копия 2 копия 1`.
+    ///
+    /// - Parameter shoppingList: Дублируемый список.
+    /// - Returns: Имя нового дубликата.
+    /// - Throws: Ошибка получения списков из SwiftData.
+    private func nextDuplicateName(
+        for shoppingList: ShoppingList
+    ) throws -> String {
+        let descriptor = FetchDescriptor<ShoppingList>()
+        let lists = try modelContext.fetch(descriptor)
+
+        let copySuffix = String(localized: .copySuffix)
+        let prefix = "\(shoppingList.name) \(copySuffix) "
+
+        let lastCopyNumber = lists
+            .compactMap { list -> Int? in
+                guard list.name.hasPrefix(prefix) else {
+                    return nil
+                }
+
+                let suffix = list.name.dropFirst(prefix.count)
+
+                return Int(suffix)
+            }
+            .max() ?? 0
+
+        return "\(prefix)\(lastCopyNumber + 1)"
+    }
+
+    private func trimmed(_ value: String) -> String {
+        value.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 }

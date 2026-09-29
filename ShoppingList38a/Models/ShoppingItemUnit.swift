@@ -13,7 +13,7 @@ enum ShoppingItemUnit: String, CaseIterable, Hashable, Codable {
     case gram
     case liter
     case milliliter
-    
+
     var displayName: String {
         switch self {
         case .piece:

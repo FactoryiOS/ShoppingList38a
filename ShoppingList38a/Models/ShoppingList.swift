@@ -14,21 +14,21 @@ final class ShoppingList {
     var icon: PurchaseIcon
     var color: PurchaseColor
     var createdAt: Date = Date.now
-    
+
     @Relationship(
         deleteRule: .cascade,
         inverse: \ShoppingItem.list
     )
     var items: [ShoppingItem]
-    
+
     var purchasedCount: Int {
         items.filter { $0.isPurchased }.count
     }
-    
+
     var totalCount: Int {
         items.count
     }
-    
+
     init(
         name: String,
         icon: PurchaseIcon,

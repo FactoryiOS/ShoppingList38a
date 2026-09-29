@@ -15,9 +15,9 @@ final class ShoppingItem {
     var unit: ShoppingItemUnit
     var isPurchased: Bool
     var createdAt: Date = Date.now
-    
+
     var list: ShoppingList?
-    
+
     init(
         name: String,
         count: Int,

@@ -11,17 +11,17 @@ struct PlaceholderView: View {
     let image: ImageResource
     let title: LocalizedStringResource
     let subtitle: LocalizedStringResource
-    
+
     var body: some View {
         VStack(spacing: 28) {
             Image(image)
-            
+
             VStack(spacing: 4) {
                 Text(title)
                     .font(AppFont.medium20)
                     .foregroundStyle(.primaryText)
                     .multilineTextAlignment(.center)
-                
+
                 Text(subtitle)
                     .font(AppFont.regular17)
                     .foregroundStyle(.primaryText)
@@ -37,7 +37,7 @@ struct PlaceholderView: View {
         title: .emptyStateTitle,
         subtitle: .shoppingListsEmptyStateSubtitle
     )
-    
+
     PlaceholderView(
         image: AppImage.emptyShoppingList,
         title: .emptyStateTitle,

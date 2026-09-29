@@ -8,12 +8,13 @@
 import SwiftUI
 
 struct BaseTextField: View {
-    @FocusState.Binding var isFocused: Bool
-    
-    let placeholder: LocalizedStringResource
     @Binding var text: String
+
+    @FocusState.Binding var isFocused: Bool
+
+    let placeholder: LocalizedStringResource
     let errorMessage: LocalizedStringResource?
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             HStack {
@@ -26,7 +27,7 @@ struct BaseTextField: View {
                 .font(AppFont.regular17)
                 .foregroundStyle(.primaryText)
                 .focused($isFocused)
-                
+
                 if !text.isEmpty && isFocused {
                     Button(
                         action: { text = "" },
@@ -42,20 +43,20 @@ struct BaseTextField: View {
             .padding(.horizontal, 16)
             .frame(maxWidth: .infinity)
             .frame(height: 54)
-            .background(Color(.baseElementsBackground))
+            .background(.baseElementsBackground)
             .cornerRadius(12)
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
                     .stroke(
-                        errorMessage != nil ? Color(.systemsRed) : Color.clear,
+                        errorMessage != nil ? .systemsRed : .clear,
                         lineWidth: 0.5
                     )
             )
-            
+
             if let errorMessage {
                 Text(errorMessage)
                     .font(AppFont.regular13)
-                    .foregroundColor(Color(.systemsRed))
+                    .foregroundStyle(.systemsRed)
                     .padding(.horizontal, 8)
                     .transition(
                         .opacity.combined(
@@ -74,17 +75,17 @@ struct BaseTextField: View {
 #Preview {
     @Previewable @State var text = "Новый год"
     @FocusState var isFocused: Bool
-    
+
     let currentError: LocalizedStringResource? = text == "Новый год"
         ? .shoppingListDuplicateNameError
         : nil
-    
+
     BaseTextField(
+        text: $text,
         isFocused: $isFocused,
         placeholder: .shoppingListNamePlaceholder,
-        text: $text,
         errorMessage: currentError
     )
     .padding()
-    .background(Color(.primaryBackground))
+    .background(.primaryBackground)
 }

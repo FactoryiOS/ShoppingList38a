@@ -10,16 +10,11 @@ import SwiftUI
 extension PurchaseColor {
     var color: Color {
         switch self {
-        case .green:
-            Color(.additionalGreen)
-        case .purple:
-            Color(.additionalPurple)
-        case .red:
-            Color(.additionalRed)
-        case .blue:
-            Color(.additionalBlue)
-        case .yellow:
-            Color(.additionalYellow)
+        case .green: .additionalGreen
+        case .purple: .additionalPurple
+        case .red: .additionalRed
+        case .blue: .additionalBlue
+        case .yellow: .additionalYellow
         }
     }
 }

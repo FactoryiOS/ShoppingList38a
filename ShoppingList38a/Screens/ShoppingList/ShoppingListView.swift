@@ -11,15 +11,14 @@ import SwiftUI
 struct ShoppingListView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(AppRouter.self) private var router
-    
-    @State private var observed: Observed
-    
+
     @FocusState private var isSearchFocused: Bool
-    
+
+    @State private var observed: Observed
     @State private var showDeletePurchasedItemsAlert = false
     @State private var showDeleteShoppingItemAlert = false
     @State private var shoppingItemToDelete: ShoppingItem?
-    
+
     init(
         service: SwiftDataService,
         shoppingList: ShoppingList
@@ -31,9 +30,9 @@ struct ShoppingListView: View {
             )
         )
     }
-    
+
     var body: some View {
-        VStack(spacing: .zero) {
+        VStack(spacing: 0) {
             customSearchBar
                 .padding(.horizontal, 16)
                 .padding(.top, 4)
@@ -69,9 +68,9 @@ struct ShoppingListView: View {
                 guard let item = shoppingItemToDelete else {
                     return
                 }
-                
+
                 shoppingItemToDelete = nil
-                
+
                 withAnimation {
                     observed.handleDeleteShoppingItem(item)
                 }
@@ -88,24 +87,61 @@ struct ShoppingListView: View {
             }
         )
         .toolbar {
-            titleToolbarItem
-            contextMenuToolbarItem
+            titleToolbar
+            contextMenuToolbar
         }
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
     }
-    
+
+    private var customSearchBar: some View {
+        HStack(spacing: 8) {
+            Image(systemName: AppSystemIcon.magnifyingGlass)
+                .foregroundStyle(.hintGrey)
+
+            TextField(
+                .shoppingListSearchPlaceholder,
+                text: $observed.searchText,
+                prompt: Text(.shoppingListSearchPlaceholder)
+                    .foregroundStyle(.hintGrey)
+            )
+            .font(AppFont.regular17)
+            .foregroundStyle(.primaryText)
+            .focused($isSearchFocused)
+            .submitLabel(.search)
+            .onSubmit {
+                isSearchFocused = false
+            }
+
+            if !observed.searchText.isEmpty {
+                Button {
+                    observed.searchText = ""
+                    isSearchFocused = false
+                } label: {
+                    Image(systemName: AppSystemIcon.xmarkCircleFill)
+                        .symbolRenderingMode(.palette)
+                        .foregroundStyle(.clearIconForeground, .hintGrey)
+                }
+                .buttonStyle(.plain)
+            }
+        }
+        .padding(.horizontal, 8)
+        .frame(height: 38)
+        .background(.searchBackground)
+        .clipShape(RoundedRectangle(cornerRadius: 10))
+    }
+
     private var emptyState: some View {
         ScrollView {
-            VStack(spacing: .zero) {
+            VStack(spacing: 0) {
                 Spacer()
-                
+
                 PlaceholderView(
                     image: AppImage.emptyShoppingList,
                     title: .emptyStateTitle,
                     subtitle: .shoppingListEmptyStateSubtitle
                 )
-                
+
                 Spacer()
             }
             .containerRelativeFrame(.vertical)
@@ -117,10 +153,10 @@ struct ShoppingListView: View {
         .scrollDisabled(true)
         .scrollIndicators(.hidden)
     }
-    
+
     private var shoppingList: some View {
         List(observed.filteredItems) { item in
-            VStack(spacing: .zero) {
+            VStack(spacing: 0) {
                 ShoppingItemView(
                     shoppingItem: item,
                     onTogglePurchased: {
@@ -148,44 +184,23 @@ struct ShoppingListView: View {
         .scrollDismissesKeyboard(.immediately)
         .contentMargins(.bottom, 86, for: .scrollContent)
     }
-    
-    private var customSearchBar: some View {
-        HStack(spacing: 8) {
-            Image(systemName: AppSystemIcon.magnifyingGlass)
-                .foregroundStyle(.hintGrey)
-            
-            TextField(
-                .shoppingListSearchPlaceholder,
-                text: $observed.searchText,
-                prompt: Text(.shoppingListSearchPlaceholder)
-                    .foregroundStyle(.hintGrey)
-            )
-            .font(AppFont.regular17)
-            .foregroundStyle(.primaryText)
-            .focused($isSearchFocused)
-            .submitLabel(.search)
-            .onSubmit {
+
+    private var addButton: some View {
+        BaseButton(
+            title: .addItem,
+            isActive: true,
+            action: {
                 isSearchFocused = false
+
+                router.showModal(
+                    .createShoppingItem(observed.shoppingListID)
+                )
             }
-            
-            if !observed.searchText.isEmpty {
-                Button {
-                    observed.searchText = ""
-                    isSearchFocused = false
-                } label: {
-                    Image(systemName: AppSystemIcon.xmarkCircleFill)
-                        .symbolRenderingMode(.palette)
-                        .foregroundStyle(.clearIconForeground, .hintGrey)
-                }
-                .buttonStyle(.plain)
-            }
-        }
-        .padding(.horizontal, 8)
-        .frame(height: 38)
-        .background(.searchBackground)
-        .clipShape(RoundedRectangle(cornerRadius: 10))
+        )
+        .padding(.horizontal, 16)
+        .padding(.bottom, 20)
     }
-    
+
     private func swipeButtons(for item: ShoppingItem) -> some View {
         Group {
             Button {
@@ -196,7 +211,7 @@ struct ShoppingListView: View {
                     .environment(\.symbolVariants, .none)
             }
             .tint(.systemsRed)
-            
+
             Button {
                 isSearchFocused = false
                 router.showModal(
@@ -209,25 +224,9 @@ struct ShoppingListView: View {
             .tint(.systemsGrey)
         }
     }
-    
-    private var addButton: some View {
-        BaseButton(
-            title: .addItem,
-            isActive: true,
-            action: {
-                isSearchFocused = false
-                
-                router.showModal(
-                    .createShoppingItem(observed.shoppingListID)
-                )
-            }
-        )
-        .padding(.horizontal, 16)
-        .padding(.bottom, 20)
-    }
-    
+
     @ToolbarContentBuilder
-    private var titleToolbarItem: some ToolbarContent {
+    private var titleToolbar: some ToolbarContent {
         if #available(iOS 26.0, *) {
             ToolbarItem(placement: .topBarLeading) {
                 backButton
@@ -263,9 +262,9 @@ struct ShoppingListView: View {
             .foregroundStyle(.titleText)
             .lineLimit(1)
     }
-    
+
     @ToolbarContentBuilder
-    private var contextMenuToolbarItem: some ToolbarContent {
+    private var contextMenuToolbar: some ToolbarContent {
         ToolbarItem(placement: .topBarTrailing) {
             Menu {
                 Toggle(
@@ -285,7 +284,7 @@ struct ShoppingListView: View {
                         systemImage: AppSystemIcon.arrowUpArrowDown
                     )
                 }
-                
+
                 ShareLink(
                     item: observed.shareText,
                     subject: Text(observed.listTitle)
@@ -295,7 +294,7 @@ struct ShoppingListView: View {
                         systemImage: AppSystemIcon.squareAndArrowUp
                     )
                 }
-                
+
                 Button {
                     observed.handleResetPurchasedItems()
                 } label: {
@@ -304,7 +303,7 @@ struct ShoppingListView: View {
                         systemImage: AppSystemIcon.arrow2Circlepath
                     )
                 }
-                
+
                 Button(role: .destructive) {
                     showDeletePurchasedItemsAlert = true
                 } label: {
@@ -313,7 +312,7 @@ struct ShoppingListView: View {
                         systemImage: AppSystemIcon.trash
                     )
                 }
-                
+
             } label: {
                 Image(systemName: AppSystemIcon.ellipsisCircle)
                     .foregroundStyle(.titleText)

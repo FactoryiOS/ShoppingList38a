@@ -7,14 +7,10 @@
 
 enum AppRoute: Hashable, Identifiable {
     case shoppingList(ShoppingList.ID)
-    
     case createShoppingList
     case editShoppingList(ShoppingList.ID)
-    
     case createShoppingItem(ShoppingList.ID)
     case editShoppingItem(ShoppingItem.ID)
-    
-    var id: Self {
-        self
-    }
+
+    var id: Self { self }
 }

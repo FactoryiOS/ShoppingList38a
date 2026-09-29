@@ -5,8 +5,6 @@
 //  Created by Kislov Vadim on 10.09.2026.
 //
 
-import Foundation
-
 enum PurchaseIcon: String, CaseIterable, Hashable, Codable {
     case snow
     case airplane

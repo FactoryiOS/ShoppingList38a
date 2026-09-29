@@ -9,12 +9,13 @@ import SwiftUI
 
 struct ShoppingListFormView: View {
     @Environment(\.dismiss) private var dismiss
-    
+
     @FocusState private var isNameFieldFocused: Bool
+
     @State private var observed: Observed
 
     private let onComplete: () -> Void
-    
+
     init(
         service: SwiftDataService,
         shoppingList: ShoppingList? = nil,
@@ -29,19 +30,19 @@ struct ShoppingListFormView: View {
 
         self.onComplete = onComplete
     }
-    
+
     var body: some View {
         ScrollView {
             VStack(spacing: 24) {
                 BaseTextField(
+                    text: $observed.name,
                     isFocused: $isNameFieldFocused,
                     placeholder: .shoppingListNamePlaceholder,
-                    text: $observed.name,
                     errorMessage: observed.nameErrorMessage
                 )
-                
+
                 ColorSelectorView(selectedColor: $observed.selectedColor)
-                
+
                 IconSelectorView(
                     selectedIcon: $observed.selectedIcon,
                     selectedColor: observed.selectedColor
@@ -69,11 +70,11 @@ struct ShoppingListFormView: View {
         }
         .ignoresSafeArea(.keyboard, edges: .bottom)
     }
-    
+
     private var submitButton: some View {
         BaseButton(
             title: observed.submitButtonTitle,
-            isActive: observed.isValid,
+            isActive: observed.isFormValid,
             action: {
                 observed.handleSave(completion: onComplete)
             }
@@ -81,7 +82,7 @@ struct ShoppingListFormView: View {
         .padding(.horizontal, 16)
         .padding(.bottom, 20)
     }
-    
+
     @ToolbarContentBuilder
     private var titleToolbar: some ToolbarContent {
         if #available(iOS 26.0, *) {
@@ -100,7 +101,7 @@ struct ShoppingListFormView: View {
             }
         }
     }
-    
+
     private var backButton: some View {
         Button {
             dismiss()
@@ -112,9 +113,9 @@ struct ShoppingListFormView: View {
         }
         .buttonStyle(.plain)
     }
-    
+
     private var toolbarTitle: some View {
-        Text(observed.titleToolbar)
+        Text(observed.toolbarTitle)
             .font(AppFont.medium17)
             .foregroundStyle(.titleText)
     }

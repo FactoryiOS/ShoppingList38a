@@ -5,8 +5,8 @@
 //  Created by Nikita Tsomuk on 07.09.2026.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 @main
 struct ShoppingList38aApp: App {
@@ -19,8 +19,6 @@ struct ShoppingList38aApp: App {
                 .environment(appState)
                 .environment(appRouter)
         }
-        .modelContainer(
-            appState.swiftDataService.modelContainer
-        )
+        .modelContainer(appState.swiftDataService.modelContainer)
     }
 }

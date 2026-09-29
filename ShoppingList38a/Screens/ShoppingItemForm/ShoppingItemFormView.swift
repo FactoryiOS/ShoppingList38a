@@ -9,13 +9,14 @@ import SwiftUI
 
 struct ShoppingItemFormView: View {
     @Environment(\.dismiss) private var dismiss
-    
+
     @FocusState private var isNameFocused: Bool
     @FocusState private var isAmountFocused: Bool
+
     @State private var observed: Observed
-    
+
     private let onComplete: () -> Void
-    
+
     init(
         service: SwiftDataService,
         shoppingList: ShoppingList,
@@ -29,22 +30,21 @@ struct ShoppingItemFormView: View {
                 shoppingItem: shoppingItem
             )
         )
-        
+
         self.onComplete = onComplete
     }
-    
+
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
-                
                 VStack(spacing: 0) {
                     BaseTextField(
+                        text: $observed.nameText,
                         isFocused: $isNameFocused,
                         placeholder: .shoppingItemNamePlaceholder,
-                        text: $observed.nameText,
                         errorMessage: observed.nameErrorMessage
                     )
-                    
+
                     if isNameFocused && !observed.suggestions.isEmpty {
                         VStack(alignment: .leading, spacing: 4) {
                             ForEach(observed.suggestions, id: \.self) { suggestion in
@@ -60,7 +60,6 @@ struct ShoppingItemFormView: View {
                                                 .foregroundStyle(.primaryText)
                                             Spacer()
                                         }
-                                        
                                         .padding(.horizontal, 16)
                                         .frame(height: 44)
                                     }
@@ -74,7 +73,7 @@ struct ShoppingItemFormView: View {
                                 }
                             }
                         }
-                        .background(Color(.baseElementsBackground))
+                        .background(.baseElementsBackground)
                         .cornerRadius(12)
                         .padding(.top, 10)
                         .transition(
@@ -84,16 +83,16 @@ struct ShoppingItemFormView: View {
                         )
                     }
                 }
-                
+
                 HStack(spacing: 16) {
                     BaseTextField(
+                        text: $observed.amountText,
                         isFocused: $isAmountFocused,
                         placeholder: .shoppingItemQuantityPlaceholder,
-                        text: $observed.amountText,
                         errorMessage: nil
                     )
                     .keyboardType(.numberPad)
-                    
+
                     selectUnitPicker
                         .simultaneousGesture(
                             TapGesture()
@@ -135,56 +134,59 @@ struct ShoppingItemFormView: View {
             observed.loadAllExistingItems()
         }
         .toolbar {
-            ToolbarItem(placement: .cancellationAction) {
-                Button(.cancel) {
-                    dismiss()
-                }
-                .font(AppFont.regular17)
-                .foregroundStyle(.hintGrey)
-            }
-            
-            ToolbarItem(placement: .principal) {
-                Text(observed.title)
-                    .font(AppFont.semiBold17)
-                    .foregroundStyle(.primaryText)
-            }
-            
-            ToolbarItem(placement: .confirmationAction) {
-                Button(.done) {
-                    observed.handleSave(completion: onComplete)
-                }
-                .font(AppFont.semiBold17)
-                .foregroundStyle(
-                    observed.isFormValid ? .turquoise : .hintGrey
-                )
-                .disabled(!observed.isFormValid)
-            }
+            formToolbar
         }
     }
-    
+
     private var selectUnitPicker: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            HStack {
-                Text(.unitLabel)
-                    .font(AppFont.regular17)
-                    .foregroundStyle(.hintGrey)
-                
-                Spacer()
-                
-                Picker(.unitPickerTitle, selection: $observed.selectedUnit) {
-                    ForEach(ShoppingItemUnit.allCases, id: \.self) { unit in
-                        Text(unit.displayName)
-                            .tag(unit)
-                    }
+        HStack {
+            Text(.unitLabel)
+                .font(AppFont.regular17)
+                .foregroundStyle(.hintGrey)
+
+            Spacer()
+
+            Picker(.unitPickerTitle, selection: $observed.selectedUnit) {
+                ForEach(ShoppingItemUnit.allCases, id: \.self) { unit in
+                    Text(unit.displayName)
+                        .tag(unit)
                 }
-                .tint(.turquoise)
             }
-            .padding(.vertical, 8)
-            .padding(.horizontal, 16)
-            .frame(maxWidth: .infinity)
-            .frame(height: 54)
-            .background(Color(.baseElementsBackground))
-            .cornerRadius(12)
+            .tint(.turquoise)
+        }
+        .padding(.vertical, 8)
+        .padding(.horizontal, 16)
+        .frame(maxWidth: .infinity)
+        .frame(height: 54)
+        .background(.baseElementsBackground)
+        .cornerRadius(12)
+    }
+
+    @ToolbarContentBuilder
+    private var formToolbar: some ToolbarContent {
+        ToolbarItem(placement: .cancellationAction) {
+            Button(.cancel) {
+                dismiss()
+            }
+            .font(AppFont.regular17)
+            .foregroundStyle(.hintGrey)
+        }
+
+        ToolbarItem(placement: .principal) {
+            Text(observed.title)
+                .font(AppFont.semiBold17)
+                .foregroundStyle(.primaryText)
+        }
+
+        ToolbarItem(placement: .confirmationAction) {
+            Button(.done) {
+                observed.handleSave(completion: onComplete)
+            }
+            .font(AppFont.semiBold17)
+            .foregroundStyle(
+                observed.isFormValid ? .turquoise : .hintGrey
+            )
+            .disabled(!observed.isFormValid)
         }
     }
 }

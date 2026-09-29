@@ -11,8 +11,8 @@ struct WelcomeScreenView: View {
     var onComplete: () -> Void = {}
 
     var body: some View {
-        VStack(spacing: .zero) {
-            VStack(spacing: .zero) {
+        VStack(spacing: 0) {
+            VStack(spacing: 0) {
                 Spacer()
 
                 welcomeContent
