@@ -40,12 +40,26 @@ struct ShoppingListFormView: View {
                     placeholder: .shoppingListNamePlaceholder,
                     errorMessage: observed.nameErrorMessage
                 )
-
-                ColorSelectorView(selectedColor: $observed.selectedColor)
-
+                
+                ColorSelectorView(
+                    selectedColor: $observed.selectedColor
+                )
+                .simultaneousGesture(
+                    TapGesture()
+                        .onEnded {
+                            isNameFieldFocused = false
+                        }
+                )
+                
                 IconSelectorView(
                     selectedIcon: $observed.selectedIcon,
                     selectedColor: observed.selectedColor
+                )
+                .simultaneousGesture(
+                    TapGesture()
+                        .onEnded {
+                            isNameFieldFocused = false
+                        }
                 )
             }
             .padding(.top, 12)
