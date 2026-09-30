@@ -18,7 +18,8 @@ struct ShoppingListsView: View {
 
     @Query(
         sort: \ShoppingList.createdAt,
-        order: .forward
+        order: .forward,
+        animation: .default
     )
     private var lists: [ShoppingList]
 
@@ -67,10 +68,7 @@ struct ShoppingListsView: View {
                 }
 
                 shoppingListToDelete = nil
-
-                withAnimation {
-                    observed.handleDeleteShoppingList(list)
-                }
+                observed.handleDeleteShoppingList(list)
             }
         )
         .toolbar {
@@ -125,9 +123,7 @@ struct ShoppingListsView: View {
                 .tint(.systemsRed)
 
                 Button {
-                    withAnimation {
-                        observed.handleDuplicateShoppingList(list)
-                    }
+                    observed.handleDuplicateShoppingList(list)
                 } label: {
                     Image(systemName: AppSystemIcon.plusSquareOnSquare)
                         .environment(\.symbolVariants, .none)
