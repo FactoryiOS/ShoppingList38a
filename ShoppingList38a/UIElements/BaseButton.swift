@@ -22,8 +22,7 @@ struct BaseButton: View {
                 .background(isActive ? .turquoise : .buttonGrey)
                 .cornerRadius(100)
         }
-        .buttonStyle(.plain)
-        .allowsHitTesting(isActive)
+        .disabled(!isActive)
     }
 }
 
