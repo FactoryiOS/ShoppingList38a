@@ -14,11 +14,14 @@ struct AppRootView: View {
     var body: some View {
         @Bindable var router = router
 
-        Group {
+        ZStack {
             if appState.isFirstLaunch {
-                WelcomeScreenView(
-                    onComplete: appState.completeWelcome
-                )
+                WelcomeScreenView {
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        appState.completeWelcome()
+                    }
+                }
+                .transition(.opacity)
             } else {
                 NavigationStack(path: $router.path) {
                     ShoppingListsView(
@@ -33,6 +36,7 @@ struct AppRootView: View {
                         destination(for: route)
                     }
                 }
+                .transition(.opacity)
             }
         }
         .preferredColorScheme(
