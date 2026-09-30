@@ -11,27 +11,26 @@ extension ShoppingListFormView {
     @MainActor
     @Observable
     final class Observed {
-        
         // MARK: - State
-        
+
         var name: String = "" {
             didSet {
                 validateName()
             }
         }
-        
+
         var selectedIcon: PurchaseIcon?
         var selectedColor: PurchaseColor?
-        
-        private(set) var nameErrorMessage: String?
-        
+
+        private(set) var nameErrorMessage: LocalizedStringResource?
+
         // MARK: - Dependencies
-        
+
         private let service: SwiftDataService
         private let currentShoppingList: ShoppingList?
-        
+
         // MARK: - Init
-        
+
         init(
             service: SwiftDataService,
             shoppingList: ShoppingList? = nil
@@ -45,43 +44,43 @@ extension ShoppingListFormView {
                 selectedColor = shoppingList.color
             }
         }
-        
+
         // MARK: - Computed Properties
-        
-        var isValid: Bool {
+
+        var isFormValid: Bool {
             !trimmedName.isEmpty
             && nameErrorMessage == nil
             && selectedIcon != nil
             && selectedColor != nil
         }
-        
-        var submitButtonTitle: String {
+
+        var submitButtonTitle: LocalizedStringResource {
             currentShoppingList != nil
-                ? String(localized: "Save")
-                : String(localized: "Create")
+            ? .save
+            : .create
         }
-        
-        var titleToolbar: String {
+
+        var toolbarTitle: LocalizedStringResource {
             currentShoppingList != nil
-                ? String(localized: "Edit List")
-                : String(localized: "Create List")
+            ? .editListTitle
+            : .createList
         }
-        
+
         private var trimmedName: String {
             name.trimmingCharacters(in: .whitespacesAndNewlines)
         }
-        
+
         // MARK: - Actions
-        
-        func handleSave(completion: Completion) {
+
+        func handleSave(completion: () -> Void) {
             guard
-                isValid,
+                isFormValid,
                 let selectedIcon,
                 let selectedColor
             else {
                 return
             }
-            
+
             do {
                 if let currentShoppingList {
                     try service.updateShoppingList(
@@ -97,21 +96,21 @@ extension ShoppingListFormView {
                         color: selectedColor
                     )
                 }
-                
+
                 completion()
             } catch {
                 print("❌ [ShoppingListFormView] handleSave: \(error)")
             }
         }
-        
-        // MARK: - Validation
-        
+
+        // MARK: - Helpers
+
         private func validateName() {
             guard !trimmedName.isEmpty else {
                 nameErrorMessage = nil
                 return
             }
-            
+
             do {
                 let isAvailable = try service.isShoppingListNameAvailable(
                     trimmedName,
@@ -120,7 +119,7 @@ extension ShoppingListFormView {
 
                 nameErrorMessage = isAvailable
                 ? nil
-                : String(localized: "This name is already in use, please change it.")
+                : .shoppingListDuplicateNameError
             } catch {
                 print("❌ [ShoppingListFormView] validateName: \(error)")
             }

@@ -8,20 +8,20 @@
 import Foundation
 
 enum AppColorScheme: String, CaseIterable, Identifiable {
-    var id: Self { self }
-    
     case light
     case dark
     case system
-    
-    var displayName: String {
+
+    var id: Self { self }
+
+    var displayName: LocalizedStringResource {
         switch self {
         case .light:
-            String(localized: "Light")
+            .themeLight
         case .dark:
-            String(localized: "Dark")
+            .themeDark
         case .system:
-            String(localized: "System")
+            .themeSystem
         }
     }
 }

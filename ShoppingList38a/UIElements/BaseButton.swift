@@ -8,18 +8,18 @@
 import SwiftUI
 
 struct BaseButton: View {
-    let title: String
+    let title: LocalizedStringResource
     let isActive: Bool
     let action: () -> Void
-    
+
     var body: some View {
         Button(action: action) {
             Text(title)
                 .font(AppFont.medium17)
-                .foregroundColor(isActive ? Color(.white) : Color(.hintGrey))
+                .foregroundStyle(isActive ? .white : .hintGrey)
                 .frame(maxWidth: .infinity)
                 .frame(height: 44)
-                .background(isActive ? Color(.turquoise) : Color(.buttonGrey))
+                .background(isActive ? .turquoise : .buttonGrey)
                 .cornerRadius(100)
         }
         .disabled(!isActive)
@@ -29,17 +29,17 @@ struct BaseButton: View {
 #Preview {
     VStack(spacing: 16) {
         BaseButton(
-            title: String(localized: "Create"),
-            isActive: false, // неактивная кнопка
+            title: .create,
+            isActive: false,
             action: {}
         )
-        
+
         BaseButton(
-            title: String(localized: "Create"),
-            isActive: true, // активная кнопка
+            title: .create,
+            isActive: true,
             action: {}
         )
     }
     .padding()
-    .background(Color(.primaryBackground))
+    .background(.primaryBackground)
 }

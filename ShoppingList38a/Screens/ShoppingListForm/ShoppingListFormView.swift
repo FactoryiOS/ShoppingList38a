@@ -9,16 +9,17 @@ import SwiftUI
 
 struct ShoppingListFormView: View {
     @Environment(\.dismiss) private var dismiss
-    
+
     @FocusState private var isNameFieldFocused: Bool
+
     @State private var observed: Observed
 
-    private let onComplete: Completion
-    
+    private let onComplete: () -> Void
+
     init(
         service: SwiftDataService,
         shoppingList: ShoppingList? = nil,
-        onComplete: @escaping Completion
+        onComplete: @escaping () -> Void
     ) {
         _observed = State(
             initialValue: Observed(
@@ -29,25 +30,43 @@ struct ShoppingListFormView: View {
 
         self.onComplete = onComplete
     }
-    
+
     var body: some View {
         ScrollView {
             VStack(spacing: 24) {
                 BaseTextField(
-                    isFocused: $isNameFieldFocused,
-                    placeholder: String(localized: "Enter list name"),
                     text: $observed.name,
+                    isFocused: $isNameFieldFocused,
+                    placeholder: .shoppingListNamePlaceholder,
                     errorMessage: observed.nameErrorMessage
                 )
                 
-                ColorSelectorView(selectedColor: $observed.selectedColor)
+                ColorSelectorView(
+                    selectedColor: $observed.selectedColor
+                )
+                .simultaneousGesture(
+                    TapGesture()
+                        .onEnded {
+                            isNameFieldFocused = false
+                        }
+                )
                 
                 IconSelectorView(
                     selectedIcon: $observed.selectedIcon,
                     selectedColor: observed.selectedColor
                 )
+                .simultaneousGesture(
+                    TapGesture()
+                        .onEnded {
+                            isNameFieldFocused = false
+                        }
+                )
             }
             .padding(.top, 12)
+            .animation(
+                .easeInOut(duration: 0.2),
+                value: observed.nameErrorMessage != nil
+            )
         }
         .padding(.horizontal, 16)
         .background(.primaryBackground)
@@ -65,11 +84,11 @@ struct ShoppingListFormView: View {
         }
         .ignoresSafeArea(.keyboard, edges: .bottom)
     }
-    
+
     private var submitButton: some View {
         BaseButton(
             title: observed.submitButtonTitle,
-            isActive: observed.isValid,
+            isActive: observed.isFormValid,
             action: {
                 observed.handleSave(completion: onComplete)
             }
@@ -77,24 +96,42 @@ struct ShoppingListFormView: View {
         .padding(.horizontal, 16)
         .padding(.bottom, 20)
     }
-    
+
     @ToolbarContentBuilder
     private var titleToolbar: some ToolbarContent {
-        ToolbarItemGroup(placement: .topBarLeading) {
-            Button {
-                dismiss()
-            } label: {
-                Image(systemName: AppSystemIcon.chevronLeft)
-                    .foregroundStyle(.titleText)
-                    .frame(width: 28, height: 44)
-                    .contentShape(Rectangle())
+        if #available(iOS 26.0, *) {
+            ToolbarItem(placement: .topBarLeading) {
+                HStack(spacing: 8) {
+                    backButton
+                    toolbarTitle
+                        .fixedSize(horizontal: true, vertical: false)
+                }
             }
-            .buttonStyle(.plain)
-            
-            Text(observed.titleToolbar)
-                .font(AppFont.medium17)
-                .foregroundStyle(.titleText)
+            .sharedBackgroundVisibility(.hidden)
+        } else {
+            ToolbarItemGroup(placement: .topBarLeading) {
+                backButton
+                toolbarTitle
+            }
         }
+    }
+
+    private var backButton: some View {
+        Button {
+            dismiss()
+        } label: {
+            Image(systemName: AppSystemIcon.chevronLeft)
+                .foregroundStyle(.titleText)
+                .frame(width: 28, height: 44)
+                .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+    }
+
+    private var toolbarTitle: some View {
+        Text(observed.toolbarTitle)
+            .font(AppFont.medium17)
+            .foregroundStyle(.titleText)
     }
 }
 

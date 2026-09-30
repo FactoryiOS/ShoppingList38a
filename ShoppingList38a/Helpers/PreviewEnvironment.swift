@@ -7,8 +7,8 @@
 
 #if DEBUG
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 @MainActor
 struct PreviewContext {
@@ -50,7 +50,7 @@ struct PreviewContext {
 
         return storedPurchasedItem
     }
-    
+
     var shoppingItem: ShoppingItem {
         guard let shoppingItem = storedShoppingList?.items.first else {
             fatalError("ShoppingItem is unavailable in empty preview")
@@ -82,11 +82,11 @@ struct PreviewContext {
 
         modelContainer = container
         self.service = service
-        
+
         appState = AppState(
             swiftDataService: service
         )
-        
+
         appRouter = AppRouter()
 
         switch state {

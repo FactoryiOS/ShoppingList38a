@@ -9,19 +9,19 @@ import SwiftUI
 
 struct PlaceholderView: View {
     let image: ImageResource
-    let title: String
-    let subtitle: String
-    
+    let title: LocalizedStringResource
+    let subtitle: LocalizedStringResource
+
     var body: some View {
         VStack(spacing: 28) {
             Image(image)
-            
+
             VStack(spacing: 4) {
                 Text(title)
                     .font(AppFont.medium20)
                     .foregroundStyle(.primaryText)
                     .multilineTextAlignment(.center)
-                
+
                 Text(subtitle)
                     .font(AppFont.regular17)
                     .foregroundStyle(.primaryText)
@@ -34,13 +34,13 @@ struct PlaceholderView: View {
 #Preview {
     PlaceholderView(
         image: AppImage.emptyShoppingLists,
-        title: String(localized: "Let's plan your shopping!"),
-        subtitle: String(localized: "Create your first list")
+        title: .emptyStateTitle,
+        subtitle: .shoppingListsEmptyStateSubtitle
     )
-    
+
     PlaceholderView(
         image: AppImage.emptyShoppingList,
-        title: String(localized: "Let's plan your shopping!"),
-        subtitle: String(localized: "Start adding items")
+        title: .emptyStateTitle,
+        subtitle: .shoppingListEmptyStateSubtitle
     )
 }

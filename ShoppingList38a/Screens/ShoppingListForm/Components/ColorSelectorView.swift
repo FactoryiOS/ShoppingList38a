@@ -9,10 +9,10 @@ import SwiftUI
 
 struct ColorSelectorView: View {
     @Binding var selectedColor: PurchaseColor?
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Choose a color")
+            Text(.chooseColor)
                 .font(AppFont.regular16)
                 .foregroundStyle(.primaryText)
                 .padding(.horizontal, 12)
@@ -22,19 +22,18 @@ struct ColorSelectorView: View {
                     if purchaseColor != PurchaseColor.allCases.first {
                         Spacer()
                     }
-                    
+
                     colorButton(for: purchaseColor)
                 }
             }
             .padding(.horizontal, 27.5)
         }
-        .padding(.top, 12)
-        .padding(.bottom, 12)
+        .padding(.vertical, 12)
         .frame(maxWidth: .infinity, alignment: .leading)
         .frame(height: 105)
         .background(.baseElementsBackground, in: RoundedRectangle(cornerRadius: 12))
     }
-    
+
     private func colorButton(for purchaseColor: PurchaseColor) -> some View {
         Button {
             selectedColor = purchaseColor
@@ -45,7 +44,7 @@ struct ColorSelectorView: View {
                         .strokeBorder(.turquoise, lineWidth: 2)
                         .frame(width: 52, height: 52)
                 }
-                
+
                 Circle()
                     .fill(purchaseColor.color)
                     .frame(width: 40, height: 40)
@@ -58,7 +57,7 @@ struct ColorSelectorView: View {
 
 #Preview {
     @Previewable @State var selectedColor: PurchaseColor?
-    
+
     ColorSelectorView(selectedColor: $selectedColor)
         .padding(.vertical)
         .frame(maxHeight: .infinity, alignment: .center)

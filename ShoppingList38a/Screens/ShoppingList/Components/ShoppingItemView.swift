@@ -9,22 +9,10 @@ import SwiftUI
 
 struct ShoppingItemView: View {
     @Environment(\.colorScheme) private var colorScheme
-    
+
     let shoppingItem: ShoppingItem
     let onTogglePurchased: () -> Void
-    
-    private var textColor: Color {
-        if shoppingItem.isPurchased {
-            return colorScheme == .light ? .listGrey : .hintGrey
-        }
-        
-        return .primaryText
-    }
-    
-    private var checkboxColor: Color {
-        colorScheme == .light ? .listGrey : .primaryText
-    }
-    
+
     var body: some View {
         HStack(spacing: 8) {
             Button {
@@ -42,13 +30,13 @@ struct ShoppingItemView: View {
             .buttonStyle(.plain)
             .font(AppFont.regular24)
             .frame(width: 44, height: 44)
-            
+
             Text(shoppingItem.name)
                 .font(AppFont.regular17)
                 .foregroundStyle(textColor)
-            
+
             Spacer()
-            
+
             Text("\(shoppingItem.count) \(shoppingItem.unit.displayName)")
                 .font(AppFont.regular17)
                 .foregroundStyle(textColor)
@@ -56,6 +44,18 @@ struct ShoppingItemView: View {
         .padding(.horizontal, 16)
         .padding(.vertical, 4)
         .frame(maxWidth: .infinity, minHeight: 52)
+    }
+
+    private var textColor: Color {
+        if shoppingItem.isPurchased {
+            return colorScheme == .light ? .listGrey : .hintGrey
+        }
+
+        return .primaryText
+    }
+
+    private var checkboxColor: Color {
+        colorScheme == .light ? .listGrey : .primaryText
     }
 }
 
@@ -66,7 +66,7 @@ struct ShoppingItemView: View {
                 shoppingItem: preview.unpurchasedItem,
                 onTogglePurchased: { }
             )
-            
+
             ShoppingItemView(
                 shoppingItem: preview.purchasedItem,
                 onTogglePurchased: { }

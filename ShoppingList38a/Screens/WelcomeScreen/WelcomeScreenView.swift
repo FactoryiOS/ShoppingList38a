@@ -8,36 +8,17 @@
 import SwiftUI
 
 struct WelcomeScreenView: View {
-    private enum WelcomeTexts {
-        static var largeTitle: String {
-            String(localized: "Welcome!")
-        }
-
-        static var headLineTitle: String {
-            String(localized: "Never forget\nwhat you need to buy")
-        }
-
-        static var supportingTextTitle: String {
-            String(localized: "Create lists\nand don't worry about shopping")
-        }
-
-        static var startButtonTitle: String {
-            String(localized: "Start")
-        }
-    }
-
     var onComplete: () -> Void = {}
 
     var body: some View {
-        VStack(spacing: .zero) {
-            VStack(spacing: 48) {
-                titleView
-                imageView
-                descriptionView
-            }
-            .padding(.top, 40)
+        VStack(spacing: 0) {
+            VStack(spacing: 0) {
+                Spacer()
 
-            Spacer()
+                welcomeContent
+
+                Spacer()
+            }
 
             actionButton
         }
@@ -45,8 +26,16 @@ struct WelcomeScreenView: View {
         .background(.primaryBackground)
     }
 
+    private var welcomeContent: some View {
+        VStack(spacing: 48) {
+            titleView
+            imageView
+            descriptionView
+        }
+    }
+
     private var titleView: some View {
-        Text(WelcomeTexts.largeTitle)
+        Text(.welcomeTitle)
             .font(AppFont.regular34)
             .foregroundStyle(.titleText)
             .multilineTextAlignment(.center)
@@ -61,10 +50,10 @@ struct WelcomeScreenView: View {
 
     private var descriptionView: some View {
         VStack(spacing: 12) {
-            Text(WelcomeTexts.headLineTitle)
+            Text(.welcomeHeadline)
                 .font(AppFont.semiBold22)
 
-            Text(WelcomeTexts.supportingTextTitle)
+            Text(.welcomeDescription)
                 .font(AppFont.regular17)
         }
         .foregroundStyle(.primaryText)
@@ -73,7 +62,7 @@ struct WelcomeScreenView: View {
 
     private var actionButton: some View {
         BaseButton(
-            title: WelcomeTexts.startButtonTitle,
+            title: .welcomeStartButton,
             isActive: true,
             action: onComplete
         )

@@ -14,7 +14,7 @@ extension ShoppingItem {
             isPurchased: false
         )
     }
-    
+
     static var mockPurchased: ShoppingItem {
         ShoppingItem(
             name: "Чайник",

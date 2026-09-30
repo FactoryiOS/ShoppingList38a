@@ -5,23 +5,24 @@
 //  Created by Андрей Макалкин on 17.09.2026.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 struct ShoppingListsView: View {
     @Environment(AppState.self) private var appState
     @Environment(AppRouter.self) private var router
-    
+
     @State private var observed: Observed
     @State private var showDeleteShoppingListAlert = false
     @State private var shoppingListToDelete: ShoppingList?
-    
+
     @Query(
         sort: \ShoppingList.createdAt,
-        order: .forward
+        order: .forward,
+        animation: .default
     )
     private var lists: [ShoppingList]
-    
+
     init(service: SwiftDataService) {
         _observed = State(
             initialValue: Observed(
@@ -45,18 +46,18 @@ struct ShoppingListsView: View {
         }
         .overlay(alignment: .bottom) {
             BaseButton(
-                title: String(localized: "Create List"),
+                title: .createList,
                 isActive: true,
                 action: {
-                    router.showModal(.createShoppingList)
+                    router.push(.createShoppingList)
                 }
             )
             .padding(.horizontal, 16)
             .padding(.bottom, 20)
         }
         .deleteAlert(
-            title: String(localized: "Delete List"),
-            message: String(localized: "Are you sure you want to delete this list?"),
+            title: .deleteListTitle,
+            message: .deleteListMessage,
             isPresented: $showDeleteShoppingListAlert,
             onCancel: {
                 shoppingListToDelete = nil
@@ -65,41 +66,34 @@ struct ShoppingListsView: View {
                 guard let list = shoppingListToDelete else {
                     return
                 }
-                
+
                 shoppingListToDelete = nil
-                
-                withAnimation {
-                    observed.handleDeleteShoppingList(list)
-                }
+                observed.handleDeleteShoppingList(list)
             }
         )
         .toolbar {
-            titleToolbarItem
-            contextMenuToolbarItem
+            titleToolbar
+            contextMenuToolbar
         }
     }
-    
+
     private var emptyState: some View {
-        // Центрируем плейсхолдер между заголовком и кнопкой.
-        // В Figma он привязан к фиксированным отступам,
-        // но такая верстка плохо адаптируется к маленьким экранам
-        // (например, некорректно выглядит на iPhone SE)
         VStack(spacing: 0) {
             Spacer()
-            
+
             PlaceholderView(
                 image: AppImage.emptyShoppingLists,
-                title: String(localized: "Let's plan your shopping!"),
-                subtitle: String(localized: "Create your first list")
+                title: .emptyStateTitle,
+                subtitle: .shoppingListsEmptyStateSubtitle
             )
-            
+
             Spacer()
         }
         // Исключаем из центрирования высоту кнопки 44 pt + нижний отступ 20 pt
         .padding(.bottom, 64)
         .padding(.horizontal, 16)
     }
-    
+
     private var shoppingList: some View {
         List(observed.sortLists(lists)) { list in
             Button {
@@ -127,19 +121,17 @@ struct ShoppingListsView: View {
                         .environment(\.symbolVariants, .none)
                 }
                 .tint(.systemsRed)
-                
+
                 Button {
-                    withAnimation {
-                        observed.handleDuplicateShoppingList(list)
-                    }
+                    observed.handleDuplicateShoppingList(list)
                 } label: {
                     Image(systemName: AppSystemIcon.plusSquareOnSquare)
                         .environment(\.symbolVariants, .none)
                 }
                 .tint(.systemsOrange)
-                
+
                 Button {
-                    router.showModal(.editShoppingList(list.id))
+                    router.push(.editShoppingList(list.id))
                 } label: {
                     Image(systemName: AppSystemIcon.squareAndPencil)
                         .environment(\.symbolVariants, .none)
@@ -158,12 +150,12 @@ struct ShoppingListsView: View {
         // Запас для overscroll, чтобы последняя ячейка прокручивалась выше кнопки
         .contentMargins(.bottom, 86, for: .scrollContent)
     }
-    
+
     @ToolbarContentBuilder
-    private var titleToolbarItem: some ToolbarContent {
+    private var titleToolbar: some ToolbarContent {
         if #available(iOS 26.0, *) {
             ToolbarItem(placement: .topBarLeading) {
-                Text("My Lists")
+                Text(.shoppingListsTitle)
                     .font(AppFont.semiBold28)
                     .foregroundStyle(.titleText)
                     .fixedSize(horizontal: true, vertical: false)
@@ -171,21 +163,21 @@ struct ShoppingListsView: View {
             .sharedBackgroundVisibility(.hidden)
         } else {
             ToolbarItem(placement: .topBarLeading) {
-                Text("My Lists")
+                Text(.shoppingListsTitle)
                     .font(AppFont.semiBold28)
                     .foregroundStyle(.titleText)
             }
         }
     }
-    
+
     @ToolbarContentBuilder
-    private var contextMenuToolbarItem: some ToolbarContent {
+    private var contextMenuToolbar: some ToolbarContent {
         @Bindable var appState = appState
-        
+
         ToolbarItem(placement: .topBarTrailing) {
             Menu {
                 Picker(
-                    "Set Theme",
+                    .themePickerTitle,
                     systemImage: AppSystemIcon.circleLefthalfFilledInverse,
                     selection: $appState.appColorScheme
                 ) {
@@ -195,9 +187,9 @@ struct ShoppingListsView: View {
                     }
                 }
                 .pickerStyle(.menu)
-                
+
                 Divider()
-                
+
                 Toggle(
                     isOn: Binding(
                         get: {
@@ -211,7 +203,7 @@ struct ShoppingListsView: View {
                     )
                 ) {
                     Label(
-                        "Sort Alphabetically",
+                        .sortAlphabetically,
                         systemImage: AppSystemIcon.arrowUpArrowDown
                     )
                 }

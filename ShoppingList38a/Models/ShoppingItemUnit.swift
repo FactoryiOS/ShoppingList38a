@@ -13,19 +13,19 @@ enum ShoppingItemUnit: String, CaseIterable, Hashable, Codable {
     case gram
     case liter
     case milliliter
-    
+
     var displayName: String {
         switch self {
         case .piece:
-            String(localized: "pcs")
+            String(localized: .unitPieces)
         case .kilogram:
-            String(localized: "kg")
+            String(localized: .unitKilograms)
         case .gram:
-            String(localized: "g")
+            String(localized: .unitGrams)
         case .liter:
-            String(localized: "L")
+            String(localized: .unitLiters)
         case .milliliter:
-            String(localized: "mL")
+            String(localized: .unitMilliliters)
         }
     }
 }

@@ -8,6 +8,8 @@
 import Foundation
 
 final class UserDefaultsService {
+    // MARK: - Welcome
+
     func saveHasCompletedWelcome() {
         UserDefaults.standard.set(
             true,
@@ -20,6 +22,8 @@ final class UserDefaultsService {
             forKey: UserDefaultsKey.hasCompletedWelcome.rawValue
         )
     }
+
+    // MARK: - App Color Scheme
 
     func saveAppColorScheme(_ appColorScheme: AppColorScheme?) {
         if let appColorScheme {
@@ -43,5 +47,4 @@ final class UserDefaultsService {
 
         return AppColorScheme(rawValue: rawValue)
     }
-
 }

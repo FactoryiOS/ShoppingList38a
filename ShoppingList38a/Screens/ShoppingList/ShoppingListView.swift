@@ -9,67 +9,16 @@ import SwiftData
 import SwiftUI
 
 struct ShoppingListView: View {
-    private enum ShoppingListTexts {
-
-        static var searchPlaceholder: String {
-            String(localized: "Search")
-        }
-
-        static var addButtonTitle: String {
-            String(localized: "Add Item")
-        }
-
-        static var emptyStateTitle: String {
-            String(localized: "Let's plan your shopping!")
-        }
-
-        static var emptyStateSubTitle: String {
-            String(localized: "Start adding items")
-        }
-
-        static var contextMenuSortByAlphabet: String {
-            String(localized: "Sort Alphabetically")
-        }
-
-        static var contextMenuShare: String {
-            String(localized: "Share")
-        }
-
-        static var contextMenuResetPurchased: String {
-            String(localized: "Uncheck All Items")
-        }
-
-        static var contextMenuDeletePurchased: String {
-            String(localized: "Delete Purchased Items")
-        }
-
-        static var deleteShoppingItemAlertTitle: String {
-            String(localized: "Delete Item")
-        }
-
-        static var deleteShoppingItemAlertMessage: String {
-            String(localized: "Are you sure you want to delete this item?")
-        }
-
-        static var deletePurchasedItemsAlertTitle: String {
-            String(localized: "Delete Purchased Items?")
-        }
-
-        static var deletePurchasedItemsAlertMessage: String {
-            String(localized: "Are you sure you want to delete all purchased items?")
-        }
-
-    }
-    
     @Environment(\.dismiss) private var dismiss
     @Environment(AppRouter.self) private var router
-    
+
+    @FocusState private var isSearchFocused: Bool
+
     @State private var observed: Observed
-    
     @State private var showDeletePurchasedItemsAlert = false
     @State private var showDeleteShoppingItemAlert = false
     @State private var shoppingItemToDelete: ShoppingItem?
-    
+
     init(
         service: SwiftDataService,
         shoppingList: ShoppingList
@@ -81,19 +30,20 @@ struct ShoppingListView: View {
             )
         )
     }
-    
+
     var body: some View {
-        VStack(spacing: .zero) {
+        VStack(spacing: 0) {
             customSearchBar
-                .padding([.horizontal, .bottom], 16)
+                .padding(.horizontal, 16)
                 .padding(.top, 4)
                 .background(.primaryBackground)
-            Group {
-                if observed.items.isEmpty {
-                    emptyState
-                } else {
-                    shoppingListState
-                }
+
+            if observed.items.isEmpty {
+                emptyState
+                addButton
+            } else {
+                shoppingList
+                    .padding(.top, 16)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -102,11 +52,14 @@ struct ShoppingListView: View {
                 .ignoresSafeArea()
         }
         .overlay(alignment: .bottom) {
-            addButton
+            if !observed.items.isEmpty {
+                addButton
+            }
         }
+        .ignoresSafeArea(.keyboard, edges: .bottom)
         .deleteAlert(
-            title: ShoppingListTexts.deleteShoppingItemAlertTitle,
-            message: ShoppingListTexts.deleteShoppingItemAlertMessage,
+            title: .deleteItemTitle,
+            message: .deleteItemMessage,
             isPresented: $showDeleteShoppingItemAlert,
             onCancel: {
                 shoppingItemToDelete = nil
@@ -115,17 +68,17 @@ struct ShoppingListView: View {
                 guard let item = shoppingItemToDelete else {
                     return
                 }
-                
+
                 shoppingItemToDelete = nil
-                
+
                 withAnimation {
                     observed.handleDeleteShoppingItem(item)
                 }
             }
         )
         .deleteAlert(
-            title: ShoppingListTexts.deletePurchasedItemsAlertTitle,
-            message: ShoppingListTexts.deletePurchasedItemsAlertMessage,
+            title: .deletePurchasedItemsTitle,
+            message: .deletePurchasedItemsMessage,
             isPresented: $showDeletePurchasedItemsAlert,
             onDelete: {
                 withAnimation {
@@ -134,75 +87,36 @@ struct ShoppingListView: View {
             }
         )
         .toolbar {
-            titleToolbarItem
-            contextMenuToolbarItem
+            titleToolbar
+            contextMenuToolbar
         }
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
     }
-    
-    private var emptyState: some View {
-        VStack(spacing: 0) {
-            Spacer()
-            PlaceholderView(
-                image: AppImage.emptyShoppingList,
-                title: ShoppingListTexts.emptyStateTitle,
-                subtitle: ShoppingListTexts.emptyStateSubTitle
-            )
-            Spacer()
-        }
-        .padding(.bottom, 64)
-    }
-    
-    private var shoppingListState: some View {
-        VStack(spacing: .zero) {
-            shoppingList
-        }
-    }
-    
-    private var shoppingList: some View {
-        List(observed.filteredItems) { item in
-            VStack(spacing: .zero) {
-                ShoppingItemView(
-                    shoppingItem: item,
-                    onTogglePurchased: {
-                        observed.handleToggleShoppingItem(item)
-                    }
-                )
-                
-                Divider()
-                    .background(.borderGrey)
-            }
-            .listRowBackground(Color.clear)
-            .listRowSeparator(.hidden)
-            .listRowInsets(EdgeInsets())
-            .swipeActions(allowsFullSwipe: false) {
-                swipeButtons(for: item)
-            }
-        }
-        .listStyle(.plain)
-        .scrollContentBackground(.hidden)
-        .scrollIndicators(.hidden)
-        .contentMargins(.bottom, 86, for: .scrollContent)
-    }
-    
+
     private var customSearchBar: some View {
         HStack(spacing: 8) {
             Image(systemName: AppSystemIcon.magnifyingGlass)
                 .foregroundStyle(.hintGrey)
-            
+
             TextField(
-                ShoppingListTexts.searchPlaceholder,
+                .shoppingListSearchPlaceholder,
                 text: $observed.searchText,
-                prompt: Text(ShoppingListTexts.searchPlaceholder)
+                prompt: Text(.shoppingListSearchPlaceholder)
                     .foregroundStyle(.hintGrey)
             )
             .font(AppFont.regular17)
             .foregroundStyle(.primaryText)
-            
+            .focused($isSearchFocused)
+            .submitLabel(.search)
+            .onSubmit {
+                isSearchFocused = false
+            }
+
             if !observed.searchText.isEmpty {
                 Button {
                     observed.searchText = ""
+                    isSearchFocused = false
                 } label: {
                     Image(systemName: AppSystemIcon.xmarkCircleFill)
                         .symbolRenderingMode(.palette)
@@ -216,7 +130,77 @@ struct ShoppingListView: View {
         .background(.searchBackground)
         .clipShape(RoundedRectangle(cornerRadius: 10))
     }
-    
+
+    private var emptyState: some View {
+        ScrollView {
+            VStack(spacing: 0) {
+                Spacer()
+
+                PlaceholderView(
+                    image: AppImage.emptyShoppingList,
+                    title: .emptyStateTitle,
+                    subtitle: .shoppingListEmptyStateSubtitle
+                )
+
+                Spacer()
+            }
+            .containerRelativeFrame(.vertical)
+            .contentShape(Rectangle())
+            .onTapGesture {
+                isSearchFocused = false
+            }
+        }
+        .scrollDisabled(true)
+        .scrollIndicators(.hidden)
+    }
+
+    private var shoppingList: some View {
+        List(observed.filteredItems) { item in
+            VStack(spacing: 0) {
+                ShoppingItemView(
+                    shoppingItem: item,
+                    onTogglePurchased: {
+                        observed.handleToggleShoppingItem(item)
+                    }
+                )
+
+                Divider()
+                    .background(.borderGrey)
+            }
+            .contentShape(Rectangle())
+            .onTapGesture {
+                isSearchFocused = false
+            }
+            .listRowBackground(Color.clear)
+            .listRowSeparator(.hidden)
+            .listRowInsets(EdgeInsets())
+            .swipeActions(allowsFullSwipe: false) {
+                swipeButtons(for: item)
+            }
+        }
+        .listStyle(.plain)
+        .scrollContentBackground(.hidden)
+        .scrollIndicators(.hidden)
+        .scrollDismissesKeyboard(.immediately)
+        .contentMargins(.bottom, 86, for: .scrollContent)
+    }
+
+    private var addButton: some View {
+        BaseButton(
+            title: .addItem,
+            isActive: true,
+            action: {
+                isSearchFocused = false
+
+                router.showModal(
+                    .createShoppingItem(observed.shoppingListID)
+                )
+            }
+        )
+        .padding(.horizontal, 16)
+        .padding(.bottom, 20)
+    }
+
     private func swipeButtons(for item: ShoppingItem) -> some View {
         Group {
             Button {
@@ -227,8 +211,9 @@ struct ShoppingListView: View {
                     .environment(\.symbolVariants, .none)
             }
             .tint(.systemsRed)
-            
+
             Button {
+                isSearchFocused = false
                 router.showModal(
                     .editShoppingItem(item.id)
                 )
@@ -239,42 +224,47 @@ struct ShoppingListView: View {
             .tint(.systemsGrey)
         }
     }
-    
-    private var addButton: some View {
-        BaseButton(
-            title: ShoppingListTexts.addButtonTitle,
-            isActive: true,
-            action: {
-                router.showModal(
-                    .createShoppingItem(observed.shoppingListID)
-                )
-            }
-        )
-        .padding(.horizontal, 16)
-        .padding(.bottom, 20)
-    }
-    
+
     @ToolbarContentBuilder
-    private var titleToolbarItem: some ToolbarContent {
-        ToolbarItemGroup(placement: .topBarLeading) {
-            Button {
-                dismiss()
-            } label: {
-                Image(systemName: AppSystemIcon.chevronLeft)
-                    .foregroundStyle(.titleText)
-                    .frame(width: 28, height: 44)
-                    .contentShape(Rectangle())
+    private var titleToolbar: some ToolbarContent {
+        if #available(iOS 26.0, *) {
+            ToolbarItem(placement: .topBarLeading) {
+                backButton
             }
-            .buttonStyle(.plain)
-            
-            Text(observed.listTitle)
-                .font(AppFont.medium17)
-                .foregroundStyle(.titleText)
+            .sharedBackgroundVisibility(.hidden)
+
+            ToolbarItem(placement: .title) {
+                toolbarTitle
+            }
+        } else {
+            ToolbarItemGroup(placement: .topBarLeading) {
+                backButton
+                toolbarTitle
+            }
         }
     }
-    
+
+    private var backButton: some View {
+        Button {
+            dismiss()
+        } label: {
+            Image(systemName: AppSystemIcon.chevronLeft)
+                .foregroundStyle(.titleText)
+                .frame(width: 28, height: 44)
+                .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+    }
+
+    private var toolbarTitle: some View {
+        Text(observed.listTitle)
+            .font(AppFont.medium17)
+            .foregroundStyle(.titleText)
+            .lineLimit(1)
+    }
+
     @ToolbarContentBuilder
-    private var contextMenuToolbarItem: some ToolbarContent {
+    private var contextMenuToolbar: some ToolbarContent {
         ToolbarItem(placement: .topBarTrailing) {
             Menu {
                 Toggle(
@@ -290,44 +280,50 @@ struct ShoppingListView: View {
                     )
                 ) {
                     Label(
-                        ShoppingListTexts.contextMenuSortByAlphabet,
+                        .sortAlphabetically,
                         systemImage: AppSystemIcon.arrowUpArrowDown
                     )
                 }
-                
+
                 ShareLink(
                     item: observed.shareText,
                     subject: Text(observed.listTitle)
                 ) {
                     Label(
-                        ShoppingListTexts.contextMenuShare,
+                        .share,
                         systemImage: AppSystemIcon.squareAndArrowUp
                     )
                 }
-                
+
                 Button {
                     observed.handleResetPurchasedItems()
                 } label: {
                     Label(
-                        ShoppingListTexts.contextMenuResetPurchased,
+                        .uncheckAllItems,
                         systemImage: AppSystemIcon.arrow2Circlepath
                     )
                 }
-                
+
                 Button(role: .destructive) {
                     showDeletePurchasedItemsAlert = true
                 } label: {
                     Label(
-                        ShoppingListTexts.contextMenuDeletePurchased,
+                        .deletePurchasedItems,
                         systemImage: AppSystemIcon.trash
                     )
                 }
-                
+
             } label: {
                 Image(systemName: AppSystemIcon.ellipsisCircle)
                     .foregroundStyle(.titleText)
                     .frame(width: 44, height: 44)
             }
+            .simultaneousGesture(
+                TapGesture()
+                    .onEnded {
+                        isSearchFocused = false
+                    }
+                )
         }
     }
 }

@@ -8,14 +8,8 @@
 enum AppSystemIcon {
     // смена темы светлая/темная
     static let circleLefthalfFilledInverse = "circle.lefthalf.filled.inverse"
-    // плюс
-    static let plus = "plus"
     // корзина
     static let trash = "trash"
-    // карандаш
-    static let pencil = "pencil"
-    // шестеренка
-    static let gearshape = "gearshape"
     // поделиться
     static let squareAndArrowUp = "square.and.arrow.up"
     // круговые стрелки
@@ -32,8 +26,6 @@ enum AppSystemIcon {
     static let ellipsisCircle = "ellipsis.circle"
     // стрелка влево
     static let chevronLeft = "chevron.left"
-    // стрелки вверх/вних (уменьшение/увеличение счетчика)
-    static let chevronUpChevronDown = "chevron.up.chevron.down"
     // выбран/отмечен
     static let checkmarkSquareFill = "checkmark.square.fill"
     // не выбран/не отмечен

@@ -7,8 +7,8 @@
 
 import Foundation
 
-@Observable
 @MainActor
+@Observable
 final class AppRouter {
     var path: [AppRoute] = []
     var presentedModal: AppRoute?

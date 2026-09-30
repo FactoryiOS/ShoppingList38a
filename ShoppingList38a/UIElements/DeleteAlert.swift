@@ -10,23 +10,22 @@ import UIKit
 
 private struct DeleteAlertModifier: ViewModifier {
     @Environment(\.colorScheme) private var colorScheme
-    
-    let title: String
-    let message: String
-    
+
     @Binding var isPresented: Bool
-    
+
+    let title: LocalizedStringResource
+    let message: LocalizedStringResource
     let onCancel: () -> Void
     let onDelete: () -> Void
-    
+
     func body(content: Content) -> some View {
         content
             .background {
                 DeleteAlertPresenter(
-                    title: title,
-                    message: message,
-                    colorScheme: colorScheme,
                     isPresented: $isPresented,
+                    title: String(localized: title),
+                    message: String(localized: message),
+                    colorScheme: colorScheme,
                     onCancel: onCancel,
                     onDelete: onDelete
                 )
@@ -35,26 +34,14 @@ private struct DeleteAlertModifier: ViewModifier {
 }
 
 private struct DeleteAlertPresenter: UIViewControllerRepresentable {
-    
-    private enum DeleteAlertTexts {
-        static var cancel: String {
-            String(localized: "Cancel")
-        }
+    @Binding var isPresented: Bool
 
-        static var delete: String {
-            String(localized: "Delete")
-        }
-    }
-    
     let title: String
     let message: String
     let colorScheme: ColorScheme
-    
-    @Binding var isPresented: Bool
-    
     let onCancel: () -> Void
     let onDelete: () -> Void
-    
+
     func makeCoordinator() -> Coordinator {
         Coordinator(
             isPresented: $isPresented,
@@ -62,11 +49,11 @@ private struct DeleteAlertPresenter: UIViewControllerRepresentable {
             onDelete: onDelete
         )
     }
-    
+
     func makeUIViewController(context: Context) -> UIViewController {
         UIViewController()
     }
-    
+
     func updateUIViewController(
         _ uiViewController: UIViewController,
         context: Context
@@ -74,52 +61,49 @@ private struct DeleteAlertPresenter: UIViewControllerRepresentable {
         context.coordinator.isPresented = $isPresented
         context.coordinator.onCancel = onCancel
         context.coordinator.onDelete = onDelete
-        
+
         guard isPresented else {
             if let alert = uiViewController.presentedViewController as? UIAlertController {
                 alert.dismiss(animated: true)
             }
-            
+
             return
         }
-        
+
         guard uiViewController.presentedViewController == nil else {
             return
         }
-        
+
         let alert = UIAlertController(
             title: title,
             message: message,
             preferredStyle: .alert
         )
-        
+
         let cancelAction = UIAlertAction(
-            title: DeleteAlertTexts.cancel,
+            title: String(localized: .cancel),
             style: .cancel
         ) { _ in
             context.coordinator.cancel()
         }
-        
+
         let deleteAction = UIAlertAction(
-            title: DeleteAlertTexts.delete,
+            title: String(localized: .delete),
             style: .destructive
         ) { _ in
             context.coordinator.delete()
         }
-        
+
         alert.addAction(cancelAction)
         alert.addAction(deleteAction)
-        
+
         alert.preferredAction = deleteAction
         alert.view.tintColor = UIColor(Color.turquoise)
         alert.overrideUserInterfaceStyle = colorScheme == .dark
             ? .dark
             : .light
-        
-        uiViewController.present(
-            alert,
-            animated: true
-        )
+
+        uiViewController.present(alert, animated: true)
     }
 }
 
@@ -127,7 +111,7 @@ private final class Coordinator {
     var isPresented: Binding<Bool>
     var onCancel: () -> Void
     var onDelete: () -> Void
-    
+
     init(
         isPresented: Binding<Bool>,
         onCancel: @escaping () -> Void,
@@ -137,12 +121,12 @@ private final class Coordinator {
         self.onCancel = onCancel
         self.onDelete = onDelete
     }
-    
+
     func cancel() {
         isPresented.wrappedValue = false
         onCancel()
     }
-    
+
     func delete() {
         isPresented.wrappedValue = false
         onDelete()
@@ -151,17 +135,17 @@ private final class Coordinator {
 
 extension View {
     func deleteAlert(
-        title: String,
-        message: String,
+        title: LocalizedStringResource,
+        message: LocalizedStringResource,
         isPresented: Binding<Bool>,
         onCancel: @escaping () -> Void = { },
         onDelete: @escaping () -> Void
     ) -> some View {
         modifier(
             DeleteAlertModifier(
+                isPresented: isPresented,
                 title: title,
                 message: message,
-                isPresented: isPresented,
                 onCancel: onCancel,
                 onDelete: onDelete
             )

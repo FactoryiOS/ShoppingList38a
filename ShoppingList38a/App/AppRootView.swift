@@ -10,15 +10,18 @@ import SwiftUI
 struct AppRootView: View {
     @Environment(AppState.self) private var appState
     @Environment(AppRouter.self) private var router
-    
+
     var body: some View {
         @Bindable var router = router
-        
-        Group {
+
+        ZStack {
             if appState.isFirstLaunch {
-                WelcomeScreenView(
-                    onComplete: appState.completeWelcome
-                )
+                WelcomeScreenView {
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        appState.completeWelcome()
+                    }
+                }
+                .transition(.opacity)
             } else {
                 NavigationStack(path: $router.path) {
                     ShoppingListsView(
@@ -33,13 +36,14 @@ struct AppRootView: View {
                         destination(for: route)
                     }
                 }
+                .transition(.opacity)
             }
         }
         .preferredColorScheme(
             appState.appColorScheme?.preferredColorScheme
         )
     }
-    
+
     @ViewBuilder
     private func destination(for route: AppRoute) -> some View {
         switch route {
@@ -52,13 +56,13 @@ struct AppRootView: View {
                     shoppingList: shoppingList
                 )
             }
-            
+
         case .createShoppingList:
             ShoppingListFormView(
                 service: appState.swiftDataService,
-                onComplete: router.dismissModal
+                onComplete: router.pop
             )
-            
+
         case .editShoppingList(let shoppingListID):
             if let shoppingList = appState.swiftDataService.fetchShoppingList(
                 by: shoppingListID
@@ -66,10 +70,10 @@ struct AppRootView: View {
                 ShoppingListFormView(
                     service: appState.swiftDataService,
                     shoppingList: shoppingList,
-                    onComplete: router.dismissModal
+                    onComplete: router.pop
                 )
             }
-        
+
         case .createShoppingItem(let shoppingListID):
             if let shoppingList = appState.swiftDataService.fetchShoppingList(
                 by: shoppingListID

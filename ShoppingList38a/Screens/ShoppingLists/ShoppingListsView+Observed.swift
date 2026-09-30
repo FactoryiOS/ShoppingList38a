@@ -11,23 +11,22 @@ extension ShoppingListsView {
     @MainActor
     @Observable
     final class Observed {
-        
         // MARK: - State
-        
+
         var isSortedByAlphabet = false
-        
+
         // MARK: - Dependencies
-        
+
         private let service: SwiftDataService
-        
+
         // MARK: - Init
-        
+
         init(service: SwiftDataService) {
             self.service = service
         }
-        
+
         // MARK: - Actions
-        
+
         func handleDeleteShoppingList(
             _ shoppingList: ShoppingList
         ) {
@@ -37,7 +36,7 @@ extension ShoppingListsView {
                 print("❌ [ShoppingListsView] handleDeleteShoppingList: \(error)")
             }
         }
-        
+
         func handleDuplicateShoppingList(
             _ shoppingList: ShoppingList
         ) {
@@ -47,9 +46,9 @@ extension ShoppingListsView {
                 print("❌ [ShoppingListsView] handleDuplicateShoppingList: \(error)")
             }
         }
-        
+
         // MARK: - Helpers
-        
+
         func sortLists(_ lists: [ShoppingList]) -> [ShoppingList] {
             guard isSortedByAlphabet else {
                 return lists

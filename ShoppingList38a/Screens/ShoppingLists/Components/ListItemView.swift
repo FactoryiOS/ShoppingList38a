@@ -9,25 +9,25 @@ import SwiftUI
 
 struct ListItemView: View {
     let listItem: ShoppingList
-    
+
     var body: some View {
         HStack(spacing: 12) {
             Image(listItem.icon.resource)
                 .frame(width: 48, height: 48)
                 .foregroundStyle(.black)
                 .background(listItem.color.color, in: Circle())
-            
+
             Text(listItem.name)
                 .font(AppFont.medium20)
                 .foregroundStyle(.primaryText)
-            
+
             Spacer()
-            
+
             HStack(spacing: 0) {
                 Text("\(listItem.purchasedCount)/")
                     .font(AppFont.regular17)
                     .foregroundStyle(.primaryText)
-                
+
                 Text("\(listItem.totalCount)")
                     .font(AppFont.medium17)
                     .foregroundStyle(.primaryText)

@@ -12,15 +12,16 @@ struct ShoppingItemFormView: View {
     
     @FocusState private var isNameFocused: Bool
     @FocusState private var isAmountFocused: Bool
+    
     @State private var observed: Observed
     
-    private let onComplete: Completion
+    private let onComplete: () -> Void
     
     init(
         service: SwiftDataService,
         shoppingList: ShoppingList,
         shoppingItem: ShoppingItem? = nil,
-        onComplete: @escaping Completion
+        onComplete: @escaping () -> Void
     ) {
         _observed = State(
             initialValue: Observed(
@@ -35,22 +36,20 @@ struct ShoppingItemFormView: View {
     
     var body: some View {
         VStack(spacing: 20) {
-
             VStack(spacing: 0) {
                 BaseTextField(
-                    isFocused: $isNameFocused,
-                    placeholder: String(localized: "Item name"),
                     text: $observed.nameText,
+                    isFocused: $isNameFocused,
+                    placeholder: .shoppingItemNamePlaceholder,
                     errorMessage: observed.nameErrorMessage
                 )
-
+                
                 if isNameFocused && !observed.suggestions.isEmpty {
                     VStack(alignment: .leading, spacing: 4) {
                         ForEach(observed.suggestions, id: \.self) { suggestion in
                             Button(
                                 action: {
                                     observed.nameText = suggestion
-                                    isNameFocused = false
                                     isAmountFocused = true
                                 },
                                 label: {
@@ -58,9 +57,9 @@ struct ShoppingItemFormView: View {
                                         Text(suggestion)
                                             .font(AppFont.regular17)
                                             .foregroundStyle(.primaryText)
+                                        
                                         Spacer()
                                     }
-                                    
                                     .padding(.horizontal, 16)
                                     .frame(height: 44)
                                 }
@@ -74,83 +73,119 @@ struct ShoppingItemFormView: View {
                             }
                         }
                     }
-                    .background(Color(.baseElementsBackground))
+                    .background(.baseElementsBackground)
                     .cornerRadius(12)
                     .padding(.top, 10)
-                    .transition(.move(edge: .top).combined(with: .opacity))
+                    .transition(
+                        .opacity.combined(
+                            with: .offset(y: -6)
+                        )
+                    )
                 }
             }
             
             HStack(spacing: 16) {
                 BaseTextField(
-                    isFocused: $isAmountFocused,
-                    placeholder: String(localized: "Quantity"),
                     text: $observed.amountText,
+                    isFocused: $isAmountFocused,
+                    placeholder: .shoppingItemQuantityPlaceholder,
                     errorMessage: nil
                 )
+                .keyboardType(.numberPad)
                 
                 selectUnitPicker
+                    .simultaneousGesture(
+                        TapGesture()
+                            .onEnded {
+                                isNameFocused = false
+                                isAmountFocused = false
+                            }
+                    )
             }
+            
             Spacer()
         }
+        .animation(
+            .easeInOut(duration: 0.2),
+            value: observed.nameErrorMessage != nil
+        )
+        .animation(
+            .easeInOut(duration: 0.2),
+            value: isNameFocused && !observed.suggestions.isEmpty
+        )
+        .animation(
+            .easeInOut(duration: 0.2),
+            value: observed.suggestions.count
+        )
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
-        .background(.primaryBackground)
+        .background {
+            Color.primaryBackground
+                .ignoresSafeArea()
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    isNameFocused = false
+                    isAmountFocused = false
+                }
+        }
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             observed.loadAllExistingItems()
         }
         .toolbar {
-            ToolbarItem(placement: .cancellationAction) {
-                Button("Cancel") {
-                    dismiss()
-                }
-                .font(AppFont.regular17)
-                .foregroundStyle(.hintGrey)
-            }
-            
-            ToolbarItem(placement: .principal) {
-                Text(observed.title)
-                    .font(AppFont.semiBold17)
-                    .foregroundStyle(.primaryText)
-            }
-            
-            ToolbarItem(placement: .confirmationAction) {
-                Button("Done") {
-                    observed.handleSave(completion: onComplete)
-                }
-                .font(AppFont.semiBold17)
-                .foregroundStyle(
-                    observed.isFormValid ? .turquoise : .hintGrey
-                )
-                .disabled(!observed.isFormValid)
-            }
+            formToolbar
         }
     }
-    
+
     private var selectUnitPicker: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            HStack {
-                Text("Unit:")
-                    .font(AppFont.regular17)
-                    .foregroundStyle(.hintGrey)
-                
-                Spacer()
-                
-                Picker("Unit of measure", selection: $observed.selectedUnit) {
-                    ForEach(ShoppingItemUnit.allCases, id: \.self) { unit in
-                        Text(unit.displayName)
-                            .tag(unit)
-                    }
+        HStack {
+            Text(.unitLabel)
+                .font(AppFont.regular17)
+                .foregroundStyle(.hintGrey)
+
+            Spacer()
+
+            Picker(.unitPickerTitle, selection: $observed.selectedUnit) {
+                ForEach(ShoppingItemUnit.allCases, id: \.self) { unit in
+                    Text(unit.displayName)
+                        .tag(unit)
                 }
-                .tint(.turquoise)
             }
-            .padding(.vertical, 8)
-            .padding(.horizontal, 16)
-            .frame(maxWidth: .infinity)
-            .frame(height: 54)
-            .background(Color(.baseElementsBackground))
-            .cornerRadius(12)
+            .tint(.turquoise)
+        }
+        .padding(.vertical, 8)
+        .padding(.horizontal, 16)
+        .frame(maxWidth: .infinity)
+        .frame(height: 54)
+        .background(.baseElementsBackground)
+        .cornerRadius(12)
+    }
+
+    @ToolbarContentBuilder
+    private var formToolbar: some ToolbarContent {
+        ToolbarItem(placement: .cancellationAction) {
+            Button(.cancel) {
+                dismiss()
+            }
+            .font(AppFont.regular17)
+            .foregroundStyle(.hintGrey)
+        }
+
+        ToolbarItem(placement: .principal) {
+            Text(observed.title)
+                .font(AppFont.semiBold17)
+                .foregroundStyle(.primaryText)
+        }
+
+        ToolbarItem(placement: .confirmationAction) {
+            Button(.done) {
+                observed.handleSave(completion: onComplete)
+            }
+            .font(AppFont.semiBold17)
+            .foregroundStyle(
+                observed.isFormValid ? .turquoise : .hintGrey
+            )
+            .disabled(!observed.isFormValid)
         }
     }
 }

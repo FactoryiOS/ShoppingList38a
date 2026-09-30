@@ -8,12 +8,13 @@
 import SwiftUI
 
 struct BaseTextField: View {
-    @FocusState.Binding var isFocused: Bool
-    
-    let placeholder: String
     @Binding var text: String
-    let errorMessage: String?
-    
+
+    @FocusState.Binding var isFocused: Bool
+
+    let placeholder: LocalizedStringResource
+    let errorMessage: LocalizedStringResource?
+
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             HStack {
@@ -26,7 +27,7 @@ struct BaseTextField: View {
                 .font(AppFont.regular17)
                 .foregroundStyle(.primaryText)
                 .focused($isFocused)
-                
+
                 if !text.isEmpty && isFocused {
                     Button(
                         action: { text = "" },
@@ -42,40 +43,49 @@ struct BaseTextField: View {
             .padding(.horizontal, 16)
             .frame(maxWidth: .infinity)
             .frame(height: 54)
-            .background(Color(.baseElementsBackground))
+            .background(.baseElementsBackground)
             .cornerRadius(12)
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
                     .stroke(
-                        errorMessage != nil ? Color(.systemsRed) : Color.clear,
+                        errorMessage != nil ? .systemsRed : .clear,
                         lineWidth: 0.5
                     )
             )
-            
+
             if let errorMessage {
                 Text(errorMessage)
                     .font(AppFont.regular13)
-                    .foregroundColor(Color(.systemsRed))
+                    .foregroundStyle(.systemsRed)
                     .padding(.horizontal, 8)
+                    .transition(
+                        .opacity.combined(
+                            with: .offset(y: -4)
+                        )
+                    )
             }
         }
+        .animation(
+            .easeInOut(duration: 0.2),
+            value: errorMessage != nil
+        )
     }
 }
 
 #Preview {
     @Previewable @State var text = "Новый год"
     @FocusState var isFocused: Bool
-    
-    let currentError = text == "Новый год"
-    ? String(localized: "This name is already in use, please change it.")
-    : nil
-    
+
+    let currentError: LocalizedStringResource? = text == "Новый год"
+        ? .shoppingListDuplicateNameError
+        : nil
+
     BaseTextField(
-        isFocused: $isFocused,
-        placeholder: String(localized: "Enter a name"),
         text: $text,
+        isFocused: $isFocused,
+        placeholder: .shoppingListNamePlaceholder,
         errorMessage: currentError
     )
     .padding()
-    .background(Color(.primaryBackground))
+    .background(.primaryBackground)
 }

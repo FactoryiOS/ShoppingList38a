@@ -14,7 +14,7 @@ extension ShoppingList {
             items: makeItems(purchasedCount: 10, totalCount: 20)
         )
     }
-    
+
     static var mocks: [ShoppingList] {
         [
             ShoppingList(
@@ -79,7 +79,7 @@ extension ShoppingList {
             )
         ]
     }
-    
+
     private static func makeItems(
         purchasedCount: Int,
         totalCount: Int

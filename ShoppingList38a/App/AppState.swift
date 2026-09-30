@@ -7,8 +7,8 @@
 
 import Foundation
 
-@Observable
 @MainActor
+@Observable
 final class AppState {
     private let userDefaultsService: UserDefaultsService
     let swiftDataService: SwiftDataService
