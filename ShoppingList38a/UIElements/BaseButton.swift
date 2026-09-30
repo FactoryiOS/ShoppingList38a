@@ -23,7 +23,7 @@ struct BaseButton: View {
                 .cornerRadius(100)
         }
         .buttonStyle(.plain)
-        .disabled(!isActive)
+        .allowsHitTesting(isActive)
     }
 }
 
